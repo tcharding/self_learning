@@ -1,0 +1,4 @@
+./testsim 1 1
+./testsim 1 2
+./testsim 1 3
+./testsim 1 4

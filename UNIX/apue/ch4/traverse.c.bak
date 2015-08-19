@@ -1,0 +1,76 @@
+#include "apue.h"
+#include <dirent.h>
+#include <limits.h>
+
+
+/* function type that is called for each filename */
+typedef int Func(const char *, const struct stat *, int);
+
+static Func func;
+static int locftw(char *, Func *);
+static int dopath(Func *);
+
+static long nreg, ndir, nblk, nchr, nfifo, nslink, nsock, ntot;
+
+int main(int argc, char *argv[])
+{
+	int ret;
+
+	if (argc != 2)
+		err_quit("Usage: %s <starting-pathname>", argv[0]);
+
+	ret = locftw(argv[1], func); /* does it all */
+
+	ntot = nreg + ndir + nblk + nchar + nfifo + nslink + nsock;
+	if (ntot == 0)
+		ntot = 1;	/* avoid divide by zero; print 0 for all counts */
+	printf("regular files = %7ld, %5.2f %%\n", nreg, nreg*100.0/ntot);
+	printf("directories = %7ld, %5.2f %%\n", ndirs, ndirs*100.0/ntot);
+	printf("block special = %7ld, %5.2f %%\n", nblk, nblk*100.0/ntot);
+	printf("char special = %7ld, %5.2f %%\n", nchar, nchar*100.0/ntot);
+	printf("FIFOs = %7ld, %5.2f %%\n", nfifo, nfifo*100.0/ntot);
+	printf("symbolic links = %7ld, %5.2f %%\n", nslink, nslink*100.0/ntot);
+	printf("sockets = %7ld, %5.2f %%\n", nsock, nsock*100.0/ntot);
+	exit(ret);
+}
+/*
+ * Descend through the hierachy, starting at "pathname".
+ * Tha caller's func() is called for every file.
+ */
+enum {
+	FTW_F,			/* file other than directory */
+	FTW_D,			/* directory */
+	FTW_DNR,		/* directory that cannot be read */
+	FTW_NS,			/* file that we cannot stat */
+};
+
+static char *fullpath;		/* contains full pathname for every file */
+static size_t pathlen;
+
+static int locftw(char *pathname, Func *funcp)
+{
+	fullpath = path_alloc(&pathlen); /* malloc PATH_MAX + 1 */
+
+	if (pathlen <= strlen(pathname)) {
+		pathlen = strlen(pathname) * 2;
+		if ((fullpath = realloc(fullpath, pathlen)) == NULL)
+			err_sys("realloc failed");
+	}
+	strcpy(fullpath, pathname);
+	return (dopath(funcp));
+}
+/* 
+ * Descend through the hierachy, starting at "fullpath".
+ * If "fullpath" is anything other than a directory, we lstat() it,
+ * recursively for each name in the directory.
+ */
+satic int dopath(Func *funcp)
+{
+	struct stat statbuf;
+	struct dirent *dirp;
+	DIR *dp;
+	int ret, n;
+
+	if (lstat(fullpath, &statbuf) < 0) /* stat error */
+		return (funcp(fullpath, &statbuf))
+}
