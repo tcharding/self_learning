@@ -1,0 +1,104 @@
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+
+enum {
+	MAXLINE = 4096
+};
+
+int getline(char *s, int lim);
+double atof(char s[]);
+
+int main(void)
+{
+	int len;
+	double val;
+	char buf[MAXLINE];
+	
+	while (getline(buf, MAXLINE) > 0) {
+		len = strlen(buf);
+		if (buf[len-1] == '\n')
+		    buf[len-1] = '\0';
+		val = atof(buf);
+		printf("atof(%s): %f\n", buf, val);
+	}
+	return 0;
+}
+
+/* atof: convert string s to double */
+double atof(char s[])
+{
+	double val, power;
+	int i, sign;
+
+	for (i = 0; isspace(s[i]); i++) /* skip whitespace */
+		;
+	sign = (s[i] == '-') ? -1 : 1;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	for (val = 0.0; isdigit(s[i]); i++)
+		val = 10.0 * val + (s[i] - '0');
+	if (s[i] == '.') 	/* handle fraction */
+		i++;
+	for (power = 1.0; isdigit(s[i]); i++) {
+		val = 10.0 * val + (s[i] - '0');
+		power *= 10.0;
+	}
+	
+	return sign * val / power;
+
+	/*
+	double val, power;
+	int sign, i;
+
+	while (isspace(s++)) /* skip whitespace 
+		;
+	sign = (*s == '-') ? -1 : 1;
+	if (*s == '+' || *s == '-')
+		s++;
+	while (isdigit(*s)) {
+		val = 10.0 * val + (*s - '0');
+		s++;
+	}
+	if (*s == '.')		/* handle fraction 
+		s++;
+	power = 1.0;
+	for (val = 0.0; isdigit(*(s+i)); i++) {
+		val = 10.0 * val + (*(s+i) - '0');
+		power *= 10.0;
+	}
+	return sign * val / power;
+	*/
+}
+
+/* getline: read a line into s, strip trailing whitespace, return length */
+int getline(char *s, int lim)
+{
+	/*
+	int cnt;
+
+	cnt = 0;
+	while ( (*s = getchar()) != EOF && *s != '\n' && cnt < lim-1)
+		s++, cnt++;
+	if (*s == EOF && cnt == 0)
+		return EOF;
+	if (*s == '\n') 
+		s++, cnt++;
+	*s = '\0';
+	return cnt;
+	*/
+	int c, i;
+
+	for (i = 0; i < lim-1 && (c = getchar()) != EOF && c != '\n'; i++, s++)
+		*s = c;
+
+	if (c == EOF && i == 0)
+		return EOF;
+
+	if (c == '\n') {
+		*s++ = c;
+		i++;
+	}
+	*s = '\0';
+	return i;
+}

@@ -1,0 +1,5 @@
+this that those /* use signf = 2 to test */
+this is a file /* comment */ success
+file and is are twice
+"and this is a xxx string constant"
+'and now single quoted'

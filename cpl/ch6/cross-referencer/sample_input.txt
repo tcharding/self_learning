@@ -1,0 +1,7 @@
+This is a document to use as sample
+input. It contains normal 'document' stuff. Also
+some ... funny characters!!?
+And now for some
+more text that has words the same
+as before in the document. Lets test it with gusto. This is
+now getting too long.
