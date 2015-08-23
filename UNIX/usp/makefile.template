@@ -1,7 +1,7 @@
 CC = gcc
 CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
-LFLAG = -L../lib -lusp
-INC = -I../include	
+LFLAG = -L../../lib -ltch
+INC = -I../../include	
 EXES = 
 
 .PHONY: all clean 

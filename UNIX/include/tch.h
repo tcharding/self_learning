@@ -23,12 +23,14 @@
 #include <sys/types.h>		/* basic system data types */
 #include <error.h>		/* for perror */
 #include <errno.h>
+
 #include <fcntl.h>		/* for non-blocking */
 
-#include <signal.h>		/* for SIG_ERR */
+#include <signal.h>
+#include <sys/select.h>		/* for select / pselect */
 #include <time.h>		/* timespec{} for pselect */
 #include <sys/time.h>		/* timeval{} for select */
-#include <sys/stat.h>
+#include <arpa/inet.h>		/* inet {3} functions */
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 
@@ -84,6 +86,19 @@ void *Mmap(void *, size_t, int, int, int, off_t);
 int Open(const char *, int, mode_t);
 void Pipe(int *fds);
 ssize_t Read(int, void *, size_t);
-void Write(int fd, void *ptr, size_t nbytes);
+void Sigaddset(sigset_t *, int);
+void Sigdelset(sigset_t *, int);
+void Sigemptyset(sigset_t *);
+void Sigfillset(sigset_t *);
+int Sigismember(const sigset_t *, int);
+void Sigpending(sigset_t *);
+void Sigprocmask(int, const sigset_t *, sigset_t *);
+char *Strdup(const char *);
+long Sysconf(int);
+void Sysctl(int *, uint32_t, void *, size_t *, void *, size_t);
+void Unlink(const char *);
+pid_t Wait(int *);
+pid_t Waitpid(pid_t, int *, int);
+void Write(int, void *, size_t);
 
 #endif	/* TCH_H */
