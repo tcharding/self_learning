@@ -1,11 +1,14 @@
 CC = gcc						
-CFLAG = -Wall -pedantic -std=c99 -fpic
+CFLAG = -Wall -pedantic -std=c99 -fpic -D_GNU_SOURCE 
 LIB = libtch.a
 INC = -I../include
 
 SRC = \
 	makeargv.c \
 	error.c \
+	wrapstdio.c \
+	wrapunix.c \
+	restart.c
 
 OBJ = $(SRC:.c=.o)
 

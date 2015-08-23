@@ -3,36 +3,12 @@ CFLAG = -Wall -pedantic -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch
 INC = -I../../include
 
-USP = parentwritepipe synchronizefan pipeserver pipeclient # text book programs
-BR = br_srv br_cli		# barrier client/server
-RR = rr_srv rr_cli		# request/reply client/server
+EXES = parentwritepipe synchronizefan pipeserver pipeclient \
+	seqserverbad seqclientbad
 
-.PHONY: all clean book barrier request_reply
+.PHONY: all clean book 
 
-all: $(USP) $(BR) $(RR)
-book: $(USP)
-barrier: $(BR)
-request_reply: $(RR)
-
-# barrier client/server
-br_srv: br_server.o barrier.o
-	$(CC) -o $@ br_server.o barrier.o $(LFLAG)
-
-br_cli: br_fanclient.o barrier.o
-	$(CC) -o $@ br_fanclient.o barrier.o $(LFLAG)
-
-barrier.o: barrier.c barrier.h
-	$(CC) $(CFLAG) -c $< $(INC)
-
-# request/reply client/server
-rr_srv: rr_server.o request_reply.o
-	$(CC) -o $@ rr_server.o request_reply.o $(LFLAG)
-
-rr_cli: rr_client.o request_reply.o
-	$(CC) -o $@ rr_client.o request_reply.o $(LFLAG)
-
-request_reply: request_reply.o request_reply.h
-	$(CC) $(CFLAG) -c $< $(INC)
+all: $(EXES) 
 
 # text book programs
 parentwritepipe: parentwritepipe.o
@@ -47,12 +23,17 @@ pipeserver: pipeserver.o restart.o
 pipeclient: pipeclient.o restart.o
 	$(CC) -o $@ pipeclient.o restart.o $(LFLAG)
 
+seqserverbad: seqserverbad.o 
+	$(CC) -o $@ seqserverbad.o $(LFLAG)
+
+seqclientbad: seqclientbad.o 
+	$(CC) -o $@ seqclientbad.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
 
 clean:
-	@for f in *.o $(USP) $(BR) $(RR) ; do \
+	@for f in *.o $(EXES) ; do \
 	if [ -f $$f ]; then \
 	rm "$$f"; \
 	echo "rm $$f" ; \

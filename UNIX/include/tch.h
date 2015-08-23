@@ -13,13 +13,24 @@
  * * UNIX Network Programming
  * *  - Stevens, Fenner, Rudoff, Volume 1, Third Edition
  */
+/* #define _GNU_SOURCE defined in makefile as gcc flag */
+
 #include <stdio.h>		/* for convenience */
 #include <stdlib.h>		/* for convenience */
 #include <string.h>		/* for convenience */
 #include <unistd.h>		/* for convenience */
+
+#include <sys/types.h>		/* basic system data types */
+#include <error.h>		/* for perror */
+#include <errno.h>
+#include <fcntl.h>		/* for non-blocking */
+
 #include <signal.h>		/* for SIG_ERR */
-#include <sys/types.h>		/* some systems still require this */
+#include <time.h>		/* timespec{} for pselect */
+#include <sys/time.h>		/* timeval{} for select */
 #include <sys/stat.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
 
 #define	MAXLINE	4096			/* max line length */
 
@@ -52,5 +63,27 @@ void	err_exit(int, const char *, ...) __attribute__((noreturn));
 void	err_ret(const char *, ...);
 void	err_sys(const char *, ...) __attribute__((noreturn));
 
+/* prototypes for our stdio wrapper functions (wrapstio.c) */
+void	 Fclose(FILE *);
+FILE	*Fdopen(int, const char *);
+char	*Fgets(char *, int, FILE *);
+FILE	*Fopen(const char *, const char *);
+void	 Fputs(const char *, FILE *);
+
+/* prototypes for our Unix wrapper functions (lib/wrapunix.c) */
+void *Calloc(size_t, size_t);
+void  Close(int);
+void  Dup2(int, int);
+int Fcntl(int, int, int);
+void Gettimeofday(struct timeval *, void *);
+int Ioctl(int, int, void *);
+pid_t Fork(void);
+void *Malloc(size_t);
+int Mkstemp(char *);
+void *Mmap(void *, size_t, int, int, int, off_t);
+int Open(const char *, int, mode_t);
+void Pipe(int *fds);
+ssize_t Read(int, void *, size_t);
+void Write(int fd, void *ptr, size_t nbytes);
 
 #endif	/* TCH_H */
