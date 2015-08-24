@@ -4,7 +4,7 @@ LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
-	ringnobreak biring sring sbiring torus fib
+	ringnobreak biring sring sbiring torus fib token_mutex
 
 .PHONY: all clean dev
 
@@ -51,6 +51,9 @@ sbiring: sbiring.o
 
 torus: torus.o
 	$(CC) -o $@ torus.o $(LFLAG)
+
+token_mutex: token_mutex.o
+	$(CC) -o $@ token_mutex.o $(LFLAG)
 
 lint:
 	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi

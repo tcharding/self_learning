@@ -17,8 +17,11 @@ biring.c	  <!-- bi-directional message passing -->
 sring.c		  <!-- (ringtopology.c) implemented using struct ring -->
 sbiring.c	  <!-- implemented using struct ring -->
 
-### 7.3 Simple Communication #
+### 7.4 Simple Communication #
 fib.c
+
+### 7.5 Mutual Exclusion with Tokens #
+token_mutex.c
 
 #### Usage: #
 _build with_ `make` _then run_  

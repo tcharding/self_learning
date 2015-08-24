@@ -14,17 +14,16 @@ static int read_seq(const char *buf, long *a, long *b);
 int main(int argc, char *argv[])
 {
 	long a, b, c;
-	int nproc, n;
+	int nproc, n, i;
 	int fd[2];
 	pid_t pid;
 	int nid;		/* node number */
-	int i, status;
 	size_t len;		/* string length */
 	ssize_t res;		/* for write(2) */
 	char buf[PIPE_BUF];
 				/* lint likes me if I do this */
 	a = b = c = 0;
-	status = nproc = n = 0;
+	nproc = n = 0;
 	bzero(fd, sizeof(int)*2);
 				/* check command line args */
 	if (argc != 2 || ((n = atoi(argv[1])) < 0))
