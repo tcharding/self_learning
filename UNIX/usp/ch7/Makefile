@@ -4,11 +4,14 @@ LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
-	ringnobreak biring sring sbiring torus
+	ringnobreak biring sring sbiring torus fib
 
 .PHONY: all clean dev
 
 all: $(EXES) lint
+
+fib: fib.o
+	$(CC) -o $@ fib.o $(LFLAG)
 
 ring: ring.o
 	$(CC) -o $@ ring.o $(LFLAG)
