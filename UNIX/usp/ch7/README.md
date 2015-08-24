@@ -5,13 +5,17 @@ Programs (text book)
 --------------------
 _see source file for text book listed 'Program' number. Build with:_ `$ make book`
 
-Examples/exercises 
-------------------
-Exercise 7.6 ring.c
+### 7.1 Ring Topology #
+ring.c
 
-Sections
---------
-### N.N Exercise: #
+### 7.1 Ring Exploration #
+ring[1..5].c
+ringtopology.c <!-- add message passing -->
+ringchildbreak.c <!-- creates fan  (doesn't sync) -->
+ringnobreak.c <!-- creates tree (doesn't sync) -->
+biring.c	  <!-- bi-directional message passing -->
+sring.c		  <!-- (ringtopology.c) implemented using struct ring -->
+sbiring.c	  <!-- implemented using struct ring -->
 
 #### Usage: #
 _build with_ `make` _then run_  

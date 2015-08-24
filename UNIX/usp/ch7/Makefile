@@ -3,7 +3,8 @@ CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
-EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology
+EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
+	ringnobreak biring sring sbiring torus
 
 .PHONY: all clean dev
 
@@ -30,11 +31,29 @@ ring5: ring5.o
 ringtopology: ringtopology.o
 	$(CC) -o $@ ringtopology.o $(LFLAG)
 
+ringchildbreak: ringchildbreak.o
+	$(CC) -o $@ ringchildbreak.o $(LFLAG)
+
+ringnobreak: ringnobreak.o
+	$(CC) -o $@ ringnobreak.o $(LFLAG)
+
+biring: biring.o
+	$(CC) -o $@ biring.o $(LFLAG)
+
+sring: sring.o
+	$(CC) -o $@ sring.o $(LFLAG)
+
+sbiring: sbiring.o
+	$(CC) -o $@ sbiring.o $(LFLAG)
+
+torus: torus.o
+	$(CC) -o $@ torus.o $(LFLAG)
+
 lint:
 	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
 	@for f in $(EXES) ; do \
 	if [ -f $$f ]; then \
-	splint $$f.c -I../../include -warnposix > $(SPLINT); \
+	splint $$f.c -I../../include -warnposix -nullderef -nullpass g> $(SPLINT); \
 	fi; done
 
 %.o: %.c

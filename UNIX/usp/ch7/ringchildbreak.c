@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 			Dup2(fd[0], STDIN_FILENO);
 		Close(fd[0]);
 		Close(fd[1]);
-		if (pid > 0)
+		if (pid == 0)
 			break;
 	}
 

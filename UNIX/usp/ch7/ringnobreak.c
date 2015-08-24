@@ -8,7 +8,7 @@ static void print_ring(pid_t a[], int size);
 /* create ring of n processes */
 int main(int argc, char *argv[])
 {
-	int nproc;
+	int nproc, nfork;
 	int fd[2];
 	pid_t pid;
 	int i, k, status;
@@ -16,11 +16,23 @@ int main(int argc, char *argv[])
 	pid_t next_ID;
 	ssize_t res;
 	
-	status = nproc = pid = 0;
+	status = nproc = nfork = pid = 0;
 	fd[0] = fd[1] = 0;
-	if (argc != 2 || ((nproc = atoi(argv[1])) <= 0))
-		err_quit("Uasge: %s processes", argv[0]);
+	if (argc != 2 || ((nfork = atoi(argv[1])) <= 0))
+		err_quit("Uasge: %s forks", argv[0]);
 
+	/* exponential growth when neither process breaks fork loop */
+	switch (nfork) {
+	case 0:
+		nproc = 1;
+		break;
+	case 1:
+		nproc = 2;
+		break;
+	default:
+		nproc = nfork * nfork;
+		break;
+	}
 	fprintf(stderr, "Creating ring of %d processes\n", nproc);
 	Pipe(fd);
 	Dup2(fd[0], STDIN_FILENO);
@@ -28,7 +40,7 @@ int main(int argc, char *argv[])
 	Close(fd[0]);
 	Close(fd[1]);
 	
-	for (i = 1; i < nproc; i++) {
+	for (i = 0; i < nfork; i++) {
 		Pipe(fd);
 		if ((pid = Fork()) > 0)
 			Dup2(fd[1], STDOUT_FILENO);
@@ -36,15 +48,13 @@ int main(int argc, char *argv[])
 			Dup2(fd[0], STDIN_FILENO);
 		Close(fd[0]);
 		Close(fd[1]);
-		if (pid > 0)
-			break;
 	}
-
+	
 	if ((ida = calloc((size_t)nproc, sizeof(pid_t))) == NULL)
 		err_sys("calloc error");
 	next_ID = getpid();
 	ida[0] = next_ID;
-	for (k = 1; k < nproc; k++) {
+	for (k = 0; k < nproc; k++) {
 		res = write(STDOUT_FILENO, &next_ID, sizeof(next_ID));
 		if ((res == -1) || ((size_t)res != sizeof(next_ID)))
 			err_sys("write error");
