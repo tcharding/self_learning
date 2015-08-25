@@ -198,7 +198,7 @@ int readline(int fd, char *buf, int nbytes)
 	errno = EINVAL;
 	return -1;
 }
-/* readtimed: read upto nbytes from fd into buf */
+
 ssize_t readtimed(int fd, void *buf, size_t nbytes, double seconds)
 {
 	struct timeval timedone;
@@ -232,8 +232,7 @@ int readwriteblock(int fromfd, int tofd, char *buf, int size)
 		return bytesread;
 	return r_write(tofd, buf, size);
 }
-/* waitfdtimed: wait for input (ready to read) on fd until end
-   return 0 if ready within time, -1 if not ready or error */
+
 int waitfdtimed(int fd, struct timeval end)
 {
 	fd_set readset;

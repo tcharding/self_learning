@@ -36,6 +36,10 @@
 
 #define	MAXLINE	4096			/* max line length */
 
+/* Macro to print debugging info */
+/* #define PUT(fmt, ...) \ */
+/*            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)  */
+
 /*
  * Default file access permissions for new files.
  */

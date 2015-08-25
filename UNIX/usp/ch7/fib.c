@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
 	if (argc != 2 || ((n = atoi(argv[1])) < 0))
 		err_quit("Uasge: fib n", argv[0]);
 				/* define fib(0) and fib(1) */
-	if (n < 3) {
-		fprintf(stdout, "Fib(%d) = %ld\n", n, (long)1);
+	if (n < 2) {
+		fprintf(stdout, "Fib(%d) = %ld\n", n, (long)n);
 		exit(0);
 	}
 	nproc = n - 2;

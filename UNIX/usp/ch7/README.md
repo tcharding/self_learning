@@ -23,6 +23,15 @@ fib.c
 ### 7.5 Mutual Exclusion with Tokens #
 token_mutex.c
 
+### 7.6 Mutual Exclusion by Voting #
+
+### 7.7 Leader Election on an Anonymous Ring #
+
+### 7.8 Token Ring for Communication #
+hostgen.c
+imp.c
+tokenring.c
+
 #### Usage: #
 _build with_ `make` _then run_  
 `$ `
