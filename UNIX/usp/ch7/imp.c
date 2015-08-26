@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 /* host: do host work */
 static int host(void)
 {
-	
+	return -1;
 }
 /* imp: do IMP work */
 static int imp(int nid, struct ring net)

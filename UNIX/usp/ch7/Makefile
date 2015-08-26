@@ -4,22 +4,30 @@ LFLAG = -L../../lib -ltch
 INC = -I../../include -I../include
 SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
-	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp \
-DEV = hostgen imp 
+	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp 
+
+DEV = tst-vector
 
 .PHONY: all clean dev
 
 dev: clean $(DEV) lint_dev
 
-lint_dev:
-	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
-	@for f in $(DEV) ; do \
-	if [ -f $$f ]; then \
-	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
-	-unreachable > $(SPLINT); \
-	fi; done
 
 all: $(EXES) lint_all
+
+# test executables (tracer bullets!)
+tst-data: tst-data.o data.o string.o
+	$(CC) -o $@ tst-data.o data.o string.o $(LFLAG)
+
+tst-vector: tst-vector.o vector.o
+	$(CC) -o $@ tst-vector.o vector.o $(LFLAG)
+
+tst-processchar: tst-processchar.o processchar.o
+	$(CC) -o $@ tst-processchar.o processchar.o $(LFLAG)
+
+# executables
+ringpp: ringpp.o
+	$(CC) -o $@ ringpp.o $(LFLAG)
 
 imp: imp.o tokenring.o
 	$(CC) -o $@ imp.o tokenring.o $(LFLAG)
@@ -72,6 +80,23 @@ token_mutex: token_mutex.o
 hostgen: hostgen.o 
 	$(CC) -o $@ hostgen.o $(LFLAG) -L../lib -lrestart
 
+# object only (library) rules
+tokenring: tokenring.c tokenring.h
+	$(CC) $(CFLAG) -c $< $(INC)
+
+string: string.h
+	$(CC) $(CFLAG) -c $< $(INC)
+
+data: data.h
+	$(CC) $(CFLAG) -c $< $(INC)
+
+vector: vector.h
+	$(CC) $(CFLAG) -c $< $(INC)
+
+%.o: %.c
+	$(CC) $(CFLAG) -c $< $(INC)
+
+# lint rules
 lint_all:
 	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
 	@for f in $(EXES) ; do \
@@ -79,11 +104,13 @@ lint_all:
 	splint $$f.c -I../../include -warnposix -nullderef -nullpass > $(SPLINT); \
 	fi; done
 
-%.o: %.c
-	$(CC) $(CFLAG) -c $< $(INC)
-
-tokenring: tokenring.c tokenring.h
-	$(CC) $(CFLAG) -c $< $(INC)
+lint_dev:
+	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
+	@for f in $(DEV) vector	; do \
+	if [ -f $$f ]; then \
+	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	-unreachable > $(SPLINT); \
+	fi; done
 
 clean:
 	@for f in *.o $(EXES) $(SPLINT); do \

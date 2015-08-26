@@ -6,9 +6,9 @@ int main(int argc, char *argv[])
 	int nproc;
 	int fd[2];
 	pid_t pid;
-	int i;
+	int i, status;
 	
-	nproc = pid = 0;
+	nproc = pid = status = 0;
 	fd[0] = fd[1] = 0;
 	if (argc != 2 || ((nproc = atoi(argv[1])) <= 0))
 		err_quit("Uasge: %s processes", argv[0]);
@@ -31,7 +31,13 @@ int main(int argc, char *argv[])
 		if (pid > 0)
 			break;
 	}
+
+	if (pid > 0)
+		if (wait(&status) == -1)
+			err_sys("wait error");
+	
 	fprintf(stderr, "This is process: %d, ID: %ld parent: %ld\n",
 	       i , (long)getpid(), (long)getppid());
+
 	return 0;
 }

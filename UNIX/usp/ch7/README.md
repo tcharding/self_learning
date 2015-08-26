@@ -32,6 +32,13 @@ hostgen.c
 imp.c
 tokenring.c
 
+### 7.9 Pipelined Perprocessor #
+processchar.c
+tst-processchar.c
+ringpp.c
+data.c data.h
+vector.c vector.h
+
 #### Usage: #
 _build with_ `make` _then run_  
 `$ `
