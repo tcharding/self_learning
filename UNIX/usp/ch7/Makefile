@@ -6,7 +6,7 @@ SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
 	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp 
 
-DEV = tst-vector
+DEV = ringpp
 
 .PHONY: all clean dev
 
@@ -19,15 +19,15 @@ all: $(EXES) lint_all
 tst-data: tst-data.o data.o string.o
 	$(CC) -o $@ tst-data.o data.o string.o $(LFLAG)
 
-tst-vector: tst-vector.o vector.o
-	$(CC) -o $@ tst-vector.o vector.o $(LFLAG)
+tst-vector: tst-vector.o vector.o data.o string.o
+	$(CC) -o $@ tst-vector.o vector.o data.o string.o $(LFLAG)
 
 tst-processchar: tst-processchar.o processchar.o
 	$(CC) -o $@ tst-processchar.o processchar.o $(LFLAG)
 
 # executables
-ringpp: ringpp.o
-	$(CC) -o $@ ringpp.o $(LFLAG)
+ringpp: ringpp.o vector.o data.o string.o
+	$(CC) -o $@ ringpp.o vector.o data.o string.o $(LFLAG)
 
 imp: imp.o tokenring.o
 	$(CC) -o $@ imp.o tokenring.o $(LFLAG)
@@ -111,6 +111,18 @@ lint_dev:
 	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
 	-unreachable > $(SPLINT); \
 	fi; done
+
+lint_string:
+	splint string.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	-unreachable -nullret > $(SPLINT);
+
+lint_data:
+	splint data.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	-unreachable -nullret > $(SPLINT);
+
+lint_vector:
+	splint vector.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	-unreachable -nullret > $(SPLINT);
 
 clean:
 	@for f in *.o $(EXES) $(SPLINT); do \

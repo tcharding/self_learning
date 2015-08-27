@@ -14,7 +14,8 @@ char *s_dup(const char *s)
 
 	if (s == NULL)		/* normal condition */
 		return NULL;
-	
+
+	buf = NULL;
 	if ((fp = open_memstream(&buf, &size)) == NULL)
 		return NULL;
 	if (fputs(s, fp) < 0) {

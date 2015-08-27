@@ -1,3 +1,4 @@
+#include "tch.h"
 #include "vector.h"
 #include <string.h>
 #include <stdlib.h>
@@ -22,12 +23,16 @@ VECTOR *v_creat()
 void v_free(VECTOR *v, Freefunc *func)
 {
 	int i;
+	data_t *dp;
 	
 	if (v == NULL || func == NULL)
 		return;
 	if (v->data != NULL) {
-		for (i = 0; i < v->cnt; i++)
-			func(v->data[i]);
+		for (i = 0; i < v->cnt; i++) {
+			dp = v->data[i];
+			func(dp);
+		}
+		free(v->data);
 	}
 	free(v);
 }
@@ -36,39 +41,47 @@ void v_free(VECTOR *v, Freefunc *func)
 int v_add(VECTOR *v, data_t *d)
 {
 	data_t **new;
+	int nbytes;
 
-	if (v == NULL || d == NULL) 
+	if (v == NULL || d == NULL) {
+		errno = EINVAL;
 		return -1;
+	}
 
 	if (v->data == NULL) {	/* first time through */
-		v->data = malloc(INIT_SLOTS * sizeof(data_t *) + 1); /* +1 for NULL */
-		if (v->data == NULL)
+		nbytes = (INIT_SLOTS +1) * sizeof(data_t *); /* +1 for NULL */
+		if ((v->data = malloc(nbytes)) == NULL)
 			return -1;
+		bzero(v->data, nbytes);
 		v->slots = INIT_SLOTS;
-	} else if (v->cnt >= v->slots) { /* re size */
-		new = realloc(v->data, v->slots * 2 + 1); /* +1 for NULL */
-		if (new == NULL)
+	} else if (v->cnt >= v->slots) { /* re-size */
+		nbytes = (v->slots * 2 + 1) * sizeof(data_t *); /* +1 for NULL */
+		if ((new = realloc(v->data, nbytes)) == NULL)
 			return -1;
 		v->data = new;
 		v->slots *= 2;
 	}
 	v->data[v->cnt] = d;
-	return ++v->cnt;
+	++v->cnt;
+	v->data[v->cnt] = NULL;	/* NULL terminator */
+	return v->cnt;
 }
 
 /* foreach: call fnc on each member of dv,
 return accumulated total from function calls or -1 on error */
-int foreach(VECTOR *v, Func *func);
+int v_foreach(VECTOR *v, Func *func)
 {
-	data_t **d;
+	data_t *d;
 	int total, res;
+	int i;
 
 	total = 0;
-	if (v == NULL || v->data == NULL || func == NULL)
+	if (v == NULL || v->data == NULL || func == NULL) {
+		errno = EINVAL;
 		return -1;
-
+	}
 	for (i = 0; i < v->cnt; i++) {
-		d = vp->data[i];
+		d = v->data[i];
 		if (d == NULL)
 			continue; /* allow for future implementation of holes */
 		res = func(d);
@@ -79,30 +92,3 @@ int foreach(VECTOR *v, Func *func);
 	}
 	return total;
 }
-
-/* /\* dupv: return duplicate of p->v, free with freev() *\/ */
-/* char **dupv(data_t *p) */
-/* { */
-/* 	char **new_v, **new_vp, **vp, *new_s; */
-
-/* 	if (p == NULL || p->v == NULL) */
-/* 		return NULL; */
-
-/* 	new_v = malloc(p->cnt * sizeof(char *) + 1); /\* +1 for NULL *\/ */
-/* 	if (new_v == NULL) */
-/* 		return NULL; */
-
-/* 	new_vp = new_v;		/\* save front *\/ */
-/* 	for (vp = p->v; *vp != NULL; ++vp) { */
-/* 		new_s = malloc(strlen(*vp) + 1); */
-/* 		if (new_s == NULL) { */
-/* 			*new_vp = NULL; /\* add terminator so we can freev *\/ */
-/* 			freev(new_v); */
-/* 			return NULL; */
-/* 		} else */
-/* 			*new_vp++ = strcpy(new_s, *vp); */
-/* 	} */
-/* 	*new_vp = NULL;		/\* NULL terminator *\/ */
-/* 	return new_v; */
-/* } */
-

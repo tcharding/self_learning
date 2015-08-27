@@ -1,14 +1,12 @@
 #include "tch.h"
-#include "string.h"
 #include "vector.h"
+#include "data.h"
+#include "string.h"
 #include <ctype.h>
 
-typedef struct transformation {
-	char c;
-	char *s;
-} trans_t;
 
-static int get_trans(trans_t **t, const char *file);
+static data_t **parse_config(const char *file);
+static void write_tp(data_t **tp);
 
 /* create ring of n processes */
 int main(int argc, char *argv[])
@@ -19,19 +17,21 @@ int main(int argc, char *argv[])
 	int n;			/* number of stages, also lines in config file */
 	char *infile, *outfile, *config;
 	int nid;
-	trans_t *t;		/* array of transformations */
+	data_t **tp;		/* array of transformations */
 	
 	n = nproc = pid = status = fd[0] = fd[1] = 0;
 	if (argc != 5) 
-		err_quit("Uasge: %s stages config infile outfile", argv[0]);
+		err_quit("Uasge: %s stages config.in file.in file.out", argv[0]);
 	if ((n = atoi(argv[1])) < 0)
 		err_sys("atoi failed with %s", argv[1]);
 	config = argv[2], infile = argv[3], outfile = argv[4];
 	nproc = n + 2;
 	nid = 0;		/* node ID of initial process is 0 */
 
-	if (get_trans(&t, config) == -1)
-		err_sys("get_trans error");
+	if ((tp = parse_config(config)) == NULL)
+		err_sys("parse_config error");
+
+	write_tp(tp);
 				/* create initial ring */
 	Pipe(fd);
 	Dup2(fd[0], STDIN_FILENO);
@@ -62,33 +62,33 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-/* get_trans: read file and populate t with transformations */
-static int get_trans(trans_t **t, const char *file)
-{
-	FILE *fp;
-	char *rdline;
-	char *ptr;
-	size_t n;
-	trans_t *tbuf;
-	int c, lineno;
-	struct {
-		int size;
-		int count;
-		trans_t *data;
-	} tab;
 
-	tab.size = 0;
-	tab.count = 0;
-	lineno = n = c = 0;
-	bzero(&rdline, sizeof(char **)); /* quiet lint */
+/* parse_config: parse config file returning array of transformations */
+static data_t **parse_config(const char *file)
+{
+	VECTOR *v;
+	data_t *d, **tp;
+	char *rdline, *ptr;
+	int lineno;
+	size_t n;
+	FILE *fp;
+	
+	lineno = 0;
+	rdline = NULL;
+	if ((v = v_creat()) == NULL)
+		err_quit("v_creat error");
+
 	if ((fp = fopen(file, O_RDONLY)) == NULL)
-		return -1;
+			return NULL;
 
 	while (getline(&rdline, &n, fp) != -1) {
 		lineno++;
+		if ((d = adt_alloc()) == NULL)
+			err_quit("adt_creat error");
 		ptr = rdline;	
 		if (*ptr == '#') {
 			free(rdline);
+			adt_free(d);
 			continue; /* skip comment lines */
 		}
 		if (*(rdline + strlen(rdline) - 1) == '\n') /* remove line feed */
@@ -97,23 +97,42 @@ static int get_trans(trans_t **t, const char *file)
 			;	
 		if (*ptr == '\0') { /* skip blank lines */
 			free(rdline);
+			adt_free(d);
 			continue; 
 		}
-		tbuf = Malloc(sizeof(trans_t));
-		tbuf->c = *ptr;
+		d->c = *ptr;
 		while (isspace(*++ptr))	/* skip whitespace */
 			;	
 		if (*ptr == '\0') {
 			err_msg("ringpp: config read error an line: %d\n", lineno);
+			adt_free(d);
 			free(rdline);
-			return -1;
+			return NULL;
 		}
-		tbuf->s = dups(ptr); /* allocates new memory */
-		v_add(tab, tbuf);
+		d->s = s_dup(ptr); /* allocates new memory */
+		if (v_add(v, d) < 0)
+			err_sys("v_add error");
 		free(rdline);
 	}
 	if (ferror(fp)) 
 		err_msg("get_trans: stream error");
-	*t = tab.data;
-	return 0;
+	tp = v->data;		/* sneaky! we are returning part of v */
+	free(v);		/* so don't use v_free */
+	return tp;
+
+	
+}
+/* write_tp: write contents of tp to stderr */
+static void write_tp(data_t **tp)
+{
+	char *s;
+	data_t *dp;
+
+	fprintf(stderr, "writing tp\n");
+	for (dp = *tp; dp != NULL; dp = ++*tp) {
+		s = adt_tostring(dp);
+		fprintf(stderr, "%s", s);
+		free(s);
+	}
+	fprintf(stderr, "\n");
 }

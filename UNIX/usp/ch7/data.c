@@ -67,6 +67,7 @@ char *adt_tostring(data_t *d)
 		errno = EINVAL;
 		return NULL;
 	}
+	buf = NULL;
 	if ((fp = open_memstream(&buf, &size)) == NULL)
 		return NULL;
 
