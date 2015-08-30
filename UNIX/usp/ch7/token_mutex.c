@@ -101,11 +101,11 @@ static void write_token(int nid)
 static void critical_section(int nid, int i)
 {
 	char buf[BUFSIZ];
-	struct timeval tv;
+	time_t t;
 
-	if (gettimeofday(&tv, NULL) == -1)
+	if (time(&t) == -1)
 		err_sys("time error");
-	if (snprintf(buf, BUFSIZ,"nid: %d i: %d %s\n", nid, i, ctime(&tv)) < 0)
+	if (snprintf(buf, BUFSIZ,"nid: %d i: %d %s\n", nid, i, ctime(&t)) < 0)
 		err_sys("snprintf error");
 	
 	ptrastr(STDERR_FILENO, buf, (int)strlen(buf));

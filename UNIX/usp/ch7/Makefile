@@ -4,33 +4,13 @@ LFLAG = -L../../lib -ltch
 INC = -I../../include -I../include
 SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
-	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp \
-	ringpp
+	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp 
 
-TESTS = tst-vector tst-data tst-processchar
-
-DEV = ringpp
-
-.PHONY: all clean dev
-
-dev: clean $(DEV) lint_dev
-
+.PHONY: all clean 
 
 all: $(EXES) lint_all
 
-# test executables (tracer bullets!)
-tst-data: tst-data.o data.o string.o
-	$(CC) -o $@ tst-data.o data.o string.o $(LFLAG)
-
-tst-vector: tst-vector.o vector.o data.o string.o
-	$(CC) -o $@ tst-vector.o vector.o data.o string.o $(LFLAG)
-
-tst-processchar: tst-processchar.o processchar.o
-	$(CC) -o $@ tst-processchar.o processchar.o $(LFLAG)
-
 # executables
-ringpp: ringpp.o vector.o data.o string.o
-	$(CC) -o $@ ringpp.o vector.o data.o string.o $(LFLAG)
 
 imp: imp.o tokenring.o
 	$(CC) -o $@ imp.o tokenring.o $(LFLAG)
