@@ -24,7 +24,8 @@
 #include <error.h>		/* for perror */
 #include <errno.h>
 
-#include <fcntl.h>		/* for non-blocking */
+/* including fcntl opens the door to hideous IO bugs when one mixes up 
+   calls to open and fopen */ /* #include <fcntl.h> */ 
 
 #include <signal.h>
 #include <sys/select.h>		/* for select / pselect */

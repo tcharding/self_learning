@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 
 	if ((res = parse_config(config, &v)) != n)
 		err_sys("parse_config error: res: %d n: %d", res, n);
+
 	if (v_foreach(&v, adt_pprint) == -1)
 		err_sys("print vector error");
 	
@@ -69,23 +70,22 @@ static int parse_config(const char *file, vec_t *v)
 	data_t *d;
 	char *rdline, *ptr;
 	int lineno;
-	size_t n;
-	FILE *fp;
-	struct stat *statbuf;
-	
+	FILE *stream;
+	size_t len;
+	ssize_t read;
+	int cnt;
+
+	cnt = 0;
 	lineno = 0;
-	rdline = NULL, n = 0;
-	fprintf(stderr, "parseing %s\n", file);
-	if (stat(file, &statbuf) == -1)
-		err_dump("stat error");
-	if ((fp = fopen("config", O_RDONLY)) == NULL)
-		err_dump("fopen error");
-	fprintf(stderr, "about to get line\n");
-	while (getline(&rdline, &n, fp) != -1) {
-		fprintf(stderr, "rdline[%d]: %s\n", lineno, rdline);
+	rdline = NULL, len = 0;
+
+	if ((stream = fopen(file, "r")) == NULL)
+		err_sys("fopen failed with %s", file);
+	
+	while ((read = getline(&rdline, &len, stream)) != -1) {
 		lineno++;
 		if (*rdline == '#') {
-			free(rdline);
+			/* free(rdline); */
 			continue; /* skip comment lines */
 		}
 		if ((d = adt_alloc()) == NULL) 
@@ -98,28 +98,29 @@ static int parse_config(const char *file, vec_t *v)
 		while (isspace(*ptr++))	/* skip whitespace */
 			;	
 		if (*ptr == '\0') { /* skip blank lines */
-			free(rdline);
+			/* free(rdline); */
 			adt_free(d);
 			continue; 
 		}
+		cnt++;		/* testing */
 		d->c = *ptr;
 		while (isspace(*++ptr))	/* skip whitespace */
 			;	
 		if (*ptr == '\0') {
 			err_msg("ringpp: config read error an line: %d\n", lineno);
 			adt_free(d);
-			free(rdline);
+			/* free(rdline); */
 			return -1;
 		}
 		d->s = s_dup(ptr); /* allocates new memory */
-		if (v_add(v, d) < 0)
+		if (v_add(v, d) != cnt)
 			err_sys("v_add error");
-		free(rdline);
-		rdline = NULL, n = 0; /* clear before call to getline(3) */
 	}
-	if (ferror(fp)) 
+	
+	if (ferror(stream)) 
 		err_msg("get_trans: stream error");
-	if (fclose(fp) != 0)
+	if (fclose(stream) != 0)
 		err_msg("fclose error");
-	return 0;
+	fprintf(stderr, "END cnt: %d v->cnt: %d\n", cnt, v->cnt);
+	return v->cnt;
 }
