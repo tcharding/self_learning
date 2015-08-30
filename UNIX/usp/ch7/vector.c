@@ -6,11 +6,11 @@
 
 /* v_creat: allocate memory and initialise vector
    free with v_free */
-VECTOR *v_creat()
+vec_t *v_creat()
 {
-	VECTOR *v;
+	vec_t *v;
 	
-	if ((v = malloc(sizeof(VECTOR))) == NULL)
+	if ((v = malloc(sizeof(vec_t))) == NULL)
 		return NULL;
 	v->slots = 0;
 	v->cnt = 0;
@@ -20,7 +20,7 @@ VECTOR *v_creat()
 }
 
 /* v_free: free memory allocated with v_creat */
-void v_free(VECTOR *v, Freefunc *func)
+void v_free(vec_t *v, Freefunc *func)
 {
 	int i;
 	data_t *dp;
@@ -38,7 +38,7 @@ void v_free(VECTOR *v, Freefunc *func)
 }
 
 /* v_add: add data to v, return new count or -1 on error */
-int v_add(VECTOR *v, data_t *d)
+int v_add(vec_t *v, data_t *d)
 {
 	data_t **new;
 	int nbytes;
@@ -69,7 +69,7 @@ int v_add(VECTOR *v, data_t *d)
 
 /* foreach: call fnc on each member of dv,
 return accumulated total from function calls or -1 on error */
-int v_foreach(VECTOR *v, Func *func)
+int v_foreach(vec_t *v, Func *func)
 {
 	data_t *d;
 	int total, res;

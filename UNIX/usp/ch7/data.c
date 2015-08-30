@@ -134,3 +134,8 @@ void adt_err_msg(data_t *d, char *fmt, ...)
 	return;
 }
 
+/* adt_pprint: print function */
+int adt_pprint(data_t *d)
+{
+	return printf("%c: s:%s\n", d->c, d->s);
+}

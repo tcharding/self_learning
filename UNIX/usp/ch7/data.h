@@ -17,4 +17,5 @@ char *adt_tostring(data_t *d);
 void adt_err_sys(data_t *d, char *fmt, ...);
 void adt_err_msg(data_t *d, char *fmt, ...);
 
+int adt_pprint(data_t *d);
 #endif	/* TCH_DATA_H */

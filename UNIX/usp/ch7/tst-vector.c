@@ -9,7 +9,7 @@ int test_fn(data_t *d);
 /* test vector implementation */
 int main(void)
 {
-	VECTOR *vp;
+	vec_t *vp;
 	data_t d, *dp;
 	int i, cnt;
 				/* test creat, free */

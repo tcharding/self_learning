@@ -4,9 +4,7 @@
 #include "string.h"
 #include <ctype.h>
 
-
-static data_t **parse_config(const char *file);
-static void write_tp(data_t **tp);
+static int parse_config(const char *file, vec_t *v);
 
 /* create ring of n processes */
 int main(int argc, char *argv[])
@@ -16,9 +14,10 @@ int main(int argc, char *argv[])
 	int i, status, nproc;
 	int n;			/* number of stages, also lines in config file */
 	char *infile, *outfile, *config;
-	int nid;
-	data_t **tp;		/* array of transformations */
-	
+	int nid, res;
+	vec_t v;		/* transformations from config file */
+
+	v.slots = 0, v.cnt = 0, v.data = NULL; /* initialise v */
 	n = nproc = pid = status = fd[0] = fd[1] = 0;
 	if (argc != 5) 
 		err_quit("Uasge: %s stages config.in file.in file.out", argv[0]);
@@ -28,10 +27,11 @@ int main(int argc, char *argv[])
 	nproc = n + 2;
 	nid = 0;		/* node ID of initial process is 0 */
 
-	if ((tp = parse_config(config)) == NULL)
-		err_sys("parse_config error");
-
-	write_tp(tp);
+	if ((res = parse_config(config, &v)) != n)
+		err_sys("parse_config error: res: %d n: %d", res, n);
+	if (v_foreach(&v, adt_pprint) == -1)
+		err_sys("print vector error");
+	
 				/* create initial ring */
 	Pipe(fd);
 	Dup2(fd[0], STDIN_FILENO);
@@ -57,42 +57,44 @@ int main(int argc, char *argv[])
 		if (wait(&status) == -1)
 			err_sys("wait error");
 	
-	fprintf(stderr, "This is process: %d, ID: %ld parent: %ld\n",
-	       nid , (long)getpid(), (long)getppid());
+	fprintf(stderr, "nid: %d, pid: %ld ppid: %ld, c: %c s: %s\n",
+		nid , (long)getpid(), (long)getppid(), v.data[n]->c, v.data[n]->s);
 
 	return 0;
 }
 
-/* parse_config: parse config file returning array of transformations */
-static data_t **parse_config(const char *file)
+/* parse_config: parse config file putting transformation's into v */
+static int parse_config(const char *file, vec_t *v)
 {
-	VECTOR *v;
-	data_t *d, **tp;
+	data_t *d;
 	char *rdline, *ptr;
 	int lineno;
 	size_t n;
 	FILE *fp;
+	struct stat *statbuf;
 	
 	lineno = 0;
-	rdline = NULL;
-	if ((v = v_creat()) == NULL)
-		err_quit("v_creat error");
-
-	if ((fp = fopen(file, O_RDONLY)) == NULL)
-			return NULL;
-
+	rdline = NULL, n = 0;
+	fprintf(stderr, "parseing %s\n", file);
+	if (stat(file, &statbuf) == -1)
+		err_dump("stat error");
+	if ((fp = fopen("config", O_RDONLY)) == NULL)
+		err_dump("fopen error");
+	fprintf(stderr, "about to get line\n");
 	while (getline(&rdline, &n, fp) != -1) {
+		fprintf(stderr, "rdline[%d]: %s\n", lineno, rdline);
 		lineno++;
-		if ((d = adt_alloc()) == NULL)
-			err_quit("adt_creat error");
-		ptr = rdline;	
-		if (*ptr == '#') {
+		if (*rdline == '#') {
 			free(rdline);
-			adt_free(d);
 			continue; /* skip comment lines */
 		}
-		if (*(rdline + strlen(rdline) - 1) == '\n') /* remove line feed */
-			*(rdline + strlen(rdline) - 1) = '\0';
+		if ((d = adt_alloc()) == NULL) 
+			err_quit("adt_alloc error");
+
+		ptr = rdline;	
+		if (*(ptr + strlen(ptr) - 1) == '\n') /* remove line feed */
+			*(ptr + strlen(ptr) - 1) = '\0';
+
 		while (isspace(*ptr++))	/* skip whitespace */
 			;	
 		if (*ptr == '\0') { /* skip blank lines */
@@ -107,32 +109,17 @@ static data_t **parse_config(const char *file)
 			err_msg("ringpp: config read error an line: %d\n", lineno);
 			adt_free(d);
 			free(rdline);
-			return NULL;
+			return -1;
 		}
 		d->s = s_dup(ptr); /* allocates new memory */
 		if (v_add(v, d) < 0)
 			err_sys("v_add error");
 		free(rdline);
+		rdline = NULL, n = 0; /* clear before call to getline(3) */
 	}
 	if (ferror(fp)) 
 		err_msg("get_trans: stream error");
-	tp = v->data;		/* sneaky! we are returning part of v */
-	free(v);		/* so don't use v_free */
-	return tp;
-
-	
-}
-/* write_tp: write contents of tp to stderr */
-static void write_tp(data_t **tp)
-{
-	char *s;
-	data_t *dp;
-
-	fprintf(stderr, "writing tp\n");
-	for (dp = *tp; dp != NULL; dp = ++*tp) {
-		s = adt_tostring(dp);
-		fprintf(stderr, "%s", s);
-		free(s);
-	}
-	fprintf(stderr, "\n");
+	if (fclose(fp) != 0)
+		err_msg("fclose error");
+	return 0;
 }

@@ -1,10 +1,13 @@
 CC = gcc
-CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
+CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE -g
 LFLAG = -L../../lib -ltch
 INC = -I../../include -I../include
 SPLINT = lint.out
 EXES = ring ring1 ring2 ring3 ring4 ring5 ringtopology ringchildbreak \
-	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp 
+	ringnobreak biring sring sbiring torus fib token_mutex hostgen imp \
+	ringpp
+
+TESTS = tst-vector tst-data tst-processchar
 
 DEV = ringpp
 
@@ -125,7 +128,7 @@ lint_vector:
 	-unreachable -nullret > $(SPLINT);
 
 clean:
-	@for f in *.o $(EXES) $(SPLINT); do \
+	@for f in *.o $(EXES) $(TESTS) $(SPLINT); do \
 	if [ -f $$f ]; then \
 	rm "$$f"; \
 	echo "rm $$f" ; \
