@@ -41,6 +41,8 @@
 /* #define PUT(fmt, ...) \ */
 /*            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)  */
 
+#define msg(fmt, ...) \
+	do { fprintf(stderr, fmt, __VA_ARGS__); } while (0)
 /*
  * Default file access permissions for new files.
  */

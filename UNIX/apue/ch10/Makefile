@@ -2,12 +2,15 @@ CC = gcc
 CFLAG = -Wall -pedantic -std=c99 
 LFLAG = -L../lib -lapue 
 INC = -I../include 
-EXES = 
+EXES = sig2string
 
 all: $(EXES)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
+
+sig2string: sig2string.o
+	$(CC) -o $@ sig2string.o $(LFLAG)
 
 # lint rules
 lint_all:
