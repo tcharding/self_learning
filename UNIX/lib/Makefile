@@ -33,3 +33,5 @@ clean:
 	echo "rm $$f" ; \
 	fi; done
 
+
+GNUmakefile finished at Tue Sep  1 08:13:29

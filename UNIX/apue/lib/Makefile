@@ -6,7 +6,8 @@ PLATFORM=$(shell $(ROOT)/systype.sh)
 include $(ROOT)/Make.defines.$(PLATFORM)
 
 LIBMISC	= libapue.a
-OBJS = error.o pathalloc.o openmax.o mem_stream.o prexit.o
+OBJS = error.o pathalloc.o openmax.o mem_stream.o prexit.o msg.o prmask.o \
+	wrapunix.o wrapstdio.o
 #OBJS   = bufargs.o cliconn.o clrfl.o \
 #			daemonize.o error.o errorlog.o lockreg.o locktest.o \
 #			popen.o prexit.o prmask.o \

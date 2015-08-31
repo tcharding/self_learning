@@ -40,4 +40,3 @@ void msg(const char *fmt, ...)
 	va_end(ap);
 }
 
-C/l finished at Mon Aug 31 18:21:35
