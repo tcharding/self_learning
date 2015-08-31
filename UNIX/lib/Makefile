@@ -8,7 +8,9 @@ SRC = \
 	error.c \
 	wrapstdio.c \
 	wrapunix.c \
-	restart.c
+	restart.c \
+	signal.c \
+	signalintr.c 
 
 OBJ = $(SRC:.c=.o)
 

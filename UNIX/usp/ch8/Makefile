@@ -3,11 +3,17 @@ CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
-EXES = 
+EXES = sig-catcher showtimes
 
 .PHONY: all clean 
 
 all: $(EXES) lint_all
+
+sig-catcher: sig-catcher.o
+	$(CC) -o $@ sig-catcher.o $(LFLAG)
+
+showtimes: showtimes.o
+	$(CC) -o $@ showtimes.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
