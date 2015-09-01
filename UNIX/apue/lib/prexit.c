@@ -1,3 +1,4 @@
+/* attr: Advanced Programming in the UNIX Environment - Stevens and Rago */
 #include "apue.h"
 #include <sys/wait.h>
 

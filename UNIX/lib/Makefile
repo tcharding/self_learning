@@ -4,6 +4,7 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	tellwait.c \
 	makeargv.c \
 	error.c \
 	wrapstdio.c \
@@ -33,5 +34,3 @@ clean:
 	echo "rm $$f" ; \
 	fi; done
 
-
-GNUmakefile finished at Tue Sep  1 08:13:29
