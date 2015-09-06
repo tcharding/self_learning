@@ -37,12 +37,6 @@
 
 #define	MAXLINE	4096			/* max line length */
 
-/* Macro to print debugging info */
-/* #define PUT(fmt, ...) \ */
-/*            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)  */
-
-#define msg(fmt, ...) \
-	do { fprintf(stderr, fmt, __VA_ARGS__); } while (0)
 /*
  * Default file access permissions for new files.
  */
@@ -114,5 +108,22 @@ void Unlink(const char *);
 pid_t Wait(int *);
 pid_t Waitpid(pid_t, int *, int);
 void Write(int, void *, size_t);
+
+/*
+ * Tobin's additions 
+ */
+
+/* output helpers */
+void debug(const char *fmt, ...);
+void msgn(const char *fmt, ...); /* adds newline */
+void msg(const char *fmt, ...);
+
+/* unit test framework */
+void tf_equ(int a, int b, int line);
+
+#define FAIL()						\
+	fprintf(stderr, "FAIL line: %d\n", __LINE__)
+#define T_EQ(a, b)				\
+	tf_equ(a, b, __LINE__)
 
 #endif	/* TCH_H */

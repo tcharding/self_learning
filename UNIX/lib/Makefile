@@ -4,6 +4,8 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	test_framework.c \
+	out.c \
 	tellwait.c \
 	makeargv.c \
 	error.c \
