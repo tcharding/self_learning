@@ -1,3 +1,6 @@
+# downloaded source
+src/
+
 # Object files
 *.o
 *.ko

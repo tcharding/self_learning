@@ -2,17 +2,31 @@
 #define VIRT_TIMERS_H
 
 #define VERBOSE 1 		/* verbose test output */
+#define TRACEFLAG 1		/* used for debugging (show()) */
 
-int getevent(int eventnumber);
-int getnumevents(void);
-int getrunning(void);
-long getvalue(int n);
-int removetop(void);
-int timerinit(void);
-void timerstart(int n, long interval);
-void timerstop(int n);
+#define MAXTIMERS 5
+
+typedef int Timer;
+typedef int Event;
+
+
+/* initialise */
+int vt_init(void);
+
 void waitforevent(void);
-int checktimer(int n);
+
+/* Manipulate Event */
+int vt_getnumevents(void);
+Timer vt_getevent(Event n);
+Timer vt_rmhead(void);
+
+/* Manipulate Timer */
+void vt_start(Timer n, struct timespec *tp);
+void vt_stop(Timer n);
+/* int vt_check(Timer n); */
+Timer vt_running(void);
+struct timeval vt_value(Timer n);
+
 /* testing */
 int vt_unit_tests(void);
 

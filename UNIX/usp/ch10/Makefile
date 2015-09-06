@@ -5,26 +5,32 @@ INC = -I../../include
 SPLINT = lint.out
 EXES =
 TESTS = test-runner tst-virtualtimers
-DEV = 
+DEV = timermain
 
 .PHONY: all clean dev tests
 
-tests: $(TESTS)
 dev: $(DEV) lint_dev
+tests: $(TESTS)
 all: $(EXES) lint_all
 
-# tests
-test-runner: virtualtimers.o test-runner.o
-	$(CC) -o $@ virtualtimers.o test-runner.o $(LFLAG)
+timermain: show.o virtualtimers.o hardwaretimer.o timermain.o 
+	$(CC) -o $@ virtualtimers.o hardwaretimer.o timermain.o show.o $(LFLAG)
 
-tst-virtualtimers: virtualtimers.o tst-virtualtimers.o
-	$(CC) -o $@ virtualtimers.o tst-virtualtimers.o $(LFLAG)
+# tests
+test-runner: show.o virtualtimers.o hardwaretimer.o test-runner.o
+	$(CC) -o $@ show.o virtualtimers.o hardwaretimer.o test-runner.o $(LFLAG)
+
+tst-virtualtimers: show.o hardwartimer.o virtualtimers.o tst-virtualtimers.o
+	$(CC) -o $@ show.o virtualtimers.o hardwartimer.o tst-virtualtimers.o $(LFLAG)
 
 # object only rules
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
 
 virtualtimers.o: virtualtimers.c virtualtimers.h
+	$(CC) $(CFLAG) -c $< $(INC)
+
+hardwaretimer.o: hardwaretimer.c hardwaretimer.h
 	$(CC) $(CFLAG) -c $< $(INC)
 
 # lint rules
