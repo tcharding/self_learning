@@ -1,5 +1,6 @@
-# downloaded source
+# soft links
 src/
+cur/
 
 # Object files
 *.o
