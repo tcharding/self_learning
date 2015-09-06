@@ -5,29 +5,30 @@
 #define TRACEFLAG 1		/* used for debugging (show()) */
 
 #define MAXTIMERS 5
+#define OFF -1
 
 typedef int Timer;
 typedef int Event;
 
-
 /* initialise */
-int vt_init(void);
+int virtt_init(void);
 
-void waitforevent(void);
-
-/* Manipulate Event */
-int vt_getnumevents(void);
-Timer vt_getevent(Event n);
-Timer vt_rmhead(void);
+void virtt_wait(void);
 
 /* Manipulate Timer */
-void vt_start(Timer n, struct timespec *tp);
-void vt_stop(Timer n);
-/* int vt_check(Timer n); */
-Timer vt_running(void);
-struct timeval vt_value(Timer n);
+Timer virtt_start(struct timespec *tp);
+void virtt_startt(Timer t, struct timespec *tp);
+void virtt_stop(Timer n);
+/* int virtt_check(Timer n); */
+Timer virtt_running(void);
+int virtt_value(Timer t);
+
+/* Manipulate Event */
+int virtt_getnumevents(void);
+Timer virtt_getevent(Event n);
+Timer virtt_rmhead(void);
 
 /* testing */
-int vt_unit_tests(void);
-
+int virtt_unit_tests(void);
+void virtt_write(Timer t);
 #endif	/* VIRT_TIMERS_H */

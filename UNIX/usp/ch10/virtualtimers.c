@@ -1,27 +1,29 @@
 #include "tch.h"
 #include "virtualtimers.h"
+#include "hardwaretimer.h"
 #include "show.h"
+#include "helper.h"
 
-typedef struct timerdata {
-	struct timer active[MAXTIMERS]; /* active timers */
+struct timerdata {
+	struct timespec active[MAXTIMERS]; /* active timers */
 	Timer events [MAXTIMERS];	/* que of expired timers */
 	int numevents;			/* number of entries in events */
 	int running;			/* next active timer to expire */
-} timerdata_t;
+};
 /* Virtual Timers */
-static timerdata_t timers;	
+static struct timerdata timers;	
 
-enum { OFF, ON };		/* used for timer.set */
+enum { UNSET, SET };		/* timer set or not set (i.e active/non-active) */
 
 /* static function prototypes */
-static void vt_sig_alrm(int signo);	/* called externally by callback */
+static void virtt_sig_alrm(int signo);	/* called externally by callback */
 
 /* static void start_next_running(void); */
 static int add_event(Timer t);
 static int rm_event(Timer t);
 static void clear_events(void);
-static int is_on(struct timespec *tp);
-static int turn_off(struct timespec *tp);
+static void clear_timer(Timer t);
+static int timer_state(Timer t);
 
 /* test helpers */
 static void dump_events();
@@ -29,95 +31,76 @@ static void dump_events();
 /* unit tests */
 static void t_addrm_event();
 
-/* vt_init: initialise Timers to zero */
-int vt_init(void)
+/* virtt_init: initialise Timers to zero */
+int virtt_init(void)
 {
 	int i;
 
 	for (i = 0; i < MAXTIMERS; i++) {
-		timers.active[i].set = OFF;
+		clear_timer(i);
 	}
 	timers.running = OFF;
 	clear_events();
-	catchsetup(vt_sig_alrm); /* init hardware sig catcher */
-	showinit(MAXTIMERS);	 /* init show library */
+	ht_init(virtt_sig_alrm); /* init hardware sig catcher */
+	show_init(MAXTIMERS);	 /* init show library */
 
 	return 0;
 }
-/* waitforevent: */
-void waitforevent(void)
+/* virtt_wait: */
+void virtt_wait(void)
 {
-	/* waitforinterupt() */
+	ht_wait();
 	return;
 }
-
-/* vt_getnumevents: return number of expired timers (numevents) */
-int vt_getnumevents(void)
+/* virtt_start: set next available timer to expire after interval tp 
+    return Timer number set, -1 if none available */
+Timer virtt_start(struct timespec *tp)
 {
-	return timers.numevents;
-}
-
-/* vt_getevent: return Timer for event n*/
-Timer vt_getevent(Event n)
-{
-				/* only access events that have occurred */
-	if (n < 0 || n >= timers.numevents) {
-		errno = EINVAL;
-		return -1;
-	}
-	return timers.events[n];
-}
-
-/* vt_rmhead: remove the 'oldest' event (Timer) from events
-    return timer number or -1 if no events available */
-Timer vt_rmhead(void)
-{
-	Timer t;			
+	Timer t;
 	
-	if (timers.numevents == 0)
-		return -1;
-	t = timers.events[0];
-	if (rm_event(t) != 0)
-		err_quit("vt_rmhead: unexplained error"); /* shouldn't get here */
-	return t;
+	for (t = 0; t < MAXTIMERS; t++) {
+		if (timer_state(t) == UNSET) {
+			virtt_startt(t, tp);
+			return t;
+		}
+	}
+	return -1;		/* no free timer */
 }
-
-/* vt_start: set t to expire after interval */
-void vt_start(Timer t, struct timespec *interval)
+/* virtt_start: set t to expire after interval tp */
+void virtt_startt(Timer t, struct timespec *tp)
 {
 	/* 
 	 * currently only supports one timer
 	 */
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
-	if (is_off(interval))
-		return;		/* defensive programming */
-	show(traceflag, "vt_start Enter", t, interval, 0);
+	show(TRACEFLAG, "virtt_start Enter", t, tp->tv_sec, 0);
 	(void)rm_event(t);
-	timers.active[t] = *interval;
 	timers.running = t;
-	sethardwaretimer(interval); 
-	show(traceflag, "vt_start Exit", t, interval, 0);
+	timers.active[t].tv_sec = tp->tv_sec;
+	timers.active[t].tv_nsec = tp->tv_nsec;
+	ht_set(tp);
+	show(TRACEFLAG, "virtt_start Exit", t, tp->tv_sec, 0);
 }
-/* vt_stop: stop t if running, remove event if present */
-void vt_stop(Timer t)
+/* virtt_stop: stop t if running, remove event if present */
+void virtt_stop(Timer t)
 {
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
 	
 	if (timers.running == t) 
 		timers.running = OFF;
-	timers.active[t].set = OFF;
+	clear_timer(t);
 	(void)rm_event(t);
 }
 
-/* /\* vt_check: check to see if a t exists */
+/* /\* virtt_check: check to see if a t exists */
 /*     1 if active */
 /*     0 if expired */
 /*     -1 if neither (timer was not set) */
 /*     -1 and errno on error */
 /* *\/ */
-/* int vt_check(Timer n) */
+/* int virtt_check(Timer n) */
 /* { */
 /* 	int i; */
 	
@@ -135,50 +118,99 @@ void vt_stop(Timer t)
 /* 	return -1;		/\* neither active nor expired *\/ */
 /* } */
 
-/* vt_running: get the current running timer, -1 if none running */
-Timer vt_running(void)
+/* virtt_running: get the current running timer, -1 if none running */
+Timer virtt_running(void)
 {
 	return timers.running;
 }
 
-/* vt_value: return current value of t if active, -1 if not */
-struct timeval getvalue(Timer t)
+/* virtt_value: return seconds till expiry of t if active, -1 if not */
+int virtt_value(Timer t)
 {
 	if (t < 0 || t >= MAXTIMERS) {
 		errno = EINVAL;
 		return -1;
 	}
-	return timers.active[t].tv;
+	return timers.active[t].tv_sec;
 }
+/* virtt_getnumevents: return number of expired timers (numevents) */
+int virtt_getnumevents(void)
+{
+	return timers.numevents;
+}
+
+/* virtt_getevent: return Timer for event n*/
+Timer virtt_getevent(Event n)
+{
+				/* only access events that have occurred */
+	if (n < 0 || n >= timers.numevents) {
+		errno = EINVAL;
+		return -1;
+	}
+	return timers.events[n];
+}
+
+/* virtt_rmhead: remove the 'oldest' event (Timer) from events
+    return timer number or -1 if no events available */
+Timer virtt_rmhead(void)
+{
+	Timer t;			
+	
+	if (timers.numevents == 0)
+		return -1;
+	t = timers.events[0];
+	if (rm_event(t) != 0)
+		err_quit("virtt_rmhead: unexplained error"); /* shouldn't get here */
+	return t;
+}
+
 /* -------- static functions ----------- */
 
-/* is_on: TRUE if tp is 'on' i.e non-nil */
-static int timer_state(struct timespec *tp)
+/* timer_state: return ON if timer is active, OFF if not active */
+static int timer_state(Timer t)
 {
+	struct timespec *tp;
+
+	if (t < 0 || t >= MAXTIMERS) {
+		errno = EINVAL;
+		return -1;
+	}
+	tp = &timers.active[t];
 	if (tp->tv_sec == 0 && tp->tv_nsec == 0)
-		return OFF;
-	return ON;
+		return UNSET;
+	return SET;
 }
-static int turn_off(struct timespec *tp)
+/* clear_timer: deactivate timer t */
+static void clear_timer(Timer t)
 {
-	
+	struct timespec *tp;
+
+	if (t < 0 || t >= MAXTIMERS) {
+		errno = EINVAL;
+		return;
+	}
+	tp = &timers.active[t];
+	tp->tv_sec = 0;
+	tp->tv_nsec = 0;
 }
 
-/* vt_sig_alrm: handle signal, called externally via callback */
-static void vt_sig_alrm(int signo)
+/* virtt_sig_alrm: handle signal, called externally via callback */
+static void virtt_sig_alrm(int signo)
 {
 	Timer t;
 /*
  * ? Do we need sig_atomic_t vars in timerdata_t ?
  */
 	(void)signo;		/* quiet lint */
-	show(traceflag, "vt_sig_alrm Enter", timers.running, -1, 1);
+	show(TRACEFLAG, "virtt_sig_alrm Enter", timers.running, -1, 1);
+	if (timers.running == OFF)
+		return;		/* alarm signal not raised by us */
 	t = timers.running;
 	timers.running = OFF;
 	add_event(t);
-	timers.active[t].set = OFF;
+	clear_timer(t);
 	/* start_next_running(); */
-	show(traceflag, "vt_sig_alrm Enter", timers.running, -1, 1);
+	show(TRACEFLAG, "virtt_sig_alrm Enter", timers.running, -1, 1);
 }
 
 /* /\* start_next_running: move the next active timer to running *\/ */
@@ -249,8 +281,8 @@ static void clear_events(void)
 
 /* --------- unit tests ---------- */
 
-/* vt_unit_tests: exported for test runner */
-int vt_unit_tests(void)
+/* virtt_unit_tests: exported for test runner */
+int virtt_unit_tests(void)
 {
 	int failed = 0;
 	
@@ -318,3 +350,10 @@ static void dump_events()
 /* } */
 
 
+void virtt_write(Timer t)
+{
+	
+	fprintf(stderr, "(T%d ", t);
+	write_tspec(&timers.active[t]);
+	fprintf(stderr,")");
+}

@@ -1,3 +1,4 @@
+/* attribution: UNIX Systems Programming - Robbins and Robbins */
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

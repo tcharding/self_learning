@@ -4,16 +4,20 @@
 
 int main(void)
 {
-	int n, interval;
-	
-	if (timerinit() != 0)
+	int nsec;
+	struct timespec tspec;
+
+	nsec = 0;
+	bzero(&tspec, sizeof(struct timespec));
+	if (virtt_init() != 0)
 		err_quit("timerinit errro");
 
 	for ( ; ; ) {
-		if (scanf("%d %d", &n, &interval) < 0)
+		if (scanf("%d", &nsec) < 0)
 			err_sys("scanf error");
-		timerstart(n, interval);
-		waitforevent();
+		tspec.tv_sec = nsec;
+		(void)virtt_start(&tspec);
+		virtt_wait();
 		/* bug in spec (waitforevent has no return value) */
 		fprintf(stderr, "Event recieved\n");
 		

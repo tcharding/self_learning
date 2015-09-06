@@ -1,5 +1,6 @@
 #include "tch.h"
 #include "hardwaretimer.h"
+#include "helper.h"
 #define MILLION 1000000L
 
 enum {FALSE, TRUE};		/* 0 = FALSE, 1 = TRUE */
@@ -8,8 +9,8 @@ static sigset_t oldmask;
 
 static long tvtomicro(struct timeval tv);
 
-/* catchsetup: set up signal handler */
-int catchsetup(Sigfunc *handler)
+/* ht_init: set up signal handler */
+int ht_init(Sigfunc *handler)
 {
 	struct sigaction act;
 
@@ -22,8 +23,8 @@ int catchsetup(Sigfunc *handler)
 	return 0;
 }
 
-/* is_interuptblocked: return TRUE if SIGALRM blocked, FALSE otherwise */
-int is_interuptblocked(void)
+/* ht_isblocked: return TRUE if SIGALRM blocked, FALSE otherwise */
+int ht_isblocked(void)
 {
 	sigset_t mask;
 
@@ -33,9 +34,9 @@ int is_interuptblocked(void)
 	return FALSE;
 }
 
-/* blockinterrupt: block SIGALRM 
+/* ht_block: block SIGALRM 
     save current process mask in oldmask */
-int blockinterrupt(void)
+int ht_block(void)
 {
 	sigset_t mask;
 
@@ -48,9 +49,9 @@ int blockinterrupt(void)
 	return 0;
 }
 
-/* unblockinterrupt: unblock SIGALRM
+/* ht_unblock: unblock SIGALRM
     save current process mask in oldmask */
-void unblockinterrupt(void)
+void ht_unblock(void)
 {
 	sigset_t mask;
 
@@ -62,8 +63,8 @@ void unblockinterrupt(void)
 	Sigprocmask(SIG_UNBLOCK, &mask, &oldmask);
 }
 
-/* gethardwaretimer: get time remaining (microseconds), 0 if not running */
-long gethardwaretimer(void)
+/* ht_get: get time remaining in microseconds, 0 if not running */
+long ht_get(void)
 {
 	struct itimerval itv;
 
@@ -72,25 +73,28 @@ long gethardwaretimer(void)
 	return tvtomicro(itv.it_value);
 }
 
-/* sethardwaretimer: set timer using itimer */
-void sethardwaretimer(long interval)
+/* ht_set: set timer using itimer
+    nanosec -> microsec, loss of resolution */
+void ht_set(struct timespec *tp)
 {
 	struct itimerval itv;
 
 	bzero(&itv.it_interval, sizeof(struct timeval)); /* no restart */
-	itv.tv_value.tv_sec = interval / MILLION;
-	itv.tv_value.tv_sec = interval % MILLION;
-
+	itv.it_value.tv_sec = tp->tv_sec;
+	itv.it_value.tv_usec = 0;
+	/* itv.it_value.tv_sec = tp->tv_nsec % 1000; /\* nano to micro *\/ */
+	write_tspec(tp);
 	if (setitimer(ITIMER_REAL, &itv, NULL) < 0)
 		err_sys("setitimer error");
 }
-void stophardwaretimer(void)
+/* ht_stop: */
+void ht_stop(void)
 {
 	err_sys("stophardwaretimer not implemented");
 }
 
-/* waitforinterrupt: unblock SIGALRM and wait for signal */
-void waitforinterrupt(void)
+/* ht_wait: unblock SIGALRM and wait for signal */
+void ht_wait(void)
 {
 	sigset_t mask;
 

@@ -1,15 +1,15 @@
 #ifndef HARD_TIMER_H
 #define HARD_TIMER_H
 
-int catchsetup(Sigfunc *handler);
-int is_interuptblocked(void);
-int blockinterrupt(void);
-void unblockinterrupt(void);
+int ht_init(Sigfunc *handler);
+int ht_isblocked(void);
+int ht_block(void);
+void ht_unblock(void);
 
-struct timeval gethardwaretimer(void);
-void sethardwaretimer(struct timeval interval);
-void stophardwaretimer(void);
+long ht_get(void);
+void ht_set(struct timespec *tp);
+void ht_stop(void);
 
-void waitforinterrupt(void);
+void ht_wait(void);
 
 #endif	/* HARD_TIMER_H */

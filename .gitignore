@@ -1,3 +1,7 @@
+# soft links
+UNIX/*/cur
+UNIX/*/src
+
 # Object files
 *.o
 *.ko

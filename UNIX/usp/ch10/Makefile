@@ -3,18 +3,20 @@ CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
-EXES =
+SRCS = helper.c show.c virtualtimers.c hardwaretimer.c
+OBJS = $(SRCS:.c=.o)
+EXES = timermain
 TESTS = test-runner tst-virtualtimers
 DEV = timermain
 
 .PHONY: all clean dev tests
 
+all: $(EXES) lint_all
 dev: $(DEV) lint_dev
 tests: $(TESTS)
-all: $(EXES) lint_all
 
-timermain: show.o virtualtimers.o hardwaretimer.o timermain.o 
-	$(CC) -o $@ virtualtimers.o hardwaretimer.o timermain.o show.o $(LFLAG)
+timermain: $(OBJS) timermain.o
+	$(CC) -o $@ timermain.o $(OBJS) $(LFLAG)
 
 # tests
 test-runner: show.o virtualtimers.o hardwaretimer.o test-runner.o
@@ -36,7 +38,7 @@ hardwaretimer.o: hardwaretimer.c hardwaretimer.h
 # lint rules
 lint_all:
 	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
-	@for f in $(EXES) ; do \
+	@for f in $(EXES) hardwaretimer virtualtimers ; do \
 	if [ -f $$f ]; then \
 	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
 	>> $(SPLINT); \

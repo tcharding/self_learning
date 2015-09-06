@@ -3,49 +3,43 @@
 #include "hardwaretimer.h"
 #define MILLION 1000000L
 
-static double initialtod = 0.0;
 static int maxtimers;
-static double gettime(void);
-static double timetodouble(long interval);
+static struct timespec initial;
 
-static double getrelativetime(void)
+static int getrelativetime(void)
 {
-	return gettime() - initialtod;
-}
+	int rel = 0;
+	struct timespec tval;
 
-static double gettime(void)
-{
-	double thistime = 0.0;
-	struct timeval tval;
-
-	if (gettimeofday(&tval, NULL))
+	if (clock_gettime(CLOCK_REALTIME, &tval) < 0)
 		fprintf(stderr, "gettimeofday error");
-	else
-		thistime = tval.tv_sec + (double)tval.tv_usec / MILLION;
-	return thistime;
+	else {
+		rel = tval.tv_sec - initial.tv_sec;
+	}
+	return rel;
 }
 
 /* showtimerdata: display the timers data structure */
 static void showtimerdata(void)
 {
 	int i;
+	Timer t;
+	Event ev;
 
-	printf("(%d,%.3f) A:", getrunning(),
-	       timetodouble(getvalue(getrunning())));
-	for (i = 0; i < maxtimers; i++)
-		if (getvalue(i) >= 0)
-			printf("(%d,%.3f) ",
-			       i, timetodouble(getvalue(i)));
-	printf(" (%dE", getnumevents());
-	for (i = 0; i < getnumevents(); i++)
-		printf(" %d", getevent(i));
+	t = virtt_running();
+	if (t == OFF) {
+		printf("(-:-)");
+	} else {
+		printf("(%d:%d)", t, virtt_value(t));
+	}
+       
+	for (t = 0; t < maxtimers; t++) 
+		virtt_write(t);
+	ev = virtt_getnumevents();
+	printf(" (%dE", ev);
+	for (i = 0; i < ev; i++)
+		printf(" %d", virtt_getevent(i));
 	printf(")\n");
-}
-
-/* timetodouble: microseconds to seconds */
-static double timetodouble(long interval)
-{
-	return (double)interval / MILLION;
 }
 
 /* ------------ Public Functions ------------ */
@@ -62,8 +56,8 @@ void show(int traceflag, const char *msg, long val1, long val2, int blockedflag)
 
 	if (!traceflag)
 		return;
-	wasblockedflag = blockinterrupt();
-	printf("**** %8.4f: ",  getrelativetime());
+	wasblockedflag = ht_block();
+	printf("**** %d: ",  getrelativetime());
 	printf("%s ", msg);
 	if (val1 >= 0)
 		printf("%ld ", val1);
@@ -74,16 +68,17 @@ void show(int traceflag, const char *msg, long val1, long val2, int blockedflag)
 	else
 		printf("U");
 	if (blockedflag != wasblockedflag)
-		printf("****");
+		printf(" ****");
 	showtimerdata();
 	fflush(stdout);
 	if (!wasblockedflag)
-		unblockinterrupt();
+		ht_unblock();
 }
 
-/* showinit: set initialtod to seconds since epoch */
-void showinit(int maxt)
+/* show_init: set initialtod to seconds since epoch */
+void show_init(int maxt)
 {
-	initialtod = gettime();
+	if (clock_gettime(CLOCK_REALTIME, &initial) < 0)
+		err_sys("clock_gettime");
 	maxtimers = maxt;
 }
