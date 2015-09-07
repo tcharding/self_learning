@@ -2,7 +2,7 @@
 #include "virtualtimers.h"
 #include "hardwaretimer.h"
 #include "show.h"
-
+#define MILLION 1000000L
 enum {FALSE, TRUE};		/* 0 = FALSE, 1 = TRUE */
 
 struct timerdata {
@@ -23,8 +23,12 @@ static void virtt_sig_alrm(int signo);	/* called externally by callback */
 static int add_event(Timer t);
 static int rm_event(Timer t);
 static void clear_events(void);
+
 static void clear_timer(Timer t);
 static int timer_state(Timer t);
+static void update_active(Timer t, struct timespec *tp);
+static long tspec_to_micro(struct timespec *tp);
+static void micro_to_tspec(struct timespec *tp, long ms);
 
 /* unit tests */
 static void t_addrm_event();
@@ -64,22 +68,42 @@ Timer virtt_start(struct timespec *tp)
 	}
 	return -1;		/* no free timer */
 }
-/* virtt_start: set t to expire after interval tp */
-void virtt_startt(Timer t, struct timespec *tp)
+/* virtt_start: set t to expire after interval 'new' */
+void virtt_startt(Timer t, struct timespec *new)
 {
-	/* 
-	 * currently only supports one timer
-	 */
+	long rem, req, total, start;
+	struct timespec tmp;
+
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
-	show(TRACEFLAG, "virtt_start BEGIN (t, sec)", t, tp->tv_sec, FALSE);
-	(void)rm_event(t);
-	timers.running = t;
-	timers.active[t].tv_sec = tp->tv_sec;
-	timers.active[t].tv_nsec = tp->tv_nsec;
-	ht_set(tp);
-	show(TRACEFLAG, "virtt_start END (t, sec)", t, tp->tv_sec, FALSE);
+	show(TRACEFLAG, "virtt_start BEGIN (t, sec)", t, new->tv_sec, FALSE);
+	(void)rm_event(t);	      /* no active t in events, by definition */
+	if ((timers.running = OFF) || /* no active timers */
+	    (timers.running = t)) {   /* t is already running */
+		timers.running = t;
+		update_active(t, new); /* copy values from new to t */
+		ht_set(new);
+		return;
+	} 
+	rem = ht_get();	/* time remaining in microseconds */
+	req = tspec_to_micro(new);
+	if (rem < req) {	/* new timer expires after running timer */
+		start = tspec_to_micro(&timers.active[timers.running]) - rem;
+		total = start + tspec_to_micro(new);
+		micro_to_tspec(&tmp, total);
+		update_active(t, &tmp);
+	} else {		/* new timer expires before running timer */
+		total = rem - tspec_to_micro(new);
+		micro_to_tspec(&tmp, total);
+		update_active(timers.running, &tmp);
+		timers.running = t;
+		update_active(t, new);
+		ht_set(new);
+	}
+	
+	show(TRACEFLAG, "virtt_start END (t, sec)", t, new->tv_sec, FALSE);
 }
+
 /* virtt_stop: stop t if running, remove event if present */
 void virtt_stop(Timer t)
 {
@@ -200,17 +224,32 @@ static int timer_state(Timer t)
 /* clear_timer: deactivate timer t */
 static void clear_timer(Timer t)
 {
-	struct timespec *tp;
 
 	if (t < 0 || t >= MAXTIMERS) {
 		errno = EINVAL;
 		return;
 	}
-	tp = &timers.active[t];
-	tp->tv_sec = 0;
-	tp->tv_nsec = 0;
+	update_active(t, NULL);
 }
 
+/* update_active: set timespec of t to tp */
+static void update_active(Timer t, struct timespec *new)
+{
+	struct timespec *old;
+	
+	if (t < 0 || t >= MAXTIMERS) {
+		errno = EINVAL;
+		return;
+	}
+	old = &timers.active[t];
+	if (new == NULL) {	/* clear timer */
+		old->tv_sec = 0;
+		old->tv_nsec = 0;
+	} else {
+		old->tv_sec = new->tv_sec;
+		old->tv_nsec = new->tv_nsec;
+	}
+}
 /* virtt_sig_alrm: handle signal, called externally via callback */
 static void virtt_sig_alrm(int signo)
 {
@@ -303,6 +342,23 @@ static void clear_events(void)
 		timers.events[i] = OFF;
 }
 
+/* tspec_to_micro: convert timespec to microseconds
+   looses resolution */
+static long tspec_to_micro(struct timespec *tp)
+{
+	long retval;
+
+	retval = tp->tv_sec * MILLION;
+	retval += tp->tv_nsec / 1000; /* lossy */
+	return retval;
+}
+
+/* micro_to_tspec: convect microseconds to timespec */
+static void micro_to_tspec(struct timespec *tp, long ms)
+{
+	tp->tv_sec = ms / MILLION;
+	tp->tv_nsec = (ms % MILLION) * 1000;
+}
 /* --------- unit tests ---------- */
 
 /* virtt_unit_tests: exported for test runner */
