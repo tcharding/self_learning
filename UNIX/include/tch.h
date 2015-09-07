@@ -110,8 +110,12 @@ pid_t Waitpid(pid_t, int *, int);
 void Write(int, void *, size_t);
 
 /*
- * Tobin's additions 
+ * Tobin's functions
  */
+
+/* string library */
+char *s_dup(const char *s);
+char *s_dupfmt(const char *fmt, ...);
 
 /* output helpers */
 void debug(const char *fmt, ...);

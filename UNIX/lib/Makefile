@@ -4,6 +4,7 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	string.c \
 	test_framework.c \
 	out.c \
 	tellwait.c \

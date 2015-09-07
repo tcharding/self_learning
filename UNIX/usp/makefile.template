@@ -17,7 +17,8 @@ lint_all:
 	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
 	@for f in $(EXES) ; do \
 	if [ -f $$f ]; then \
-	splint $$f.c -I../../include -warnposix -nullderef -nullpass > $(SPLINT); \
+	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	> $(SPLINT); \
 	fi; done
 
 clean:
