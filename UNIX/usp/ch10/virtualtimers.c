@@ -2,11 +2,12 @@
 #include "virtualtimers.h"
 #include "hardwaretimer.h"
 #include "show.h"
-#include "helper.h"
+
+enum {FALSE, TRUE};		/* 0 = FALSE, 1 = TRUE */
 
 struct timerdata {
 	struct timespec active[MAXTIMERS]; /* active timers */
-	Timer events [MAXTIMERS];	/* que of expired timers */
+	Timer events[MAXTIMERS];	/* que of expired timers */
 	int numevents;			/* number of entries in events */
 	int running;			/* next active timer to expire */
 };
@@ -25,9 +26,6 @@ static void clear_events(void);
 static void clear_timer(Timer t);
 static int timer_state(Timer t);
 
-/* test helpers */
-static void dump_events();
-/* static void dump_active(); */
 /* unit tests */
 static void t_addrm_event();
 
@@ -74,13 +72,13 @@ void virtt_startt(Timer t, struct timespec *tp)
 	 */
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
-	show(TRACEFLAG, "virtt_start Enter", t, tp->tv_sec, 0);
+	show(TRACEFLAG, "virtt_start BEGIN (t, sec)", t, tp->tv_sec, FALSE);
 	(void)rm_event(t);
 	timers.running = t;
 	timers.active[t].tv_sec = tp->tv_sec;
 	timers.active[t].tv_nsec = tp->tv_nsec;
 	ht_set(tp);
-	show(TRACEFLAG, "virtt_start Exit", t, tp->tv_sec, 0);
+	show(TRACEFLAG, "virtt_start END (t, sec)", t, tp->tv_sec, FALSE);
 }
 /* virtt_stop: stop t if running, remove event if present */
 void virtt_stop(Timer t)
@@ -93,30 +91,6 @@ void virtt_stop(Timer t)
 	clear_timer(t);
 	(void)rm_event(t);
 }
-
-/* /\* virtt_check: check to see if a t exists */
-/*     1 if active */
-/*     0 if expired */
-/*     -1 if neither (timer was not set) */
-/*     -1 and errno on error */
-/* *\/ */
-/* int virtt_check(Timer n) */
-/* { */
-/* 	int i; */
-	
-/* 	if (n < 0 || n > MAXTIMERS) { */
-/* 		errno = EINVAL; */
-/* 		return -1; */
-/* 	} */
-	
-/* 	if (timers.active[n] != OFF) */
-/* 		return 1; */
-/* 	for (i = 0; i < timers.numevents; i++) { */
-/* 		if (timers.events[i] == n) */
-/* 			return 0; /\* timer event present *\/ */
-/* 	} */
-/* 	return -1;		/\* neither active nor expired *\/ */
-/* } */
 
 /* virtt_running: get the current running timer, -1 if none running */
 Timer virtt_running(void)
@@ -139,16 +113,16 @@ int virtt_getnumevents(void)
 	return timers.numevents;
 }
 
-/* virtt_getevent: return Timer for event n*/
-Timer virtt_getevent(Event n)
-{
-				/* only access events that have occurred */
-	if (n < 0 || n >= timers.numevents) {
-		errno = EINVAL;
-		return -1;
-	}
-	return timers.events[n];
-}
+/* /\* virtt_getevent: return Timer for event n*\/ */
+/* Timer virtt_getevent(Event n) */
+/* { */
+/* 				/\* only access events that have occurred *\/ */
+/* 	if (n < 0 || n >= timers.numevents) { */
+/* 		errno = EINVAL; */
+/* 		return -1; */
+/* 	} */
+/* 	return timers.events[n]; */
+/* } */
 
 /* virtt_rmhead: remove the 'oldest' event (Timer) from events
     return timer number or -1 if no events available */
@@ -162,6 +136,49 @@ Timer virtt_rmhead(void)
 	if (rm_event(t) != 0)
 		err_quit("virtt_rmhead: unexplained error"); /* shouldn't get here */
 	return t;
+}
+/* 
+ * Output functions, all write to stdout
+ */ 
+static void write_tspec(struct timespec *tp)
+{
+	printf("[%d:%d]", (int)tp->tv_sec, (int)tp->tv_nsec);
+}
+static void write_timer(Timer t)
+{
+	printf("(%d", t);
+	write_tspec(&timers.active[t]);
+	printf(")");
+}
+void virtt_write_active(void)
+{
+	Timer t;
+
+	printf("A( ");
+	for (t = 0; t < MAXTIMERS; t++)
+		if (timer_state(t) == SET)
+			write_timer(t);
+	printf(")");
+}
+void virtt_write_events(void)
+{
+	int nev, i;
+
+	nev = virtt_getnumevents();
+	printf(" %dE(", nev);
+	for (i = 0; i < nev; i++)
+		printf(" %d", timers.events[i]);
+	printf(")");
+}
+void virtt_write_running(void)
+{
+	Timer t = timers.running;
+	
+	printf("R");
+	if (t == OFF)
+		printf("[-:-]");
+	else
+		write_timer(t);
 }
 
 /* -------- static functions ----------- */
@@ -202,7 +219,8 @@ static void virtt_sig_alrm(int signo)
  * ? Do we need sig_atomic_t vars in timerdata_t ?
  */
 	(void)signo;		/* quiet lint */
-	show(TRACEFLAG, "virtt_sig_alrm Enter", timers.running, -1, 1);
+	show(TRACEFLAG, "virtt_sig_alrm BEGIN (running, 0)",
+	     timers.running, 0, TRUE);
 	if (timers.running == OFF)
 		return;		/* alarm signal not raised by us */
 	t = timers.running;
@@ -210,7 +228,8 @@ static void virtt_sig_alrm(int signo)
 	add_event(t);
 	clear_timer(t);
 	/* start_next_running(); */
-	show(TRACEFLAG, "virtt_sig_alrm Enter", timers.running, -1, 1);
+	show(TRACEFLAG, "virtt_sig_alrm END (running, numevents)",
+	     timers.running, timers.numevents, TRUE);
 }
 
 /* /\* start_next_running: move the next active timer to running *\/ */
@@ -249,7 +268,7 @@ static int add_event(Timer t)
 
 	if (rm_event(t) >= 0)
 		--timers.numevents;
-	timers.events[timers.numevents] = t;
+	timers.events[timers.numevents++] = t;
 	return timers.numevents;
 }
 /* rm_event: remove t from events, update numevents
@@ -257,6 +276,11 @@ static int add_event(Timer t)
 static int rm_event(Timer t)
 {
 	int i, j;
+
+	if (t < 0 || t >= MAXTIMERS) {
+		errno = EINVAL;
+		return -1;
+	}
 				/* find event */
 	for (i = 0; i < timers.numevents; i++) {
 		if (timers.events[i] == t) {
@@ -300,60 +324,36 @@ static void t_addrm_event()
 	T_EQ(add_event(3), 3);
 	T_EQ(add_event(0), 4);
 	T_EQ(add_event(1), 5);
-	msgn("------  [ 2 4 3 0 1 ]");
-	dump_events();
-	T_EQ(rm_event(3), 4);
-	msgn("------  [ 2 4 0 1 . ]");
-	dump_events();
-	T_EQ(rm_event(2), 3);
-	msgn("------  [ 4 0 1 . . ]");
-	dump_events();
+	printf("-- [ 2 4 3 0 1 ]\n");
+	virtt_write_events();
+	printf("\n");
+	T_EQ(rm_event(3), 2);	/* event number 2 */
+	T_EQ(rm_event(3), -1);
+	printf("-- [ 2 4 0 1 . ]\n");
+	virtt_write_events();
+	printf("\n");
+	T_EQ(rm_event(2), 0);
+	printf("-- [ 4 0 1 . . ]\n");
+	virtt_write_events();
+	printf("\n");
 	T_EQ(rm_event(1), 2);
-	msgn("------  [ 4 0 . . . ]");
-	dump_events();
+	printf("-- [ 4 0 . . . ]\n");
+	virtt_write_events();
+	printf("\n");
+	
 				/* now test add_event edge cases */
 	clear_events();
 	T_EQ(add_event(2), 1);
 	T_EQ(add_event(2), 1);
 	T_EQ(add_event(4), 2);
-	msgn("Expect: [ 2 4 ... ]");
-	dump_events();
+	printf("-- [ 2 4 ... ]\n");
+	virtt_write_events();
+	printf("\n");
 	T_EQ(add_event(3), 3);
 	T_EQ(add_event(2), 3);
-	msgn("Expect: [ 4 3 2 ... ]");
-	dump_events();
+	printf("-- [ 4 3 2 ... ]\n");
+	virtt_write_events();
+	printf("\n");
 	clear_events();
 }
 
-/* dump events array */
-static void dump_events()
-{
-	int i;
-	
-	fprintf(stderr, "Events: [");
-	for (i = 0; i < MAXTIMERS; i++) {
-		fprintf(stderr, " %d", timers.events[i]);
-	}
-	fprintf(stderr, " ]\n");
-}
-
-/* /\* dump active array *\/ */
-/* static void dump_active() */
-/* { */
-/* 	int i; */
-	
-/* 	fprintf(stderr, "Active: ["); */
-/* 	for (i = 0; i < MAXTIMERS; i++) { */
-/* 		fprintf(stderr, " %ld", timers.active[i]); */
-/* 	} */
-/* 	fprintf(stderr, " ]\n");	 */
-/* } */
-
-
-void virtt_write(Timer t)
-{
-	
-	fprintf(stderr, "(T%d ", t);
-	write_tspec(&timers.active[t]);
-	fprintf(stderr,")");
-}

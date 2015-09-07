@@ -3,7 +3,7 @@ CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch
 INC = -I../../include	
 SPLINT = lint.out
-SRCS = helper.c show.c virtualtimers.c hardwaretimer.c
+SRCS = show.c virtualtimers.c hardwaretimer.c
 OBJS = $(SRCS:.c=.o)
 EXES = timermain
 TESTS = test-runner tst-virtualtimers
@@ -19,11 +19,11 @@ timermain: $(OBJS) timermain.o
 	$(CC) -o $@ timermain.o $(OBJS) $(LFLAG)
 
 # tests
-test-runner: show.o virtualtimers.o hardwaretimer.o test-runner.o
-	$(CC) -o $@ show.o virtualtimers.o hardwaretimer.o test-runner.o $(LFLAG)
+test-runner: $(OBJS) test-runner.o
+	$(CC) -o $@ $(OBJS) test-runner.o $(LFLAG)
 
-tst-virtualtimers: show.o hardwartimer.o virtualtimers.o tst-virtualtimers.o
-	$(CC) -o $@ show.o virtualtimers.o hardwartimer.o tst-virtualtimers.o $(LFLAG)
+tst-virtualtimers: show.o hardwaretimer.o virtualtimers.o tst-virtualtimers.o
+	$(CC) -o $@ show.o virtualtimers.o hardwaretimer.o tst-virtualtimers.o $(LFLAG)
 
 # object only rules
 %.o: %.c

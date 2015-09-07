@@ -1,10 +1,12 @@
 #include "tch.h"
 #include "virtualtimers.h"
 #include "hardwaretimer.h"
+#include "show.h"
 
 int main(void)
 {
 	int nsec;
+	Timer t;
 	struct timespec tspec;
 
 	nsec = 0;
@@ -13,13 +15,10 @@ int main(void)
 		err_quit("timerinit errro");
 
 	for ( ; ; ) {
-		if (scanf("%d", &nsec) < 0)
-			err_sys("scanf error");
-		tspec.tv_sec = nsec;
-		(void)virtt_start(&tspec);
-		virtt_wait();
-		/* bug in spec (waitforevent has no return value) */
-		fprintf(stderr, "Event recieved\n");
-		
+		while (scanf("%d %d", &t, &nsec) != EOF) {
+			tspec.tv_sec = nsec;
+			(void)virtt_startt(t, &tspec);
+			virtt_wait();
+		}
 	}
 }

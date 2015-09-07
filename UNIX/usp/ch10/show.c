@@ -12,7 +12,7 @@ static int getrelativetime(void)
 	struct timespec tval;
 
 	if (clock_gettime(CLOCK_REALTIME, &tval) < 0)
-		fprintf(stderr, "gettimeofday error");
+		err_sys("clock_gettimer");
 	else {
 		rel = tval.tv_sec - initial.tv_sec;
 	}
@@ -22,24 +22,11 @@ static int getrelativetime(void)
 /* showtimerdata: display the timers data structure */
 static void showtimerdata(void)
 {
-	int i;
-	Timer t;
-	Event ev;
-
-	t = virtt_running();
-	if (t == OFF) {
-		printf("(-:-)");
-	} else {
-		printf("(%d:%d)", t, virtt_value(t));
-	}
-       
-	for (t = 0; t < maxtimers; t++) 
-		virtt_write(t);
-	ev = virtt_getnumevents();
-	printf(" (%dE", ev);
-	for (i = 0; i < ev; i++)
-		printf(" %d", virtt_getevent(i));
-	printf(")\n");
+	virtt_write_running();
+	printf(" ");
+	virtt_write_active();
+	printf(" ");
+	virtt_write_events();
 }
 
 /* ------------ Public Functions ------------ */
@@ -57,19 +44,20 @@ void show(int traceflag, const char *msg, long val1, long val2, int blockedflag)
 	if (!traceflag)
 		return;
 	wasblockedflag = ht_block();
-	printf("**** %d: ",  getrelativetime());
+	printf("RT %d: ",  getrelativetime());
 	printf("%s ", msg);
 	if (val1 >= 0)
 		printf("%ld ", val1);
 	if (val2 >= 0)
 		printf("%ld ", val2);
 	if (blockedflag)
-		printf("B");
+		printf("B ");
 	else
-		printf("U");
+		printf("U ");
 	if (blockedflag != wasblockedflag)
-		printf(" ****");
+		printf("**** ");
 	showtimerdata();
+	printf("\n");
 	fflush(stdout);
 	if (!wasblockedflag)
 		ht_unblock();

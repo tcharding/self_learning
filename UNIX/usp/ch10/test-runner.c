@@ -8,7 +8,7 @@ int main(void)
 
 	nfail = 0;
 	/* unit tests */
-	nfail = vt_unit_tests();
+	nfail = virtt_unit_tests();
 	if (nfail != 0)
 		fprintf(stderr, "Tests failed: %d ( vt_unit_tests )", nfail);
 	/* integration tests */

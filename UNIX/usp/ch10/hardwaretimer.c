@@ -1,11 +1,9 @@
 #include "tch.h"
 #include "hardwaretimer.h"
-#include "helper.h"
 #define MILLION 1000000L
 
-enum {FALSE, TRUE};		/* 0 = FALSE, 1 = TRUE */
-
 static sigset_t oldmask;
+enum {FALSE, TRUE};		/* 0 = FALSE, 1 = TRUE */
 
 static long tvtomicro(struct timeval tv);
 
@@ -83,14 +81,14 @@ void ht_set(struct timespec *tp)
 	itv.it_value.tv_sec = tp->tv_sec;
 	itv.it_value.tv_usec = 0;
 	/* itv.it_value.tv_sec = tp->tv_nsec % 1000; /\* nano to micro *\/ */
-	write_tspec(tp);
+
 	if (setitimer(ITIMER_REAL, &itv, NULL) < 0)
 		err_sys("setitimer error");
 }
 /* ht_stop: */
 void ht_stop(void)
 {
-	err_sys("stophardwaretimer not implemented");
+	err_sys("ht_stop not implemented");
 }
 
 /* ht_wait: unblock SIGALRM and wait for signal */
@@ -103,7 +101,6 @@ void ht_wait(void)
 		Sigdelset(&mask, SIGALRM); /* unblock SIGALRM */
 	}
 	(void)sigsuspend(&mask);
-	fprintf(stderr, "waitforinterrupt: sigsuspend returned\n");
 }
 
 /* tvtomicro: return microsecond value of tv */
