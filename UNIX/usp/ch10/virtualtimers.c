@@ -76,7 +76,10 @@ void virtt_startt(Timer t, struct timespec *new)
 
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
+
 	show(TRACEFLAG, "virtt_start BEGIN (t, sec)", t, new->tv_sec, FALSE);
+
+	ht_block();
 	(void)rm_event(t);	      /* no active t in events, by definition */
 	if ((timers.running = OFF) || /* no active timers */
 	    (timers.running = t)) {   /* t is already running */
@@ -100,7 +103,7 @@ void virtt_startt(Timer t, struct timespec *new)
 		update_active(t, new);
 		ht_set(new);
 	}
-	
+	ht_unblock();
 	show(TRACEFLAG, "virtt_start END (t, sec)", t, new->tv_sec, FALSE);
 }
 
@@ -109,11 +112,12 @@ void virtt_stop(Timer t)
 {
 	if (t < 0 || t >= MAXTIMERS) 
 		return;
-	
+	ht_block();
 	if (timers.running == t) 
 		timers.running = OFF;
 	clear_timer(t);
 	(void)rm_event(t);
+	ht_unblock();
 }
 
 /* virtt_running: get the current running timer, -1 if none running */
