@@ -15,6 +15,7 @@ char *getinput(void);
 struct command *cmd_creat(const char *line);
 void cmd_free(struct command *cmd);
 void cmd_write(struct command *cmd);
+int input_unit_tests(void);
 
 /* exec.c */
 int cmd_exec(struct command *cmd);
