@@ -24,7 +24,7 @@ int makeargv(const char *s, const char *delim, char ***argvp)
 		for (ntokens = 1; strtok(NULL, delim) != NULL; ntokens++)
 			;
 				/* create argument array for ptrs to the tokens */
-	if ((*argvp = malloc(ntokens + 1)) == NULL) {
+	if ((*argvp = calloc((ntokens + 1), sizeof(char *))) == NULL) {
 		error = errno;
 		free(t);
 		errno = error;

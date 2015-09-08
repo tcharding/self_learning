@@ -7,15 +7,17 @@ struct command {
 	char *outfile;
 };
 
-/* parse.c */
-struct command *cmd_init();
-struct command *cmd_parse(const char *line);
+#define DEBUG 1
+#define DP(fmt, ...) if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__);
+
+/* input.c */
+char *getinput(void);
+struct command *cmd_creat(const char *line);
 void cmd_free(struct command *cmd);
 void cmd_write(struct command *cmd);
 
 /* exec.c */
 int cmd_exec(struct command *cmd);
-
 
 /* tst-parse.c */
 int t_parse(const char *line);

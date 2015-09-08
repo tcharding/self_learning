@@ -1,48 +1,61 @@
 CC = gcc
 CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
-LFLAG = -L../../lib -ltch
+LFLAG = -L../../lib -ltch -lreadline
 INC = -I../../include	
 SPLINT = lint.out
-SRCS = exec.c parse.c 
+SPLEXE = lint.exe.out
+SPLLIB = lint.lib.out
+SPLTESTS = lint.tests.out
+SRCS = exec.c input.c 
 OBJS = $(SRCS:.c=.o)
-EXES = ush
+EXE = main
 TESTS = tst-parse
 
 .PHONY: all clean tests
 
-all: $(EXES) lint_all
-tests: $(TESTS)
+all: main tests lint_lib
+main: $(EXE) lint_exe
+tests: $(TESTS) lint_tests
 
-ush: $(OBJS) ush.o ush.h
-	$(CC) -o $@  $(OBJS) ush.o $(LFLAG)
+main: $(OBJS) main.o ush.h
+	$(CC) -o $@ $(OBJS) main.o $(LFLAG)
 
-tst-parse: $(OBJS) tst-parse.o
-	$(CC) -o $@  $(OBJS) tst-parse.o $(LFLAG)
+tst-parse: input.o tst-parse.o
+	$(CC) -o $@ input.o tst-parse.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
 
 # lint rules
-lint_all: 
-	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
-	@for f in $(EXES) ; do \
+lint_exe: 
+	@if [ -f "$$SPLEXE" ]; then rm "$$SPLEXE"; fi
+	@echo 'lint_exe' > $(SPLEXE)
+	@for f in $(EXE) ; do \
 	if [ -f $$f ]; then \
 	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
-	>> $(SPLINT); \
+	-preproc >> $(SPLEXE); \
 	fi; done
 
-lint_src: 
-	@if [ -f "$$SPLINT" ]; then rm "$$SPLINT"; fi
+lint_lib: 
+	@if [ -f "$$SPLLIB" ]; then rm "$$SPLLIB"; fi
+	@echo 'lint_lib' > $(SPLLIB)
 	@for f in $(SRCS) ; do \
 	if [ -f $$f ]; then \
 	splint $$f -I../../include -warnposix -nullderef -nullpass -unrecog \
-	>> $(SPLINT); \
+	-preproc >> $(SPLLIB); \
 	fi; done
 
-
+lint_tests: 
+	@if [ -f "$$SPLTESTS" ]; then rm "$$SPLTESTS"; fi
+	@echo 'lint_tests' > $(SPLTESTS)
+	@for f in $(TESTS) ; do \
+	if [ -f $$f ]; then \
+	splint $$f.c -I../../include -warnposix -nullderef -nullpass -unrecog \
+	-preproc >> $(SPLTESTS); \
+	fi; done
 
 clean:
-	@for f in *.o $(EXES) ; do \
+	@for f in *.o $(EXE) $(TESTS) ; do \
 	if [ -f $$f ]; then \
 	rm "$$f"; \
 	echo "rm $$f" ; \

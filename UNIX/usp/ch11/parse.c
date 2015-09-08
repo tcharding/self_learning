@@ -2,39 +2,35 @@
 #include "ush.h"
 #define BLANK " "
 
+static void writev(char **v);
 
-/* UNIX/lib/makeargv.c */
-int makeargv(const char *s, const char *delim, char ***argvp); 
+/* parse: pares input line into cmd
+    free with free_cmd() */
+struct command *cmd_parse(const char *line)
+{
+	struct command *cmd;
+	char *dup;
+	int ntokens;
+	char *v;
+	
 
-static void write_argv(char **argv);
+	ntokens = count_tokens(line);
+	
+	dup = s_dup(line);	/* allocates new memory */
 
-/* cmd_init: initialise memory */
+
+	cmd = cmd_init();
+	
+	return cmd;
+}
+
+/* cmd_init: allocate and zero memory */
 struct command *cmd_init()
 {
 	struct command *cmd;
 
 	cmd = Malloc(sizeof(struct command));
 	bzero(cmd, sizeof(struct command));
-	/* cmd->argv = NULL; */
-	/* cmd->infile = NULL; */
-	/* cmd->outfile = NULL; */
-	return cmd;
-}
-/* parse: pares input line into cmd
-    free with free_cmd() */
-struct command *cmd_parse(const char *line)
-{
-	struct command *cmd;
-	char **chargv;
-
-	chargv = NULL;
-	cmd = cmd_init();
-	if (makeargv(line, BLANK, &chargv) < 0) {
-		cmd_free(cmd);
-		err_msg("makeargv error");
-		return NULL;
-	}
-	cmd->argv = chargv;
 	return cmd;
 }
 
@@ -48,29 +44,37 @@ void cmd_free(struct command *cmd)
 			free(cmd->infile);
 		if (cmd->outfile != NULL)
 			free(cmd->outfile);
+		free(cmd);
 	}
 }
 /* cmd_write: pretty print cmd to sdterr */
 void cmd_write(struct command *cmd)
 {
-	fprintf(stderr, "<struct command>: \n");
-	fprintf(stderr, "\targv: ");
-	write_argv(cmd->argv);
-	fprintf(stderr, "\n");
-	if (cmd->infile != NULL)
-		fprintf(stderr, "\tinfile: %s\n", cmd->infile);
-	if (cmd->outfile != NULL)
-		fprintf(stderr, "\toutfile: %s\n", cmd->outfile);
-
+	if (cmd != NULL) {
+		msg("<struct command>\n");
+		if (cmd->argv != NULL) {
+			msg("\targv: ");
+			writev(cmd->argv);
+			msg("\n");
+		}
+		if (cmd->infile != NULL)
+			msg("\tinfile: %s\n", cmd->infile);
+		if (cmd->outfile != NULL)
+			msg("\toutfile: %s\n", cmd->outfile);
+	} else
+		msg("cmd_write error: argument is null\n");
 }
 
-static void write_argv(char **argv)
+/* writev: write NULL terminated vector of strings to stderr */
+static void writev(char **v)
 {
-	if (argv == NULL) {
-		fprintf(stderr, "[NULL]");
+	msg("[");	
+	if (v == NULL) {
+		msg("<NULL>");	
 	} else {
-		for ( ; *argv != NULL; argv++) {
-			fprintf(stderr, "[%s] ", *argv);
+		for ( ; *v != NULL; v++) {
+			msg("[%s] ", *v);
 		}
 	}
+	msg("]");
 }
