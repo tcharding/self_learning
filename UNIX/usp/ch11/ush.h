@@ -1,24 +1,25 @@
 #ifndef USH_H
 #define USH_H
 
-struct command {
-	char **argv;
-	char *infile;
-	char *outfile;
-};
-
 #define DEBUG 1
 #define DP(fmt, ...) if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__);
 
+struct command {
+	char **argv;		/* for simple command */
+	char *infile;		/* redirect stdin */
+	char *outfile;		/* redirect stdout */
+	char **pipev;		/* pipeline command */
+};
+
 /* input.c */
 char *getinput(void);
-struct command *cmd_creat(const char *line);
+struct command *cmd_creat(const char *input);
 void cmd_free(struct command *cmd);
 void cmd_write(struct command *cmd);
 int input_unit_tests(void);
 
 /* exec.c */
-int cmd_exec(struct command *cmd);
+void execute(struct command *cmd);
 
 /* tst-parse.c */
 int t_parse(const char *line);

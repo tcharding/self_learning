@@ -2,7 +2,13 @@
 #include "ush.h"
 #include <linux/limits.h>
 #define PROMPT "ush> "
-
+/*
+ * USH - Ultra-simple SHell
+ * 
+ * Based on chapter 11 of UNIX Systems Programming - Robbins and Robbins
+ *
+ * Tobin Harding 2015
+ */
 static void prompt(void);
 
 int main(void)
@@ -26,7 +32,7 @@ int main(void)
 			continue;
 		} else if (pid == 0) { /* child */
 			/* cmd_write(cmd); */
-			cmd_exec(cmd);			
+			execute(cmd);			
 		} else {
 			(void)wait(NULL);
 		}

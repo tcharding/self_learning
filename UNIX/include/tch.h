@@ -110,6 +110,11 @@ pid_t Waitpid(pid_t, int *, int);
 void Write(int, void *, size_t);
 
 /*
+ * UNIX Systems Programming - Robbins and Robbins 
+ */ 
+int makeargv(const char *s, const char *delim, char ***argvp);
+
+/*
  * Tobin's functions
  */
 

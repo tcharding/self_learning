@@ -3,9 +3,15 @@
 #include <ctype.h>
 #include <linux/limits.h>
 #define BLANK " "
-
+/*
+ * USH - input.c
+ *
+ * Handle user input and parsing input into command structure. 
+ * Also functions to manipulate command structure.
+ */
 static int argv_parse(struct command *cmd, const char *s);
 static char *io_parse(struct command *cmd, const char *s);
+static int pipeline_parse(struct command *cmd, const char *s);
 static int process_redirect(struct command *cmd, const char *s);
 static void writes_null(const char *s);
 static void writev_null(char **v);
@@ -35,13 +41,21 @@ struct command *cmd_creat(const char *input)
 	cmd = Malloc(sizeof(struct command));
 	bzero(cmd, sizeof(struct command));
 
-	/* remove redirection options from input */
-	s = io_parse(cmd, input);
-	
-	if (argv_parse(cmd, s) == -1) {
-		cmd_free(cmd);
-		DP("%s", "cmd_free error");
-		return (struct command *)0;
+	if (strchr(input, '|') != '\0') {
+		if (pipeline_parse(cmd, input) == -1) {
+			cmd_free(cmd);
+			DP("%s", "pipeline_parse error");
+			return (struct command *)0;
+		}
+	} else {
+				/* remove redirection options from input  */
+		s = io_parse(cmd, input);
+
+		if (argv_parse(cmd, s) == -1) {
+			cmd_free(cmd);
+			DP("%s", "argv_parse error");
+			return (struct command *)0;
+		}
 	}
 	free(s);
 	return cmd;
@@ -179,6 +193,10 @@ static int process_redirect(struct command *cmd, const char *s)
 	(void)fclose(stream);
 	switch(d) {
 	case '<':
+		if (cmd->infile != NULL) {
+			err_msg("ush does not support multiple redirects"
+			"within a pipeline, behaviour is undefined\n");
+		}
 		cmd->infile = buf;
 		break;
 	case '>':
@@ -189,6 +207,16 @@ static int process_redirect(struct command *cmd, const char *s)
 		break;
 	}
 	return len;
+}
+
+/* pipeline_parse: parse pipeline command string s into cmd */
+static int pipeline_parse(struct command *cmd, const char *s)
+{
+	if (s == NULL || cmd == (struct command *)0) {
+		errno = EINVAL;
+		return -1;
+	}
+	return makeargv(s, "|", &cmd->pipev);
 }
 /* writes_null: write possible null string to stderr */
 static void writes_null(const char *s)
@@ -227,12 +255,14 @@ static struct command *cmd_init(void)
 /* -------- Unit tests ------------ */
 static void t_argv_parse(void);
 static void t_io_parse(void);
+static void t_pipeline_parse(void);
 
 /* unit test runner */
 int input_unit_tests(void)
 {
 	t_argv_parse();
 	t_io_parse();
+	t_pipeline_parse();
 	return 0;
 }
 
@@ -257,7 +287,6 @@ static void t_argv_parse(void)
 		writev_null(cmd->argv);
 		fprintf(stderr, "\n");
 		cmd_free(cmd);
-
 	}
 }
 
@@ -296,4 +325,29 @@ static void t_io_parse(void)
 		cmd_free(cmd);
 	}
 	
+}
+
+static void t_pipeline_parse(void)
+{
+	struct command *cmd;
+	char **dp;
+	char *data[] = {
+		"cmd | cmd1",
+		"<in cmd | cmd1 arg >out",
+		"<in cmd | cmd2 |cmd1 arg >out",
+		NULL
+	};
+	fprintf(stderr, "\n--- t_pipelie_parse ---\n");	
+
+	for (dp = data; *dp != NULL; dp++) {
+		fprintf(stderr, "line: |%s|\n", *dp);
+		if ((cmd = cmd_init()) == (struct command *)0)
+			err_quit("cmd_init");
+		if (pipeline_parse(cmd, *dp) == -1)
+			err_sys("pipeline_parse error");
+		fprintf(stderr, "pipev: ");
+		writev_null(cmd->pipev);
+		fprintf(stderr, "\n");
+		cmd_free(cmd);
+	}	
 }

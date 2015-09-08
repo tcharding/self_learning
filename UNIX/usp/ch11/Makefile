@@ -55,7 +55,7 @@ lint_tests:
 	fi; done
 
 clean:
-	@for f in *.o $(EXE) $(TESTS) ; do \
+	@for f in *.o lint.* $(EXE) $(TESTS) ; do \
 	if [ -f $$f ]; then \
 	rm "$$f"; \
 	echo "rm $$f" ; \
