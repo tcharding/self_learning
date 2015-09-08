@@ -27,6 +27,8 @@ void execute(struct command *cmd)
 /* exec_simple: execute simple command (cmd->argv only) */
 static void exec_simple(struct command *cmd)
 {
+	if (cmd->background == 1)
+		setpgid(0, 0);
 				/* execute the command */
 	(void)execvp(cmd->argv[0], cmd->argv);
 	exit(EXIT_FAILURE);	/* shouldn't get here */

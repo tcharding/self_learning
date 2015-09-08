@@ -55,24 +55,6 @@ typedef	void	Sigfunc(int);	/* for signal handlers */
 /* Define bzero() as macro. Stevens, Fenner, Rudoff [2004] */
 #define bzero(ptr, n) memset(ptr, 0, (size_t)(n))
 
-/*
- * Prototypes for library routines. Stevens and Rago [2013]
- */				
-void	err_msg(const char *, ...); /* error routines */
-void	err_dump(const char *, ...) __attribute__((noreturn));
-void	err_quit(const char *, ...) __attribute__((noreturn));
-void	err_cont(int, const char *, ...);
-void	err_exit(int, const char *, ...) __attribute__((noreturn));
-void	err_ret(const char *, ...);
-void	err_sys(const char *, ...) __attribute__((noreturn));
-
-void	TELL_WAIT(void);		/* parent/child from {Sec race_conditions} */
-void	TELL_PARENT(pid_t);
-void	TELL_CHILD(pid_t);
-void	WAIT_PARENT(void);
-void	WAIT_CHILD(void);
-
-
 /* prototypes for our stdio wrapper functions (wrapstio.c) */
 void	 Fclose(FILE *);
 FILE	*Fdopen(int, const char *);
@@ -110,10 +92,33 @@ pid_t Waitpid(pid_t, int *, int);
 void Write(int, void *, size_t);
 
 /*
- * UNIX Systems Programming - Robbins and Robbins 
- */ 
+ * Prototypes for library routines. Stevens and Rago [2013]
+ */				
+void	err_msg(const char *, ...); /* error routines */
+void	err_dump(const char *, ...) __attribute__((noreturn));
+void	err_quit(const char *, ...) __attribute__((noreturn));
+void	err_cont(int, const char *, ...);
+void	err_exit(int, const char *, ...) __attribute__((noreturn));
+void	err_ret(const char *, ...);
+void	err_sys(const char *, ...) __attribute__((noreturn));
+
+void	TELL_WAIT(void);		/* parent/child from {Sec race_conditions} */
+void	TELL_PARENT(pid_t);
+void	TELL_CHILD(pid_t);
+void	WAIT_PARENT(void);
+void	WAIT_CHILD(void);
+
+/* prototypes for our own library functions. see file for attribution */
+Sigfunc *signal(int signo, Sigfunc *func);
+Sigfunc *signal_intr(int signo, Sigfunc *func);
+ssize_t readn(int fd, void *vptr, size_t n);
+ssize_t writen(int fd, const void *vptr, size_t n);
 int makeargv(const char *s, const char *delim, char ***argvp);
 
+/* prototypes for our own library  wrapper functions */
+Sigfunc *Signal(int, Sigfunc *);
+ssize_t Readn(int fd, void *ptr, size_t nbytes);
+void Writen(int fd, void *ptr, size_t nbytes);
 /*
  * Tobin's functions
  */

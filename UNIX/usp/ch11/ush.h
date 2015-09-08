@@ -9,6 +9,7 @@ struct command {
 	char *infile;		/* redirect stdin */
 	char *outfile;		/* redirect stdout */
 	char **pipev;		/* pipeline command */
+	int background;
 };
 
 /* input.c */

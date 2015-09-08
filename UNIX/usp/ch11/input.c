@@ -24,7 +24,8 @@ char *getinput(void)
 	char *s;
 	
 	/* for now just one line */
-	(void)fgets(buf, MAX_CANON, stdin);
+	if (fgets(buf, MAX_CANON, stdin) == NULL)
+		exit(EXIT_SUCCESS);
 	if (*(buf + strlen(buf)-1) == '\n')
 		*(buf + strlen(buf)-1) = '\0';
 	s = s_dup(buf);
@@ -36,28 +37,39 @@ char *getinput(void)
 struct command *cmd_creat(const char *input)
 {
 	struct command *cmd;
-	char *s;
+	char *s, *t;
+	int background = 0;	/* 1 if background process */
 	
 	cmd = Malloc(sizeof(struct command));
 	bzero(cmd, sizeof(struct command));
 
-	if (strchr(input, '|') != '\0') {
-		if (pipeline_parse(cmd, input) == -1) {
+	s = s_dup(input);
+	if (*(s+strlen(s)-1) == '&') {
+		*(s+strlen(s)-1) = '\0';
+		background = 1;
+	}
+
+	if (strchr(s, '|') != '\0') {
+		if (pipeline_parse(cmd, s) == -1) {
 			cmd_free(cmd);
+			free(s);
 			DP("%s", "pipeline_parse error");
 			return (struct command *)0;
 		}
 	} else {
-				/* remove redirection options from input  */
-		s = io_parse(cmd, input);
+				/* remove redirection options from s  */
+		t = io_parse(cmd, s);
 
-		if (argv_parse(cmd, s) == -1) {
+		if (argv_parse(cmd, t) == -1) {
 			cmd_free(cmd);
+			free(s);
 			DP("%s", "argv_parse error");
 			return (struct command *)0;
 		}
 	}
 	free(s);
+	free(t);
+	cmd->background = background;
 	return cmd;
 }
 

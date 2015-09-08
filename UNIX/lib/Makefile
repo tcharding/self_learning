@@ -4,6 +4,8 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	writen.c \
+	readn.c \
 	string.c \
 	test_framework.c \
 	out.c \

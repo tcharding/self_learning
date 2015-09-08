@@ -1,6 +1,6 @@
 CC = gcc
 CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
-LFLAG = -L../../lib -ltch -lreadline
+LFLAG = -L../../lib -ltch 
 INC = -I../../include	
 SPLINT = lint.out
 SPLEXE = lint.exe.out
@@ -11,10 +11,10 @@ OBJS = $(SRCS:.c=.o)
 EXE = main
 TESTS = tst-parse
 
-.PHONY: all clean tests
+.PHONY: all clean tests dev
 
-all: main tests lint_lib
-main: $(EXE) lint_exe
+all: dev tests lint_lib
+dev: $(EXE) lint_exe
 tests: $(TESTS) lint_tests
 
 main: $(OBJS) main.o ush.h
