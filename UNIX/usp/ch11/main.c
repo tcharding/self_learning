@@ -25,6 +25,7 @@ int main(void)
 			DP("%s", "fork error");
 			continue;
 		} else if (pid == 0) { /* child */
+			/* cmd_write(cmd); */
 			cmd_exec(cmd);			
 		} else {
 			(void)wait(NULL);

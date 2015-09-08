@@ -30,18 +30,20 @@ char *getinput(void)
 struct command *cmd_creat(const char *input)
 {
 	struct command *cmd;
+	char *s;
 	
 	cmd = Malloc(sizeof(struct command));
 	bzero(cmd, sizeof(struct command));
 
 	/* remove redirection options from input */
-
-	if (argv_parse(cmd, input) == -1) {
+	s = io_parse(cmd, input);
+	
+	if (argv_parse(cmd, s) == -1) {
 		cmd_free(cmd);
 		DP("%s", "cmd_free error");
 		return (struct command *)0;
 	}
-	
+	free(s);
 	return cmd;
 }
 
