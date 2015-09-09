@@ -4,6 +4,7 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	wrappthread.c \
 	writen.c \
 	readn.c \
 	string.c \

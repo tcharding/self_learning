@@ -44,6 +44,8 @@ set_globals () {
 
 make_new_dir() {
     ensure mkdir "$dir"
+    ensure rm -rf cur			# remove soft link
+    ln -s "$dir" cur
 }
 
 copy_templates () {
