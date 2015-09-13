@@ -18,7 +18,7 @@ typedef struct copy_struct {
 copyinfo_t *head = NULL;
 copyinfo_t *tail = NULL;
 
-static copyinfo_t *ci_init(const char *name, int fd[], pthread_t tid);
+static copyinfo_t *ci_init(const char *name, pthread_t tid);
 static void *copydirectory(void *arg);
 static void *copyfilepass(void *arg);
 static char *buildpath(const char *dir, const char *file);
@@ -57,10 +57,10 @@ static void *copydirectory(void *arg)
 	char *src_path, *dst_path;
 	struct dirent *dirp;
 	DIR *dp;
-	int fd[3];		/* infd, outfd, retval */
+	int infd, outfd;
 	pthread_t tid;
 	struct stat statbuf;
-	copyinfo_t *cip;
+	copyinfo_t *cip, *newci;
 
 				/* get inputs */
 	src_dir = (char *)arg;
@@ -72,9 +72,7 @@ static void *copydirectory(void *arg)
 	if ((dp = opendir(src_dir)) == NULL) {
 		err_quit("Failed to opendir: %s", src_dir);
 	}
-	if (stat(dst_dir
-
-		 , &statbuf) == -1) {
+	if (stat(dst_dir, &statbuf) == -1) {
 		if (mkdir(dst_dir, DIR_MODE) == -1)
 			err_sys("mkdir error");
 	}
@@ -85,19 +83,19 @@ static void *copydirectory(void *arg)
 			continue;
 		src_path = buildpath(src_dir, dirp->d_name);
 		fprintf(stderr, "src_path: %s\n", src_path);
-		if ((fd[0] = open(src_path, O_RDONLY)) < 0) 
+		if ((infd = open(src_path, O_RDONLY)) < 0) 
 		    err_sys("failed to open %s", src_path);
 		dst_path = buildpath(dst_dir, dirp->d_name);
 		fprintf(stderr, "dst_path: %s\n", dst_path);
-			
-
-		if ((fd[1] = open(dst_path, OFLAGS, FILE_MODE)) < 0)
+		if ((outfd = open(dst_path, OFLAGS, FILE_MODE)) < 0)
 		    err_sys("failed to open %s", dst_path);
-		fd[2] = 0;
-		Pthread_create(&tid, NULL, copyfilepass, fd);
-		cip = ci_init(dst_path, fd, tid);
-		cip->next = head;
-		head = cip;
+	
+		newci = ci_init(dst_path, tid);
+		newci->sourcefd = infd;
+		newci->destinationfd = outfd;
+		newci->next = head;
+		head = newci;
+		Pthread_create(&newci->tid, NULL, copyfilepass, (void *)newci);
 		for (cip = head; cip != NULL; cip = cip->next) {
 			(void)pthread_join(cip->tid, NULL);			
 		}
@@ -111,16 +109,13 @@ static void *copydirectory(void *arg)
 }
 
 /* ci_init: allocate memory for new copyinfo ci */
-static copyinfo_t *ci_init(const char *name, int fd[], pthread_t tid)
+static copyinfo_t *ci_init(const char *name, pthread_t tid)
 {
 	copyinfo_t *cip;
 
 	cip = Malloc(sizeof(copyinfo_t));
 	bzero(cip, sizeof(cip));
 	cip->namestring = s_dup(name);
-	cip->sourcefd = fd[0];
-	cip->destinationfd = fd[1];
-	cip->bytescopied = fd[2];
 	cip->tid = tid;
 	cip->next = NULL;
 	return cip;
@@ -129,13 +124,13 @@ static copyinfo_t *ci_init(const char *name, int fd[], pthread_t tid)
 /* usp Program 12.7 */
 static void *copyfilepass(void *arg)
 {
-	int *argint;
+	copyinfo_t *cip;
 
-	argint = (int *)arg;
-	argint[2] = copyfile(argint[0], argint[1]);
-	r_close(argint[0]);
-	r_close(argint[1]);
-	return (void *)(argint + 2);
+	cip = (copyinfo_t *)arg;
+	cip->bytescopied = copyfile(cip->sourcefd, cip->destinationfd);
+	r_close(cip->sourcefd);
+	r_close(cip->destinationfd);
+	return (void *)(&cip->bytescopied);
 }
 
 /* buildpath: return pathname dir/file, must be free'd */
