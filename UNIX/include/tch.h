@@ -109,6 +109,7 @@ void	WAIT_PARENT(void);
 void	WAIT_CHILD(void);
 
 /* prototypes for our own library functions. see file for attribution */
+char * path_alloc(size_t *sizep);
 Sigfunc *signal(int signo, Sigfunc *func);
 Sigfunc *signal_intr(int signo, Sigfunc *func);
 ssize_t readn(int fd, void *vptr, size_t n);
@@ -126,6 +127,13 @@ void Writen(int fd, void *ptr, size_t nbytes);
 /* string library */
 char *s_dup(const char *s);
 char *s_dupfmt(const char *fmt, ...);
+
+/* wrap thread */
+void Pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+		    void *(*start_routine) (void *), void *arg);
+void Pthread_join(pthread_t thread, void **retval);
+void Pthread_mutex_lock(pthread_mutex_t *lock);
+void Pthread_mutex_unlock(pthread_mutex_t *lock);
 
 /* output helpers */
 void debug(const char *fmt, ...);
