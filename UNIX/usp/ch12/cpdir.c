@@ -7,6 +7,11 @@
 #define BLKSIZE 1024
 #define OFLAGS (O_WRONLY | O_TRUNC | O_CREAT)
 
+struct iofiles {
+	char *source;
+	char *destination;
+};
+
 typedef struct copy_struct {
 	char *namestring;
 	int sourcefd;
@@ -26,26 +31,18 @@ static char *buildpath(const char *dir, const char *file);
 
 int main(int argc, char *argv[])
 {
-	FILE *stream;
-	size_t size;
-	char *buf;
 	pthread_t tid;
-
+	struct iofiles *iofp;
+	
 	if (argc != 3)
 		err_quit("Usage: %s src_dir dst_dir", argv[0]);
-	buf = NULL;
 	tid = 0;
-	if ((stream = open_memstream(&buf, &size)) == NULL)
-		err_sys("open_memstream error");
-	fprintf(stream, "%s", argv[1]);
-	fputc('\0', stream);
-	fprintf(stream, "%s", argv[2]);
-	if (fclose(stream) > 0)
-		err_sys("fclose error");
+	iofp = Malloc(sizeof(struct iofiles));
+	iofp->source = s_dup(argv[1]);
+	iofp->destination = s_dup(argv[2]);
 
-	Pthread_create(&tid, NULL, copydirectory, (void *)buf);
+	Pthread_create(&tid, NULL, copydirectory, (void *)iofp);
 	(void)pthread_join(tid, NULL);
-	free(buf);
 	return 0;
 }
 
@@ -53,6 +50,7 @@ int main(int argc, char *argv[])
     arg is of form 'src\0dst\0' */
 static void *copydirectory(void *arg)
 {
+	struct iofiles *iofp, *newiofp;
 	char *src_dir, *dst_dir;
 	char *src_path, *dst_path;
 	struct dirent *dirp;
@@ -63,10 +61,10 @@ static void *copydirectory(void *arg)
 	copyinfo_t *cip, *newci;
 
 				/* get inputs */
-	src_dir = (char *)arg;
-	dst_dir = (char *)arg;
-	while (*dst_dir++ != '\0')
-		;	
+	iofp = (struct iofiles *)arg;
+	src_dir = iofp->source;
+	dst_dir = iofp->destination;
+
 	fprintf(stderr, "copydirectory got: %s %s\n", src_dir, dst_dir);
 	tid = 0;
 	if ((dp = opendir(src_dir)) == NULL) {
@@ -82,11 +80,18 @@ static void *copydirectory(void *arg)
 		    (!strcmp(dirp->d_name, "..")))
 			continue;
 		src_path = buildpath(src_dir, dirp->d_name);
-		fprintf(stderr, "src_path: %s\n", src_path);
+		if (stat(src_path, &statbuf) == -1)
+			err_sys("stat error");
 		if ((infd = open(src_path, O_RDONLY)) < 0) 
 		    err_sys("failed to open %s", src_path);
 		dst_path = buildpath(dst_dir, dirp->d_name);
-		fprintf(stderr, "dst_path: %s\n", dst_path);
+		if (S_ISDIR(statbuf.st_mode)) {
+			newiofp = Malloc(sizeof(struct iofiles));
+			newiofp->source = s_dup(src_path);
+			newiofp->destination = s_dup(dst_path);
+			copydirectory((void *)newiofp);
+			continue;
+		}
 		if ((outfd = open(dst_path, OFLAGS, FILE_MODE)) < 0)
 		    err_sys("failed to open %s", dst_path);
 	
