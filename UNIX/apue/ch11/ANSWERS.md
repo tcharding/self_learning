@@ -10,7 +10,8 @@ Chapter
 4. You may signal the condition after unlocking only if code can tolerate race
    condition on the state that triggered the signal i.e the condition may have
    changed to untrue again.
-5. pthread_barrier.c, tst-barrier.c, barrier.c
+5. pthread_barrier.c, tst-barrier.c, barrier.c. Postponed until next chapter,
+   thread signals.
    
 
 
