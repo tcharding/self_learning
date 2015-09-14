@@ -23,8 +23,8 @@ int main(void)
 	tid = 0;
 	srand48((long)getpid());
 	(void)barrier_init(&b, NTHR+1);
-	fprintf(stderr, "barrier initialised. b->cnt: %u \n", b.b_cnt);
-	return 0;
+	/* fprintf(stderr, "barrier initialised. b->cnt: %u \n", b.b_cnt); */
+
 	fprintf(stderr, "Parent creating %d threads\n", NTHR);
 	for (i = 0; i < NTHR; i++)
 		Pthread_create(&tid, NULL, th_fn, (void *)0);
@@ -45,10 +45,12 @@ int main(void)
 	tv.tv_sec = (int)(drand48() * 5.0);
 	nanosleep(&tv, NULL);
 	retval = barrier_wait(&b);
-	if (retval == BARRIER_SERIAL_THREAD)
+	if (retval == 1)
+		fprintf(stderr, "barrier_wait return error value (1)\n");
+	else if (retval == BARRIER_SERIAL_THREAD)
 		fprintf(stderr, "I'm the master thread: tid 0x%lx retval: %d\n",
 		(unsigned long)pthread_self(), retval);
-	else
+	else 
 		fprintf(stderr, "thread throug barrier: tid 0x%lx retval: %d\n",
 		(unsigned long)pthread_self(), retval);
 		
