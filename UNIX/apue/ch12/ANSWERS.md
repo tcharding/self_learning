@@ -11,6 +11,11 @@ Chapter 12 Thread Control
 5. You still would use fork() to if you needed to exec(). You may wish to fork
    before creating threads i.e a client/server where server forks to handle each
    connection may have use for multiple threads.
-6. nap.[ch] tst-nap.c
-
+6. nap.[ch] tst-nap.c, did not complete. This question is basically the same as
+   the 'UNIX Systems Programming' chapter 10 project already completed. 
+7. No, you cannot call pthread_cond_destroy in a child process because this call
+   is undefined if there are threads waiting on the condition. The child has no
+   way of knowing if this is the case or not.
+8. One way of simplifying the timeout function would be to pass in the timespec
+   as a relative time instead of absolute.   
 

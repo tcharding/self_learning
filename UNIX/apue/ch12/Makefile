@@ -8,7 +8,7 @@ SPLINT_EXES = lint.out.exes
 LIBS = putenv_r
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = pthread_atfork tst-nap
+EXES = pthread_atfork 
 
 .PHONY: all libs clean lint_all # tests dev
 
