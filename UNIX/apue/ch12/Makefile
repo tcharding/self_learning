@@ -1,19 +1,28 @@
 CC = gcc
-CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
-LFLAG = -L../lib -lapue 
+CFLAG = -Wall -pedantic -std=c99 
+LFLAG = -L../lib -lapue -lpthread
 INC = -I../include 
 SPLINT_LIB = lint.out.libs
 SPLINT_EXES = lint.out.exes
 # source files without a main() function
-LIBS = 
+LIBS = putenv_r
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = 
+EXES = pthread_atfork tst-nap
 
 .PHONY: all libs clean lint_all # tests dev
 
 all: $(EXES) lint_all
 libs: $(OBJS) lint_libs
+
+pthread_atfork: pthread_atfork.o
+	$(CC) -o $@ pthread_atfork.o $(LFLAG)
+
+tst-nap: nap.o tst-nap.o 
+	$(CC) -o $@ nap.o tst-nap.o $(LFLAG)
+
+putenv_r.o: putenv_r.c 
+	$(CC) $(CFLAG) -c $< $(INC)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)

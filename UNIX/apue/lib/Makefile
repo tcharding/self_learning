@@ -7,7 +7,7 @@ include $(ROOT)/Make.defines.$(PLATFORM)
 
 LIBMISC	= libapue.a
 OBJS = error.o pathalloc.o openmax.o mem_stream.o prexit.o msg.o prmask.o \
-	wrapunix.o wrapstdio.o tellwait.o signal.o signalintr.o
+	wrapunix.o wrapstdio.o tellwait.o signal.o signalintr.o wrappthread.o \
 #OBJS   = bufargs.o cliconn.o clrfl.o \
 #			daemonize.o  errorlog.o lockreg.o locktest.o \
 #			popen.o prexit.o
