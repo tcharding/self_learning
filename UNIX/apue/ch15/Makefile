@@ -5,27 +5,15 @@ INC = -I../include
 SPLINT_LIB = lint.out.libs
 SPLINT_EXES = lint.out.exes
 # source files without a main() function
-LIBS = tellwait-record.c
+LIBS = 
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = starve pipesize memmap_copy tst-tellwait
+EXES = 
 
 .PHONY: all libs clean lint_all # tests dev
 
 all: $(EXES) lint_all
 libs: $(OBJS) lint_libs
-
-memmap_copy: memmap_copy.o
-	$(CC) -o $@ memmap_copy.o $(LFLAG)
-
-starve: starve.o
-	$(CC) -o $@ starve.o $(LFLAG)
-
-pipesize: pipesize.o
-	$(CC) -o $@ pipesize.o $(LFLAG)
-
-tst-tellwait: tellwait-record.o tst-tellwait.o
-	$(CC) -o $@ tellwait-record.o tst-tellwait.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)

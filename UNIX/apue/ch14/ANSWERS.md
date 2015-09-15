@@ -9,14 +9,18 @@ Chapter 14 Advanced I/O
    ugly solution.
 4. term/book
 5. sleepus.c
-6. No you cannot implement TELL_* using advisory locking without either using
-   signals as well or polling because calls to fcntl do not block if the lock
-   cannot be acquired.
+6. You can implement tellwait using record locking to an extent. You cannot,
+   however, have the child process run first i.e the parent cannot call
+   WAIT_CHILD straight after the fork. This is because the only way to block on
+   the other process is to aquire a lock, however locks are not passed over the
+   fork so the child cannot be guaranteed to get a lock first since we do not
+   know which process, parent or child, will run first. Hence the parent cannot
+   reliably wait (aquire exclusive lock) on the child.
 7. pipesize.c: PIPE_BUF: 4096 but we could write 65536 (2^16) bytes before blocking.
 8. did not complete: skipped section on asyncronous I/O.
 9. ?
 10. memmap_copy.c: access time is not update, however, it is also not updated
-   cp(1) or by opening/closing the file in emacs without an edit?
+	cp(1) or by opening/closing the file in emacs without an edit?
 11. memmap_copy.c
 
 key 

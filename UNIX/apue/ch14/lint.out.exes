@@ -1,0 +1,51 @@
+*** splint: lint_exe ***
+starve.c: (in function main)
+starve.c:14:67: Left operand of >> may be negative (int): (0400 >> 3) >> 3
+  The left operand to a shift operator may be negative (behavior is
+  implementation-defined). (Use -shiftimplementation to inhibit warning)
+starve.c:14:37: Function Open expects arg 3 to be mode_t gets int:
+                   (0400 | 0200 | (0400 >> 3) | ((0400 >> 3) >> 3))
+  Types are incompatible. (Use -type to inhibit warning)
+starve.c:27:3: Return value (type unsigned int) ignored: sleep(1)
+  Result returned by function call is not used. If this is intended, can cast
+  result to (void) to eliminate message. (Use -retvalint to inhibit warning)
+starve.c:45:5: Return value (type unsigned int) ignored: sleep(1)
+starve.c:48:3: Return value (type unsigned int) ignored: sleep(1)
+starve.c:51:2: Path with no return in function declared to return int
+  There is a path through a function declared to return a value on which there
+  is no return statement. This means the execution may fall through without
+  returning a meaningful result to the caller. (Use -noret to inhibit warning)
+
+pipesize.c: (in function main)
+pipesize.c:13:7: Passed storage fd not completely defined (*fd is undefined):
+                    Pipe (fd)
+  Storage derivable from a parameter, return value or global is not defined.
+  Use /*@out@*/ to denote passed or returned storage which need not be defined.
+  (Use -compdef to inhibit warning)
+
+memmap_copy.c: (in function main)
+memmap_copy.c:22:78: Left operand of >> may be negative (int): (0400 >> 3) >> 3
+  The left operand to a shift operator may be negative (behavior is
+  implementation-defined). (Use -shiftimplementation to inhibit warning)
+memmap_copy.c:25:18: Passed storage sbuf contains 17 undefined fields:
+                        st_dev, __pad1, st_ino, st_mode, ...
+  Storage derivable from a parameter, return value or global is not defined.
+  Use /*@out@*/ to denote passed or returned storage which need not be defined.
+  (Use -compdef to inhibit warning)
+memmap_copy.c:35:4: Assignment of long int to size_t:
+                       copysz = sbuf.st_size - fsz
+  To allow arbitrary integral types to match long unsigned, use +longintegral.
+memmap_copy.c:45:3: Return value (type int) ignored: munmap(src, copysz)
+  Result returned by function call is not used. If this is intended, can cast
+  result to (void) to eliminate message. (Use -retvalint to inhibit warning)
+memmap_copy.c:46:3: Return value (type int) ignored: munmap(dst, copysz)
+
+tst-tellwait.c: (in function main)
+tst-tellwait.c:19:4: Return value (type unsigned int) ignored: sleep(1)
+  Result returned by function call is not used. If this is intended, can cast
+  result to (void) to eliminate message. (Use -retvalint to inhibit warning)
+tst-tellwait.c:31:2: Path with no return in function declared to return int
+  There is a path through a function declared to return a value on which there
+  is no return statement. This means the execution may fall through without
+  returning a meaningful result to the caller. (Use -noret to inhibit warning)
+
