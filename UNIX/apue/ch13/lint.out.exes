@@ -1,0 +1,16 @@
+*** splint: lint_exe ***
+daemon-login.c: (in function main)
+daemon-login.c:15:2: Path with no return in function declared to return int
+  There is a path through a function declared to return a value on which there
+  is no return statement. This means the execution may fall through without
+  returning a meaningful result to the caller. (Use -noret to inhibit warning)
+daemon-login.c:15:2: Fresh storage user not released before return
+  A memory leak has been detected. Storage allocated locally is not released
+  before the last reference to it is lost. (Use -mustfreefresh to inhibit
+  warning)
+   daemon-login.c:10:2: Fresh storage user created
+daemon-login.c:5:14: Parameter argc not used
+  A function parameter is not used in the body of the function. If the argument
+  is needed for type compatibility or future plans, use /*@unused@*/ in the
+  argument declaration. (Use -paramuse to inhibit warning)
+

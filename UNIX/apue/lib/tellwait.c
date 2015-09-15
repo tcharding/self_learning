@@ -25,15 +25,15 @@ void TELL_WAIT(void)
 		err_sys("SIG_BLOCK error");
 }
 
-void TELL_PARENT(pid_t pid)
+void TELL_PARENT(void)
 {
-	kill(pid, SIGUSR2);		/* tell parent we're done */
+	kill(getppid(), SIGUSR2);	/* tell parent we're done */
 }
 
 void WAIT_PARENT(void)
 {
 	while (sigflag == 0)
-		sigsuspend(&zeromask);	/* and wait for parent */
+		sigsuspend(&zeromask); /* and wait for parent */
 	sigflag = 0;
 
 	/* Reset signal mask to original value */
@@ -43,7 +43,7 @@ void WAIT_PARENT(void)
 
 void TELL_CHILD(pid_t pid)
 {
-	kill(pid, SIGUSR1);			/* tell child we're done */
+	kill(pid, SIGUSR1);	/* tell child we're done */
 }
 
 void WAIT_CHILD(void)

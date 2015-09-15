@@ -47,7 +47,7 @@
  */
 #define	DIR_MODE	(FILE_MODE | S_IXUSR | S_IXGRP | S_IXOTH)
 
-typedef	void	Sigfunc(int);	/* for signal handlers */
+typedef	void Sigfunc(int);	/* for signal handlers */
 
 #define	min(a,b)	((a) < (b) ? (a) : (b))
 #define	max(a,b)	((a) > (b) ? (a) : (b))
@@ -55,14 +55,14 @@ typedef	void	Sigfunc(int);	/* for signal handlers */
 /* Define bzero() as macro. Stevens, Fenner, Rudoff [2004] */
 #define bzero(ptr, n) memset(ptr, 0, (size_t)(n))
 
-/* prototypes for our stdio wrapper functions (wrapstio.c) */
-void	 Fclose(FILE *);
-FILE	*Fdopen(int, const char *);
-char	*Fgets(char *, int, FILE *);
-FILE	*Fopen(const char *, const char *);
-void	 Fputs(const char *, FILE *);
+/* prototypes for our stdio wrapper functions (wrapstdio.c) */
+void  Fclose(FILE *);
+FILE *Fdopen(int, const char *);
+char *Fgets(char *, int, FILE *);
+FILE *Fopen(const char *, const char *);
+void  Fputs(const char *, FILE *);
 
-/* prototypes for our Unix wrapper functions (lib/wrapunix.c) */
+/* prototypes for our Unix wrapper functions (wrapunix.c) */
 void *Calloc(size_t, size_t);
 void  Close(int);
 void  Dup2(int, int);
@@ -94,19 +94,19 @@ void Write(int, void *, size_t);
 /*
  * Prototypes for library routines. Stevens and Rago [2013]
  */				
-void	err_msg(const char *, ...); /* error routines */
-void	err_dump(const char *, ...) __attribute__((noreturn));
-void	err_quit(const char *, ...) __attribute__((noreturn));
-void	err_cont(int, const char *, ...);
-void	err_exit(int, const char *, ...) __attribute__((noreturn));
-void	err_ret(const char *, ...);
-void	err_sys(const char *, ...) __attribute__((noreturn));
+void err_msg(const char *, ...); /* error routines */
+void err_dump(const char *, ...) __attribute__((noreturn));
+void err_quit(const char *, ...) __attribute__((noreturn));
+void err_cont(int, const char *, ...);
+void err_exit(int, const char *, ...) __attribute__((noreturn));
+void err_ret(const char *, ...);
+void err_sys(const char *, ...) __attribute__((noreturn));
 
-void	TELL_WAIT(void);		/* parent/child from {Sec race_conditions} */
-void	TELL_PARENT(pid_t);
-void	TELL_CHILD(pid_t);
-void	WAIT_PARENT(void);
-void	WAIT_CHILD(void);
+void TELL_WAIT(void);		/* parent/child from {Sec race_conditions} */
+void TELL_PARENT(pid_t);
+void TELL_CHILD(pid_t);
+void WAIT_PARENT(void);
+void WAIT_CHILD(void);
 
 /* prototypes for our own library functions. see file for attribution */
 char * path_alloc(size_t *sizep);
@@ -120,6 +120,7 @@ int makeargv(const char *s, const char *delim, char ***argvp);
 Sigfunc *Signal(int, Sigfunc *);
 ssize_t Readn(int fd, void *ptr, size_t nbytes);
 void Writen(int fd, void *ptr, size_t nbytes);
+
 /*
  * Tobin's functions
  */
@@ -128,7 +129,7 @@ void Writen(int fd, void *ptr, size_t nbytes);
 char *s_dup(const char *s);
 char *s_dupfmt(const char *fmt, ...);
 
-/* wrap thread */
+/* prototypes for pthread wrapper functions (wrappthread.c) */
 void Pthread_create(pthread_t *thread, const pthread_attr_t *attr,
 		    void *(*start_routine) (void *), void *arg);
 void Pthread_join(pthread_t thread, void **retval);
