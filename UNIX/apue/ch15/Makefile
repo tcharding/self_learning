@@ -8,12 +8,25 @@ SPLINT_EXES = lint.out.exes
 LIBS = 
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = cp_to_pager popen coprocess add2stdio add2
+EXES = cp_to_pager popen coprocess add2stdio add2 select-close-write \
+	poll-close-write select-close-read poll-close-read
 
 .PHONY: all libs clean lint_all # tests dev
 
 all: $(EXES) lint_all
 libs: $(OBJS) lint_libs
+
+poll-close-read: poll-close-read.o
+	$(CC) -o $@ poll-close-read.o $(LFLAG)
+
+select-close-read: select-close-read.o
+	$(CC) -o $@ select-close-read.o $(LFLAG)
+
+poll-close-write: poll-close-write.o
+	$(CC) -o $@ poll-close-write.o $(LFLAG)
+
+select-close-write: select-close-write.o
+	$(CC) -o $@ select-close-write.o $(LFLAG)
 
 add2: add2.o
 	$(CC) -o $@ add2.o $(LFLAG)

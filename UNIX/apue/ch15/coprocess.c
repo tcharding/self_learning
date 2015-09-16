@@ -7,7 +7,7 @@ static void	sig_pipe(int);		/* our signal handler */
 int
 main(void)
 {
-	int n, fd1[2], fd2[2];
+	int fd1[2], fd2[2];
 	pid_t pid;
 	char line[MAXLINE];
 	FILE *infp, *outfp;

@@ -8,8 +8,26 @@ Chapter
    return an error, a later read from the stream returns NULL i.e end of file or
    error. ferror() does not report an error.
 4. The shell returns an error code (141).
-5.    
+5. coprocess.c
+6. If waitpid is not available and popen must use wait then the signal raised by
+   termination of the child process created by a call to system will interfere with
+   the original call to popen.
+7.
+* select-close-write.c:
+   Once the write end of the pipe is close calls to select return that the pipe
+   is ready to read, and reads get 0 bytes signifying end of file.
 
+* poll-close-write.c:
+   Poll behaves in a similar manner, successive calls to poll return fd ready
+   and reads return 0.
+* select-close-read.c:
+   select returns fd ready, write to pipe (closed already) causes signal
+   SIGPIPE.
+* poll-close-write.c:
+   poll returns fd ready, however the revents member of the pollfd struct does
+   not register an event. BUG: Did not manage to terminate loop since poll keeps
+   returning 1.
+   
 key 
 ---
 term - completed at terminal
