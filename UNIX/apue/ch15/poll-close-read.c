@@ -13,9 +13,8 @@ int main(void)
 {
 	int fd[2];
 	pid_t pid;
-	int nready, nbytes, maxi, i;
+	int nready, nbytes, maxi;
 	struct pollfd pfds[1];
-	char buf[BUFSIZ];
 	
 	Pipe(fd);
 

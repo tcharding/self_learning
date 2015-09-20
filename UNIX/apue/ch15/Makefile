@@ -1,6 +1,6 @@
 CC = gcc
 CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
-LFLAG = -L../lib -lapue 
+LFLAG = -L../lib -lapue -pthread
 INC = -I../include 
 SPLINT_LIBS = lint.out.libs
 SPLINT_EXES = lint.out.exes
@@ -9,12 +9,31 @@ LIBS =
 OBJS = $(LIBS:.c=.o)
 # executables
 EXES = cp_to_pager popen coprocess add2stdio add2 select-close-write \
-	poll-close-write select-close-read poll-close-read
+	poll-close-write select-close-read poll-close-read msgque \
+	counter-mmapdev0 counter-XSIshmem  counter-reclock counter-POSIXsem
 
 .PHONY: all libs clean lint_all # tests dev
 
 all: $(EXES) lint_all
 libs: $(OBJS) lint_libs
+
+counter-mmapdev0: counter-mmapdev0.o
+	$(CC) -o $@ counter-mmapdev0.o $(LFLAG)
+
+counter-XSIshmem: counter-XSIshmem.o
+	$(CC) -o $@ counter-XSIshmem.o $(LFLAG)
+
+counter-reclock: counter-reclock.o
+	$(CC) -o $@ counter-reclock.o $(LFLAG)
+
+counter-XSIsem: counter-XSIsem.o
+	$(CC) -o $@ counter-XSIsem.o $(LFLAG)
+
+counter-POSIXsem: counter-POSIXsem.o
+	$(CC) -o $@ counter-POSIXsem.o $(LFLAG)
+
+msgque: msgque.o
+	$(CC) -o $@ msgque.o $(LFLAG)
 
 poll-close-read: poll-close-read.o
 	$(CC) -o $@ poll-close-read.o $(LFLAG)
@@ -73,4 +92,3 @@ clean:
 	rm "$$f"; \
 	echo "rm $$f" ; \
 	fi; done
-
