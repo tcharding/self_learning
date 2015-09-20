@@ -20,6 +20,6 @@ input.txt
 
 #### Usage: #
 _build with_ `make` _then run_  
-`$ ./runsim`  
+`$ ./runsim n`  
 `$ ./testsim`  
-`$ ./runsim <input.txt`  
+`$ ./runsim n <input.txt`  
