@@ -1,16 +1,9 @@
-Chapter - Processes in UNIX
-=============================
+Chapter 14 - Critical Sections and Semaphores
+=============================================
 
-Programs (text book)
---------------------
-_see source file for text book listed 'Program' number. Build with:_ `$ make book`
-
-Examples/exercises 
-------------------
-
-Sections
---------
-### N.N Exercise: #
+### 14.6 Exercise: License Manager #
+license.[ch]
+runsim.c
 
 #### Usage: #
 _build with_ `make` _then run_  

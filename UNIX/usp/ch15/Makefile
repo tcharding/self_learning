@@ -3,14 +3,14 @@ CFLAG = -Wall -pedantic -std=c99 -D_GNU_SOURCE
 LFLAG = -L../../lib -ltch -lpthread
 INC = -I../../include	
 SPLINT = lint.out
-EXES = runsim 
+EXES = tst-pipe
 
 .PHONY: all clean 
 
 all: $(EXES) lint_all
 
-runsim: license.o runsim.o
-	$(CC) -o $@ license.o runsim.o $(LFLAG)
+tst-pipe: pipe.o tst-pipe.o
+	$(CC) -o $@ pipe.o tst-pipe.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)
