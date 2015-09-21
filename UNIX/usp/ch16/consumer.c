@@ -19,5 +19,5 @@ void *th_consumer(void *args)
 		err_msg("getitem error");
 		pthread_exit(NULL);
 	}
-	pthread_exit(NULL);
+	pthread_exit(NULLy);
 }

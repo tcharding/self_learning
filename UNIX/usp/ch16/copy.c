@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
 	if ((end = times(&tmsend)) == -1)		/* ending values */
 		err_sys("times error");
 
-	msg("aoeu");
 	pr_times(end-start, &tmsstart, &tmsend);
 	return 0;
 }
