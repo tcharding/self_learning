@@ -4,6 +4,7 @@ LIB = libtch.a
 INC = -I../include
 
 SRC = \
+	buildpath.c \
 	pathalloc.c \
 	wrappthread.c \
 	writen.c \

@@ -15,9 +15,10 @@ static long xsi_version = 0;
 /* If PATH_MAX is indeterminate, no guarantee this is adequate */
 #define	PATH_MAX_GUESS	1024
 
+
 /* path_alloc: allocate memory to hold pathname
  also return allocated size, if sizep is non null */
-char * path_alloc(size_t *sizep)
+char *path_alloc(size_t *sizep)
 {
 	char *ptr;
 	size_t size;
@@ -56,3 +57,4 @@ char * path_alloc(size_t *sizep)
 		*sizep = size;
 	return(ptr);
 }
+

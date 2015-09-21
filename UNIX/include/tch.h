@@ -124,6 +124,7 @@ void Writen(int fd, void *ptr, size_t nbytes);
 /*
  * Tobin's functions
  */
+char *buildpath(const char *dir, const char *file); /* pathalloc.c */
 
 /* string library */
 char *s_dup(const char *s);
