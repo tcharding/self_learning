@@ -5,15 +5,23 @@ INC = -I../include
 SPLINT_LIBS = lint.out.libs
 SPLINT_EXES = lint.out.exes
 # source files without a main() function
-LIBS = initserver.c
+LIBS = initserver.c sig_io.c
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = endianess sockstat tcp-ruptimed
+EXES = endianess sockstat tcp-ruptimed tcp-ruptimed-nodelay
+RPS = rpsd rps-cli
 
-.PHONY: all libs clean lint_all 
+.PHONY: all libs clean lint_all rps
 
 all: $(EXES) lint_all
+rps: $(RPS) 
 libs: $(OBJS) lint_libs
+
+rps-cli: rps-cli.o
+	$(CC) -o $@ rps-cli.o $(LFLAG)
+
+rpsd: initserver.o rpsd.o
+	$(CC) -o $@ initserver.o rpsd.o $(LFLAG)
 
 tcp-ruptimed: initserver.o tcp-ruptimed.o
 	$(CC) -o $@ initserver.o tcp-ruptimed.o $(LFLAG)
@@ -23,6 +31,9 @@ sockstat: sockstat.o
 
 endianess: endianess.o
 	$(CC) -o $@ endianess.o $(LFLAG)
+
+tcp-ruptimed-nodelay: initserver.o tcp-ruptimed-nodelay.o
+	$(CC) -o $@ initserver.o tcp-ruptimed-nodelay.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)

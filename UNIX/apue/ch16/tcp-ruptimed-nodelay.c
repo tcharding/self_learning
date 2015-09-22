@@ -1,6 +1,4 @@
-/* attr: Advanced Programming in the UNIX Environment - Stevens and Rago 
- * modified main function to fork
-*/
+/* attr: Advanced Programming in the UNIX Environment - Stevens and Rago */
 #include "apue.h"
 #include <netdb.h>
 #include <errno.h>
@@ -46,7 +44,7 @@ static void serve(int sockfd)
 				       strerror(errno));			
 		} else {	/* parent */
 			close(clfd);
-			waitpid(pid, &status, 0);
+			/* waitpid(pid, &status, 0); */
 		}
 	}
 }
@@ -57,7 +55,6 @@ int main(int argc, char *argv[])
 	struct addrinfo hint;
 	int sockfd, err, n;
 	char *host;
-	pid_t pid;
 	
 	if (argc != 1)
 		err_quit("Usage: ruptimed");
@@ -74,20 +71,13 @@ int main(int argc, char *argv[])
 	hint.ai_addr = NULL;
 	hint.ai_next = NULL;
 	if ((err = getaddrinfo(host, "ruptime", &hint, &ailist)) != 0) {
-		syslog(LOG_ERR, "ruptimed: getaddrinfo error: %s",
-		       strerror(errno));		
+		
 	}
 	for (aip = ailist; aip != NULL; aip = aip->ai_next) {
-		if ((pid = fork() < 0)) {
-			err_sys("fork error");
-		} else if (pid == 0) { /* child */
-			if ((sockfd = initserver(SOCK_STREAM, aip->ai_addr,
-						 aip->ai_addrlen, QLEN)) >= 0) {
-				serve(sockfd);
-				exit(0);
-			}
-			else
-				exit(1); 
-		} 
+		if ((sockfd = initserver(SOCK_STREAM, aip->ai_addr,
+					 aip->ai_addrlen, QLEN)) >= 0) {
+			serve(sockfd);
+			exit(0);
+		}
 	}
 }
