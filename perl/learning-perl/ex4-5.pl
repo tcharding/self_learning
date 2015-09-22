@@ -2,13 +2,14 @@
 #use 5.01O; does not work
 use strict;
 
+my @names; 
+
 &greet( 'Fred' );
 &greet( 'Tobin' );
 &greet( 'John' );
 &greet( 'Tom' );
 
 sub greet {
-    state @names; 
     my $who = shift;
 
     print "Hello $who! ";
