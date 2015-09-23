@@ -81,17 +81,16 @@ int send_err(int, int, const char *);			       /* senderr.c */
 int serv_listen(const char *);	/* servlisten.c */
 int serv_accept(int, uid_t *);	/* servaccept.c */
 int cli_conn(const char *);	/* cliconn.c */
-
-int tty_cbreak(int);			  /* {Prog raw} */
-int tty_raw(int);			  /* {Prog raw} */
-int tty_reset(int);			  /* {Prog raw} */
-void tty_atexit(void);			  /* {Prog raw} */
-struct termios *tty_termios(void);	  /* {Prog raw} */
-int ptym_open(char *, int);		  /* {Prog ptyopen} */
-int ptys_open(char *);			  /* {Prog ptyopen} */
+int tty_cbreak(int);		/* ttymodes.c */
+int tty_raw(int);		/* ttymodes.c */
+int tty_reset(int);		/* ttymodes.c */
+void tty_atexit(void);		/* ttymodes.c */
+struct termios *tty_termios(void); /* ttymodes.c */
+int ptym_open(char *, int);	   /* ptyopen.c */
+int ptys_open(char *);		   /* ptyopen.c */
 #ifdef	TIOCGWINSZ
 pid_t pty_fork(int *, char *, int, const struct termios *,
-	       const struct winsize *);	/* {Prog ptyfork} */
+	       const struct winsize *);	/* ptyfork.c */
 #endif
 
 int lock_reg(int, int, int, off_t, int, off_t); /* lockreg.c */
@@ -133,8 +132,8 @@ void log_exit(int, const char *, ...) __attribute__((noreturn));
  *   *_PARENT called by child process 
  *   *_CHILD called by parent process 
  */
-void TELL_WAIT(void);		/* init */
-void TELL_PARENT(void);	/* tell parent we're done */
+void TELL_WAIT(void);		/* init, must be called before other functions */
+void TELL_PARENT(void);		/* tell parent we're done */
 void TELL_CHILD(pid_t);		/* tell child we're done */
 void WAIT_PARENT(void);		/* wait for parent to call TELL_CHILD */
 void WAIT_CHILD(void);		/* wait for child to call TELL_PARENT */
@@ -169,14 +168,15 @@ void Sigpending(sigset_t *);
 void Sigprocmask(int, const sigset_t *, sigset_t *);
 char *Strdup(const char *);
 long Sysconf(int);
-/* void Sysctl(int *, uint32_t, void *, size_t *, void *, size_t); */
+void Sysctl(int *, uint32_t, void *, size_t *, void *, size_t);
 void Unlink(const char *);
 pid_t Wait(int *);
 pid_t Waitpid(pid_t, int *, int);
 void Write(int, void *, size_t);
 
 /* 
- * Tobin's functions
+ * functions not include by apue
+ *  author: Tobin Harding <me@tobin.cc>
  */
 
 /* prototypes for pthread wrapper functions (wrappthread.c) */
@@ -186,7 +186,7 @@ void Pthread_join(pthread_t thread, void **retval);
 void Pthread_mutex_unlock(pthread_mutex_t *lock);
 void Pthread_mutex_lock(pthread_mutex_t *lock);
 
-/* prototypes for functions */
+/* fprintf(stderr, ...) shortcut */
 void msg(const char *fmt, ...);
 
 #endif	/* _APUE_H */

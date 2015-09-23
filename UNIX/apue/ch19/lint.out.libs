@@ -1,0 +1,40 @@
+*** splint: lint_lib ***
+loop.c: (in function loop)
+loop.c:9:113: Operands of < have incompatible types (unsigned int, arbitrary
+    unsigned integral type): __i < sizeof(fd_set) / sizeof(__fd_mask)
+  To ignore type qualifiers in type comparisons use +ignorequals.
+loop.c:13:101: Right operand of << may be negative (int):
+                  1UL << ((ptym) % (8 * (int)sizeof(__fd_mask)))
+  The right operand to a shift operator may be negative (behavior undefined).
+  (Use -shiftnegative to inhibit warning)
+loop.c:13:12: Value rset.fds_bits[] used before definition
+  An rvalue is used that may not be initialized to a value on some execution
+  path. (Use -usedef to inhibit warning)
+loop.c:14:98: Right operand of << may be negative (int):
+                 1UL << ((0) % (8 * (int)sizeof(__fd_mask)))
+loop.c:18:94: Right operand of << may be negative (int):
+                 1UL << ((0) % (8 * (int)sizeof(__fd_mask)))
+loop.c:19:25: Passed storage buf not completely defined (*buf is undefined):
+                 read (..., buf, ...)
+  Storage derivable from a parameter, return value or global is not defined.
+  Use /*@out@*/ to denote passed or returned storage which need not be defined.
+  (Use -compdef to inhibit warning)
+loop.c:19:9: Assignment of ssize_t to int: nread = read(0, buf, BUFSIZ)
+  To allow arbitrary integral types to match any integral type, use
+  +matchanyintegral.
+loop.c:23:26: Function writen expects arg 3 to be size_t gets int: nread
+loop.c:23:8: Operands of != have incompatible types (ssize_t, int):
+                writen(ptym, buf, nread) != nread
+loop.c:26:97: Right operand of << may be negative (int):
+                 1UL << ((ptym) % (8 * (int)sizeof(__fd_mask)))
+loop.c:27:28: Passed storage buf not completely defined (*buf is undefined):
+                 read (..., buf, ...)
+loop.c:27:9: Assignment of ssize_t to int: nread = read(ptym, buf, BUFSIZ)
+loop.c:29:23: Function writen expects arg 3 to be size_t gets int: nread
+loop.c:29:8: Operands of != have incompatible types (ssize_t, int):
+                writen(1, buf, nread) != nread
+loop.c:3:24: Parameter ignoreeof not used
+  A function parameter is not used in the body of the function. If the argument
+  is needed for type compatibility or future plans, use /*@unused@*/ in the
+  argument declaration. (Use -paramuse to inhibit warning)
+

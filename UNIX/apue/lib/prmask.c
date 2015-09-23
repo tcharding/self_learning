@@ -1,6 +1,9 @@
 #include "apue.h"
 #include <errno.h>
-
+/*
+ * Macro implementation based on lib/pr_mask.c: apue 
+ *  author: Tobin Harding
+ */
 #define O_IFMEMB(sigstr)		      \
 	if (sigismember(&sigset, sigstr))     \
 		printf(" #sigstr")	  
