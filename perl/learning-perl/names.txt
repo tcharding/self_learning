@@ -1,0 +1,13 @@
+This is a regex input file.
+It mentions Fred and his friends.
+It also has a fella named Frederick.
+And another name Alfred.
+Neither of these to men are friends with Betty.
+Nor Elma nor Louise.
+fred is spelled wrong.
+This line has no dot in it
+this word is all in CAPITALS
+wilma and fred are in this line
+and fred and wilma are in this one
+wilma in this
+
