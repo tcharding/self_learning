@@ -8,7 +8,7 @@ SPLINT_EXES = lint.out.exes
 LIBS = loop.c
 OBJS = $(LIBS:.c=.o)
 # executables
-EXES = termios-winsz 
+EXES = termios-winsz prog pty-fork-fun
 
 .PHONY: all libs clean lint_all 
 
@@ -17,6 +17,12 @@ libs: $(OBJS) lint_libs
 
 termios-winsz: termios-winsz.o
 	$(CC) -o $@ termios-winsz.o $(LFLAG)
+
+prog: prog.o
+	$(CC) -o $@ prog.o $(LFLAG)
+
+pty-fork-fun: pty-fork-fun.o
+	$(CC) -o $@ pty-fork-fun.o $(LFLAG)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< $(INC)

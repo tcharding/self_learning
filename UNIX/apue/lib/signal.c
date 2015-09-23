@@ -2,7 +2,7 @@
 #include "apue.h"
 
 /* Reliable version of signal(), using POSIX sigaction().  */
-Sigfunc *Signal(int signo, Sigfunc *func)
+Sigfunc *signal(int signo, Sigfunc *func)
 {
 	struct sigaction act, oact;
 

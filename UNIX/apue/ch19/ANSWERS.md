@@ -16,4 +16,6 @@ Chapter 19 Pseudo Terminals
    pty slave does the same, lastly cat gets eof and exits.
 7. script.sh
 8. Out put comes from the pty slave.
-9. 
+9. pty-fork-fun.c prog.c: could not get ioctl to send signal to process group of
+   slave. Did get slave and master running and read/write msg between prog and
+   main process through master and slave.
