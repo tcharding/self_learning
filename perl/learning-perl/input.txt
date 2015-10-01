@@ -1,12 +1,6 @@
-this
-is
-a
-file
-and
-it
-has
-words
-in
-it
-.
+wilma abcdefg  
+barney
+a word a
+Mrs. Wilma Flinstone
+wilma&fred
 
