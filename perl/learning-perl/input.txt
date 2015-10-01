@@ -1,6 +1,11 @@
-wilma abcdefg  
+Fred abcdefg  
+Larry wost
+LarryLarry was
+Wilma&Fred
+Wilma Fred Wilma Fred
+Larryrick was
 barney
 a word a
-Mrs. Wilma Flinstone
-wilma&fred
+Mrs. Fred Flinstone
+Fred&Larry
 

@@ -783,7 +783,7 @@ _db_findfree(DB *db, int keylen, int datlen)
 		/* if (strlen(db->idxbuf) == keylen && db->datlen == datlen) */
 			/* break;		/\* found a match *\/ */
 		if (available >= needed)
-			break;
+			break;	/* creates holes in data file */
 		saveoffset = offset;
 		offset = nextoffset;
 	}
