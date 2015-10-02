@@ -1,4 +1,4 @@
-/* attr: Advanced Programming in the UNIX Environment - Stevens and Rago */
+/* Attr: Advanced Programming In The Unix Environment - Stevens and Rago */
 /*
  * Print server daemon.
  */
@@ -43,31 +43,53 @@ struct worker_thread {
 /*
  * Needed for logging.
  */
-int					log_to_stderr = 0;
+int log_to_stderr = 0;
 
 /*
  * Printer-related stuff.
  */
-struct addrinfo		*printer;
-char					*printer_name;
-pthread_mutex_t		configlock = PTHREAD_MUTEX_INITIALIZER;
-int					reread;
+struct addrinfo 	*printer;
+char *printer_name;
+pthread_mutex_t	configlock = PTHREAD_MUTEX_INITIALIZER;
+int reread;
 
 /*
  * Thread-related stuff.
  */
-struct worker_thread	*workers;
-pthread_mutex_t		workerlock = PTHREAD_MUTEX_INITIALIZER;
-sigset_t				mask;
+struct worker_thread *workers;
+pthread_mutex_t	workerlock = PTHREAD_MUTEX_INITIALIZER;
+sigset_t mask;
 
 /*
  * Job-related stuff.
  */
-struct job				*jobhead, *jobtail;
-int					jobfd;
-int32_t				nextjob;
-pthread_mutex_t		joblock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t			jobwait = PTHREAD_COND_INITIALIZER;
+struct job *jobhead, *jobtail;
+int jobfd;
+int32_t	nextjob;
+pthread_mutex_t	joblock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t jobwait = PTHREAD_COND_INITIALIZER;
+
+/*
+ * Printer options
+ */
+
+struct ipp_attr {
+	int8_t tag;
+	char *name;
+	char *value;
+} op_tab[] = {
+	{ TAG_CHARSET, "attributes-charset", "utf-8" },
+	{ TAG_NATULANG, "attributes-natural-language", "en-us" },
+	{ TAG_MIMETYPE, "document-format", "text/plain" },
+	{ TAG_MIMETYPE, "document-format", "application/poscript" },
+	{ TAG_NATULANG /* ? */, "orientation-requested", "portrait" },
+				/* ... */
+	{ TAG_NATULANG /* ? */,	 "sides", "two-sided-long-edge" },
+				/* ... */
+	{ 0, NULL, NULL }
+};
+
+#define nprinter_ops (sizeof(op_tab) / sizeof(struct ipp_attr))
 
 /*
  * Function prototypes.
@@ -89,6 +111,10 @@ void		add_worker(pthread_t, int);
 void		kill_workers(void);
 void		client_cleanup(void *);
 static void log_error(int errcode);
+static void printer_read_attributes(int sockfd);
+static int get_printer_attributes(void);
+static char *get_status(void);
+static int cancel_job(const char *name, long jobid);
 
 /*
  * Main print server thread.  Accepts connect requests from
@@ -195,8 +221,8 @@ main(int argc, char *argv[])
 void
 init_request(void)
 {
-	int		n;
-	char	name[FILENMSZ];
+	int n;
+	char name[FILENMSZ];
 
 	sprintf(name, "%s/%s", SPOOLDIR, JOBFILE);
 	jobfd = open(name, O_CREAT|O_RDWR, S_IRUSR|S_IWUSR);
@@ -228,7 +254,14 @@ init_printer(void)
 	printer_name = printer->ai_canonname;
 	if (printer_name == NULL)
 		printer_name = "printer";
-	log_msg("printer is %s", printer_name);
+	log_msg("printer is %s, attempting to get attributes",
+		printer_name);
+	if (get_printer_attributes() == 0)
+		log_msg("got printer attributes");
+	else {
+		log_msg("init_printer: failed to get attributes");
+		exit(1);
+	}
 }
 
 /*
@@ -245,6 +278,8 @@ update_jobno(void)
 	if (lseek(jobfd, 0, SEEK_SET) == -1)
 		log_sys("can't seek in job file");
 	sprintf(buf, "%d", nextjob);
+	if (ftruncate(jobfd, 0) == -1)
+		log_sys("failed to truncate job file");
 	if (write(jobfd, buf, strlen(buf)) < 0)
 		log_sys("can't update job file");
 }
@@ -390,27 +425,26 @@ build_qonstart(void)
  *
  * LOCKING: none.
  */
-void *
-client_thread(void *arg)
+void * client_thread(void *arg)
 {
-	int					n, fd, sockfd, nr, nw, first;
-	int32_t				jobid;
-	pthread_t			tid;
-	struct printreq		req;
-	struct printresp	res;
-	char				name[FILENMSZ];
-	char				buf[IOBUFSZ];
+	int n, fd, sockfd, nr, nw, first;
+	int32_t	jobid;
+	pthread_t tid;
+	struct printreq	req;
+	struct printresp res;
+	char name[FILENMSZ];
+	char buf[IOBUFSZ];
 
 	tid = pthread_self();
 	pthread_cleanup_push(client_cleanup, (void *)((long)tid));
 	sockfd = (long)arg;
 	add_worker(tid, sockfd);
-
+	
 	/*
 	 * Read the request header.
 	 */
 	if ((n = treadn(sockfd, &req, sizeof(struct printreq), 10)) !=
-	  sizeof(struct printreq)) {
+	    sizeof(struct printreq)) {
 		res.jobid = 0;
 		if (n < 0)
 			res.retcode = htonl(errno);
@@ -422,6 +456,21 @@ client_thread(void *arg)
 	}
 	req.size = ntohl(req.size);
 	req.flags = ntohl(req.flags);
+
+	if (req.flags & PR_CANCEL) {
+		/* size overloaded to hold jobid */
+		if (cancel_job(req.usernm, req.size) == 0) {
+			res.retcode = 0;
+			sprintf(res.msg, "job ID %d canceled", res.jobid);
+		} else {
+			res.retcode = htonl(1);
+			sprintf(res.msg, "failed to cancel job ID %d, not pending",
+				jobid);
+		}
+		res.jobid = req.size;
+		writen(sockfd, &res, sizeof(struct printresp));
+		pthread_exit((void *)0);
+	}
 
 	/*
 	 * Create the data file.
@@ -520,7 +569,7 @@ client_thread(void *arg)
 	log_msg("adding job %d to queue", jobid);
 	add_job(&req, jobid);
 	pthread_cleanup_pop(1);
-	return((void *)0);
+	return ((void *)0);
 }
 
 /*
@@ -528,8 +577,7 @@ client_thread(void *arg)
  *
  * LOCKING: acquires and releases workerlock.
  */
-void
-add_worker(pthread_t tid, int sockfd)
+void add_worker(pthread_t tid, int sockfd)
 {
 	struct worker_thread	*wtp;
 
@@ -669,17 +717,17 @@ add_option(char *cp, int tag, char *optname, char *optval)
 void *
 printer_thread(void *arg)
 {
-	struct job		*jp;
-	int				hlen, ilen, sockfd, fd, nr, nw, extra;
-	char			*icp, *hcp, *p;
-	struct ipp_hdr	*hp;
-	struct stat		sbuf;
-	struct iovec	iov[2];
-	char			name[FILENMSZ];
-	char			hbuf[HBUFSZ];
-	char			ibuf[IBUFSZ];
-	char			buf[IOBUFSZ];
-	char			str[64];
+	struct job *jp;
+	int hlen, ilen, sockfd, fd, nr, nw, extra;
+	char *icp, *hcp, *p;
+	struct ipp_hdr *hp;
+	struct stat sbuf;
+	struct iovec iov[2];
+	char name[FILENMSZ];
+	char hbuf[HBUFSZ];
+	char ibuf[IBUFSZ];
+	char buf[IOBUFSZ];
+	char str[64];
 	struct timespec	ts = { 60, 0 };		/* 1 minute */
 
 	for (;;) {
@@ -896,8 +944,7 @@ readmore(int sockfd, char **bpp, int off, int *bszp)
  *
  * LOCKING: none.
  */
-int
-printer_status(int sfd, struct job *jp)
+int printer_status(int sfd, struct job *jp)
 {
 	int i, success, code, len, found, bufsz, datsz;
 	int32_t	jobid;
@@ -1061,4 +1108,138 @@ static void log_error(int err_code)
 		}
 	}
 	log_msg("log_error: unknown error");
+}
+
+static int get_printer_attributes(void)
+{
+	int hlen, ilen, sockfd, i;
+	char *icp, *hcp;
+	struct ipp_hdr *hp;
+	struct iovec iov[2];
+	char hbuf[HBUFSZ];
+	char ibuf[IBUFSZ];
+
+				/* connect to printer */
+	if ((sockfd = connect_retry(AF_INET, SOCK_STREAM, 0,
+				    printer->ai_addr, printer->ai_addrlen)) < 0) {
+		log_msg("can't contact printer: %s",
+			strerror(errno));
+		return (-1);
+	}
+
+	/*
+	 * Set up the IPP header.
+	 */
+	icp = ibuf;
+	hp = (struct ipp_hdr *)icp;
+	hp->major_version = 1;
+	hp->minor_version = 1;
+	hp->operation = htons(OP_GET_PRINTER_ATTR);
+	hp->request_id = htonl(1);
+
+	icp += offsetof(struct ipp_hdr, attr_group);
+	*icp++ = TAG_OPERATION_ATTR;
+	for (i = 0; i < nprinter_ops; i++) {
+		icp = add_option(icp, op_tab[i].tag, op_tab[i].name,
+				 op_tab[i].value);
+	}
+	*icp++ = TAG_END_OF_ATTR;
+	ilen = icp - ibuf;
+
+	/*
+	 * set up the HTTP header.
+	 */
+	hcp = hbuf;
+	sprintf(hcp, "POST /ipp HTTP/1.1\r\n");
+	hcp += strlen(hcp);
+	sprintf(hcp, "Content-Length: %d\r\n", ilen); /* this is probably wrong */
+	hcp += strlen(hcp);
+	strcpy(hcp, "Content-Type: application/ipp\r\n");
+	hcp += strlen(hcp);
+	sprintf(hcp, "Host: %s:%d\r\n", printer_name, IPP_PORT);
+	hcp += strlen(hcp);
+	*hcp++ = '\r';
+	*hcp++ = '\n';
+	hlen = hcp - hbuf;
+
+	/*
+	 * Write the headers first.  Then send the file.
+	 */
+	iov[0].iov_base = hbuf;
+	iov[0].iov_len = hlen;
+	iov[1].iov_base = ibuf;
+	iov[1].iov_len = ilen;
+	if (writev(sockfd, iov, 2) != hlen + ilen) {
+		log_ret("can't write to printer");
+		if (sockfd >= 0)
+			close(sockfd);
+		return (-1);
+	}
+
+	/*
+	 * Read the response from the printer.
+	 */
+	printer_read_attributes(sockfd);
+	if (sockfd >= 0)
+		close(sockfd);
+	return 0;
+}
+
+/* read response from request for printer attributes */
+static void printer_read_attributes(int sockfd)
+{
+/*
+ * read response from printer
+ * check for errors in http header
+ * check for errors in ipp header
+ * parse attribute list, store in global memory  location
+ */ 
+}
+
+/* get status of pending jobs, status returned in static buffer */
+static char *get_status(void)
+{
+	int qlen = 0;
+	struct job *jp;
+	static char buf[BUFSIZ];
+	
+	for (jp = jobhead; jp != NULL; jp = jp->next)
+		qlen++;
+	sprintf(buf, "Printer Status: que len is %d", qlen);
+	return buf;
+}
+
+/* 
+ * Cancel print job.
+ *
+ * LOCKING: acquires and releases joblock.
+ */
+static int cancel_job(const char *username, long jobid)
+{
+	struct job *cur, *rem;
+	char name[FILENMSZ];
+	
+	rem = NULL;
+	pthread_mutex_lock(&joblock);
+	if (jobhead->jobid == jobid) {
+		remove_job(rem = jobhead);
+	} else {
+		for (cur = jobhead; cur != NULL; cur = cur->next) {
+			if (cur->jobid == jobid) {
+				remove_job(rem = cur);
+				break;
+			}
+		}
+	}
+	pthread_mutex_unlock(&joblock);
+	if (rem == NULL) {
+		return (-1);
+	} else {			/* unlink job files */
+		sprintf(name, "%s/%s/%ld", SPOOLDIR, DATADIR, jobid);
+		unlink(name);
+		sprintf(name, "%s/%s/%ld", SPOOLDIR, REQDIR, jobid);
+		unlink(name);
+		free(rem);
+	}
+	return 0;
 }

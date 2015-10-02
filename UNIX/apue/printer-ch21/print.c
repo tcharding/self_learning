@@ -1,8 +1,16 @@
 /* attr: Advanced Programming in the UNIX Environment - Stevens and Rago */
 /*
  * The client command for printing documents.  Opens the file
- * and sends it to the printer spooling daemon.  Usage:
- * 	print [-t] filename
+ * and sends it to the printer spooling daemon.  
+ * Usage: 
+ *  print [options] filename
+ *   options:
+       -t -> text file
+       -s num_sides -> 0 < num < 4, number and type (long/short edge) of sides.
+       -o -> orientation
+         (portrait, reverse-portrait, landscape, reverse-landscape)
+       -i -> get job status
+       -c jobid -> cancel job
  */
 #include "apue.h"
 #include "print.h"
@@ -18,6 +26,9 @@ void submit_file(int fd, int sockfd, const char *fname, size_t nbytes,
 		 int text, const char *orientation, int sides);
 static void set_orientation(int *oloc, const char *s);
 static void set_sides(int *oloc, int sides);
+static int job_status(void);
+static int cancel_job(int sockfd, long jobid);
+static void usage(void);
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +37,7 @@ int main(int argc, char *argv[])
 	char *host, *file;
 	struct addrinfo	*ailist, *aip;
 	char *orient;
+	long jobid;
 	int text;
 	int sides;		/* 0=default 1=one-sided */
 				/* 2=two-sided-long-edge  3=two-sided-short-edge */
@@ -33,8 +45,18 @@ int main(int argc, char *argv[])
 	sides = 0;
 	text = 0;
 	err = 0;
-	while ((c = getopt(argc, argv, "s:to:")) != -1) {
+	jobid = -1;
+	while ((c = getopt(argc, argv, "is:to:c:h")) != -1) {
 		switch (c) {
+		case 'h':
+			usage();
+			exit(0);
+		case 'c':
+			jobid = atol(optarg);
+			break;
+		case 'i':
+			job_status();
+			exit(0);
 		case 's':
 			sides = atol(optarg);
 			if (sides < 1 || sides > 3)
@@ -74,8 +96,11 @@ int main(int argc, char *argv[])
 		  aip->ai_addr, aip->ai_addrlen)) < 0) {
 			err = errno;
 		} else {
-			submit_file(fd, sfd, file, sbuf.st_size,
-				    text, orient, sides);
+			if (jobid != -1) /* cancel job */
+				cancel_job(sfd, jobid);
+			else 
+				submit_file(fd, sfd, file, sbuf.st_size,
+					    text, orient, sides);
 			exit(0);
 		}
 	}
@@ -190,4 +215,69 @@ static void set_sides(int *sloc, int sides)
 		*sloc = PR_SIDES_TWO_LONG;
 	else if (sides == 3)
 		*sloc = PR_SIDES_TWO_SHORT;
+}
+
+/* output pending job status information */
+static int job_status(void)
+{
+	fprintf(stderr, "job_status not implemented yet");
+	return 0;
+}
+
+/* cancel print job */
+static int cancel_job(int sockfd, long jobid)
+{
+	int nw, nr;
+	struct printreq req;
+	struct printresp res;
+	struct passwd *pwd;
+
+	bzero(&req, sizeof(req));
+	bzero(&res, sizeof(res));
+	if ((pwd = getpwuid(geteuid())) == NULL) {
+		strcpy(req.usernm, "unknown");
+	} else {
+		strncpy(req.usernm, pwd->pw_name, USERNM_MAX-1);
+		req.usernm[USERNM_MAX-1] = '\0';
+	}
+	req.size = jobid;	/* overload size element */
+	/*
+	 * Send the request to the server.
+	 */
+	nw = writen(sockfd, &req, sizeof(struct printreq));
+	if (nw != sizeof(struct printreq)) {
+		if (nw < 0)
+			err_sys("can't write to print server");
+		else
+			err_quit("short write (%d/%d) to print server",
+			  nw, sizeof(struct printreq));
+	}
+	/*
+	 * Read the response.
+	 */
+	if ((nr = readn(sockfd, &res, sizeof(struct printresp))) !=
+	  sizeof(struct printresp))
+		err_sys("can't read response from server");
+	if (res.retcode != 0) {
+		printf("rejected: %s\n", res.msg);
+		exit(1);
+	} else {
+		printf("job ID %ld canceled\n", (long)ntohl(res.jobid));
+	}
+
+
+	return 0;
+}
+
+static void usage(void)
+{
+	printf("Usage:\n print [-t] file\n print OPTION \n\n");
+	printf("Options:\n"
+	       "\t -t \t\t text file\n"
+	       "\t -s <num_sides>  0 < num < 4\n"
+	       "\t\t\t number and type (long/short edge) of sides.\n"
+	       "\t -o <orient> \t orientation\n"
+	       "\t\t\t (portrait, reverse-portrait, landscape, reverse-landscape)\n"
+	       "\t -i \t\t get job status\n"
+	       "\t -c <jobid> \t cancel job\n");
 }

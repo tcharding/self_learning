@@ -62,6 +62,7 @@ struct printreq {
 	char usernm[USERNM_MAX]; /* user's name */
 	char jobnm[JOBNM_MAX];	 /* job's name */
 };
+
 /* 
  * Macros to test request flags 
 */
@@ -73,6 +74,7 @@ struct printreq {
  * Request flags.
  */
 #define PR_TEXT	0x01		/* treat file as plain text */
+#define PR_CANCEL 0x02		/* cancel job */
 #define PR_ORIENT_P 0x11	/* page orientation: portrait */
 #define PR_ORIENT_RP 0x12	/* page orientation: reverse-portrait */
 #define PR_ORIENT_L 0x13	/*  page orientation: landscape */

@@ -87,8 +87,8 @@ get_printserver(void)
 struct addrinfo *
 get_printaddr(void)
 {
-	int				err;
-	char			*p;
+	int err;
+	char *p;
 	struct addrinfo	*ailist;
 
 	if ((p = scan_configfile("printer")) != NULL) {
