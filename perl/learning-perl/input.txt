@@ -1,11 +1,8 @@
-Fred abcdefg  
-Larry wost
-LarryLarry was
-Wilma&Fred
-Wilma Fred Wilma Fred
-Larryrick was
-barney
-a word a
-Mrs. Fred Flinstone
-Fred&Larry
+this is a line
+fred wilma
+fred
+and now a new one
+this has numbers 367531 in it
+this has CAPITALS in it
+This is properly formed.
 
