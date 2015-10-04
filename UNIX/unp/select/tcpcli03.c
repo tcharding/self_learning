@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* Test shutdown(fd,SHUT_RD) and see what happens */
 #include	"unp.h"
 

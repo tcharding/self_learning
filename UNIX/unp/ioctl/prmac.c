@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unpifi.h"
 #include	<net/if_arp.h>
 

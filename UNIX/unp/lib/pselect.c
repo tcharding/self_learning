@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * This is *not* a complete implementation of the Posix.1g pselect()
  * function.  For atomicity this must be implemented within the kernel,

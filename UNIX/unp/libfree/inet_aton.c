@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  *  inet_aton.c,v 1.3 1993/05/19 03:39:32 jch Exp
  */

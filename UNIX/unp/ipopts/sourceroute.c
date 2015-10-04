@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include inet_srcrt_init */
 #include	"unp.h"
 #include	<netinet/in_systm.h>

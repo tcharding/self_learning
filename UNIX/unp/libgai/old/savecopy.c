@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 #include	<ctype.h>		/* isxdigit(), etc. */
 #include	<arpa/nameser.h>

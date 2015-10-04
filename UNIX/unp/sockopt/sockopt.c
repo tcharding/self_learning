@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 #include	<netinet/tcp.h>		/* for TCP_MAXSEG value */
 

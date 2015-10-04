@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include child_make */
 #include	"unp.h"
 #include	"child.h"

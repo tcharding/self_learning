@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* This is from the BIND 4.9.4 release, modified to compile by itself */
 
 /* Copyright (c) 1996 by Internet Software Consortium.

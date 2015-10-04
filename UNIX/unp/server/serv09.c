@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include serv09 */
 #include	"unpthread.h"
 #include	"pthread09.h"

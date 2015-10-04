@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* Use standard echo server; baseline measurements for nonblocking version */
 #include	"unp.h"
 

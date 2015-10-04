@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include my_addrs */
 #include	"unp.h"
 #include	<sys/utsname.h>

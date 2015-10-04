@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * Wrapper functions for our own library functions.
  * Most are included in the source file for the function itself.

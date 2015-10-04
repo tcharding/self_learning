@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * Socket wrapper functions.
  * These could all go into separate files, so only the ones needed cause

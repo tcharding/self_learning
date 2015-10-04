@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unpifi.h"
 
 void	mydg_echo(int, SA *, socklen_t);

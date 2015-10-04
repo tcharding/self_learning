@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*	BSDI	ping.c,v 2.3 1996/01/21 17:56:50 jch Exp	*/
 
 /*

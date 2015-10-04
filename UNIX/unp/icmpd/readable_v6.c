@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include readable_v61 */
 #include	"icmpd.h"
 #include	<netinet/in_systm.h>

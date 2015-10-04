@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 static uint8_t *sctp_pdapi_readbuf=NULL;

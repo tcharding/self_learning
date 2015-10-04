@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include web1 */
 #include	"unpthread.h"
 #include	<thread.h>		/* Solaris threads */

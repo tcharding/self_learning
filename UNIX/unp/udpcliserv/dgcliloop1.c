@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 #define	NDG		2000	/* datagrams to send */

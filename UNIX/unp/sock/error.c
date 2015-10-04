@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	<errno.h>		/* for definition of errno */
 #include	<stdarg.h>		/* ANSI C header file */
 #include	"ourhdr.h"

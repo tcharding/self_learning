@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 #define	SAP_NAME	"sap.mcast.net"	/* default group name and port */

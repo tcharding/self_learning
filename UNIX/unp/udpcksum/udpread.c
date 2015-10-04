@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"udpcksum.h"
 
 struct udpiphdr	*udp_check(char *, int);

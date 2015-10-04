@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * Return a string containing some additional information after a
  * host name or address lookup error - gethostbyname() or gethostbyaddr().

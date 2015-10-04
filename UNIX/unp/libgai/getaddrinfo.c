@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include ga1 */
 #include	"gai_hdr.h"
 #include	<arpa/nameser.h>	/* needed for <resolv.h> */

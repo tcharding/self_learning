@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* Doesn't work right.  Main thread sucks up all the CPU time polling unless
    we call thr_yield(). */
 #include	"unpthread.h"

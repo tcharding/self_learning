@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include dgcli011 */
 #include	"unpicmpd.h"
 

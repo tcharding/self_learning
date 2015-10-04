@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unpthread.h"
 
 #define	Pthread_mutex_lock(mptr) \

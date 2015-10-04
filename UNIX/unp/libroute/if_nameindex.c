@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include if_nameindex */
 #include	"unpifi.h"
 #include	"unproute.h"

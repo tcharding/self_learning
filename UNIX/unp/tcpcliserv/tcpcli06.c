@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* Test version of client that sends one line without a newline,
    to break tcpservselect01.c */
 

@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 /* Try and get ENOBUFS from sendto() by sending huge datagrams.

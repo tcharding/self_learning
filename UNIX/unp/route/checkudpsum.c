@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unproute.h"
 #include	<netinet/udp.h>
 #include	<netinet/ip_var.h>

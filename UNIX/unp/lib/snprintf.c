@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * Throughout the book I use snprintf() because it's safer than sprintf().
  * But as of the time of this writing, not all systems provide this

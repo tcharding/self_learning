@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include serv05a */
 #include	"unp.h"
 #include	"child.h"

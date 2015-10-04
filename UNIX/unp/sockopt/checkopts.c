@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include checkopts1 */
 /* *INDENT-OFF* */
 #include	"unp.h"

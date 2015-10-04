@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* See what the implementation returns for TSD keys */
 
 #include	"unpthread.h"

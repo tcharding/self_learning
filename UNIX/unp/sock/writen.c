@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"ourhdr.h"
 
 ssize_t						/* Write "n" bytes to a descriptor. */

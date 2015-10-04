@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"../lib/unp.h"
 
 #ifndef	AF_INET6

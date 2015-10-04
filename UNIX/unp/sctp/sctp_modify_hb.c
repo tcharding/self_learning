@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 int heartbeat_action(int sock_fd, struct sockaddr *sa, socklen_t salen,

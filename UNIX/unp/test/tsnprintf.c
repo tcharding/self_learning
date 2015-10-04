@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * If your system does not provide snprintf(), this program will compile
  * but will have an undefined error from the linker.

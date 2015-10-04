@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/fcntl.h>

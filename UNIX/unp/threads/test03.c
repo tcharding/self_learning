@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* test pthread_cond_timedwait() */
 
 #include	"unpthread.h"

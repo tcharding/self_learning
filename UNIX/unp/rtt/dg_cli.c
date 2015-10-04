@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 ssize_t	Dg_send_recv(int, const void *, size_t, void *, size_t,

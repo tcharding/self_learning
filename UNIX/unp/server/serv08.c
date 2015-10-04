@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include serv08 */
 #include	"unpthread.h"
 #include	"pthread08.h"

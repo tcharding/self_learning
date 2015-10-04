@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 #include	"unp.h"
 
 ssize_t	read_cred(int, void *, size_t, struct cmsgcred *);

@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include mcast_join1 */
 #include	"unp.h"
 #include	<net/if.h>

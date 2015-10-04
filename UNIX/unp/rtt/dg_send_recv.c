@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include dgsendrecv1 */
 #include	"unprtt.h"
 #include	<setjmp.h>

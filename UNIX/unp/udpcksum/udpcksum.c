@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include sig_alrm */
 #include	"udpcksum.h"
 #include	<setjmp.h>

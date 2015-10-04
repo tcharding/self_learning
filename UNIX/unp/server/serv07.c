@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include serv07 */
 #include	"unpthread.h"
 #include	"pthread07.h"

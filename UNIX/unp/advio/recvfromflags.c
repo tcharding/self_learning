@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /* include recvfrom_flags1 */
 #include	"unp.h"
 #include	<sys/param.h>		/* ALIGN macro for CMSG_NXTHDR() macro */

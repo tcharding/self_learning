@@ -1,3 +1,5 @@
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+
 /*
  * Copyright (c) 1993 W. Richard Stevens.  All rights reserved.
  * Permission to use or modify this software and its documentation only for
