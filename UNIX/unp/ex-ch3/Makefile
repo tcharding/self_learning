@@ -6,9 +6,9 @@ INC = -I../lib
 # lint output file
 SPLINT = lint.out
 
-SRCS = 
+SRCS = inet_pton_loose.c
 OBJS = $(SRCS:.c=.o)
-EXES = 
+EXES = inet_pton_loose
 
 .PHONY: all clean 
 all: $(EXES) lint
