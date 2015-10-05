@@ -29,6 +29,7 @@ hostinfo               = unknown
 
 PATH: /home/tobin/perl5/bin
 PATH: /home/tobin/perl5/bin
+PATH: /home/tobin/perl5/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/bin
@@ -129,7 +130,7 @@ configure:2307: $? = 0
 configure:2319: result: yes
 configure:2403: checking for t_open in -lnsl
 configure:2434: gcc -o conftest -g -O2 -D_REENTRANT   conftest.c -lnsl  -lpthread  >&5
-/tmp/ccbVmf8O.o: In function `main':
+/tmp/ccDzWnKz.o: In function `main':
 /home/tobin/build/github/self_learning/UNIX/unp/configure:2431: undefined reference to `t_open'
 collect2: error: ld returned 1 exit status
 configure:2437: $? = 1
@@ -175,7 +176,7 @@ configure:2591: checking for /home/tobin/libresolv.a
 configure:2598: result: no
 configure:2601: checking for res_init in -lresolv
 configure:2632: gcc -o conftest -g -O2 -D_REENTRANT   conftest.c -lresolv  -lpthread  >&5
-/tmp/ccWGACRU.o: In function `main':
+/tmp/ccfpQolE.o: In function `main':
 /home/tobin/build/github/self_learning/UNIX/unp/configure:2629: undefined reference to `res_init'
 collect2: error: ld returned 1 exit status
 configure:2635: $? = 1
@@ -1545,8 +1546,8 @@ configure:6890: $? = 0
 configure:6901: result: yes
 configure:6916: checking for kqueue
 configure:6966: gcc -o conftest -g -O2 -D_REENTRANT   conftest.c -lpthread  >&5
-/tmp/ccFqKxen.o:(.data+0x0): undefined reference to `kqueue'
-/tmp/ccFqKxen.o: In function `main':
+/tmp/ccwn6vKM.o:(.data+0x0): undefined reference to `kqueue'
+/tmp/ccwn6vKM.o: In function `main':
 /home/tobin/build/github/self_learning/UNIX/unp/configure:7018: undefined reference to `kqueue'
 collect2: error: ld returned 1 exit status
 configure:6969: $? = 1
@@ -1657,8 +1658,8 @@ configure: failed program was:
 configure:6986: result: no
 configure:6916: checking for kevent
 configure:6966: gcc -o conftest -g -O2 -D_REENTRANT   conftest.c -lpthread  >&5
-/tmp/ccqtvENp.o:(.data+0x0): undefined reference to `kevent'
-/tmp/ccqtvENp.o: In function `main':
+/tmp/ccuUNOJQ.o:(.data+0x0): undefined reference to `kevent'
+/tmp/ccuUNOJQ.o: In function `main':
 /home/tobin/build/github/self_learning/UNIX/unp/configure:7018: undefined reference to `kevent'
 collect2: error: ld returned 1 exit status
 configure:6969: $? = 1
@@ -1897,7 +1898,6 @@ on eros
 config.status:628: creating Makefile
 config.status:628: creating Make.defines
 config.status:731: creating config.h
-config.status:981: config.h is unchanged
 
 ## ---------------- ##
 ## Cache variables. ##

@@ -6,12 +6,21 @@ INC = -I../lib
 # lint output file
 SPLINT = lint.out
 
-SRCS = 
+SRCS =  daytimetcpcli-ex-4.2.c daytimetcpsrv1-ex-4.4.c daytimetcpsrv1-ex-4.5.c
 OBJS = $(SRCS:.c=.o)
-EXES = 
+EXES =  daytimetcpcli-ex-4.2 daytimetcpsrv1-ex-4.4 daytimetcpsrv1-ex-4.5
 
 .PHONY: all clean 
 all: $(EXES) lint
+
+daytimetcpsrv1-ex-4.5: daytimetcpsrv1-ex-4.5.o
+	$(CC) -o $@ daytimetcpsrv1-ex-4.5.o $(LFLAG)
+
+daytimetcpsrv1-ex-4.4: daytimetcpsrv1-ex-4.4.o
+	$(CC) -o $@ daytimetcpsrv1-ex-4.4.o $(LFLAG)
+
+daytimetcpcli-ex-4.2: daytimetcpcli-ex-4.2.o
+	$(CC) -o $@ daytimetcpcli-ex-4.2.o $(LFLAG)
 
 #foo: foo.o
 #	$(CC) -o $@ foo.o $(LFLAG)
@@ -25,7 +34,7 @@ lint:
 	@echo '*** splint: lint.out ***' > $(SPLINT)
 	@for f in $(SRCS) ; do \
 	if [ -f $$f ]; then \
-	splint $$f $(INC) -warnposix -nullderef -nullpass -unrecog -paramuse \
+	splint $$f $(INC) -warnposix -nullderef -nullpass -paramuse -unrecog  \
 	>> $(SPLINT); \
 	fi; done
 
