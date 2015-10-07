@@ -14,4 +14,5 @@ Exercise answers - Tobin Harding.
 
 
 Key 
-===  
+===
+term = completed at terminal
