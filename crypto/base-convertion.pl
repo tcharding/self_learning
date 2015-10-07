@@ -1,10 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
 
-my $input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-my $expected = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
-$input = uc $input;
-
 my %b64 = (
     A => '000000',
     B => '000001',
@@ -93,16 +89,6 @@ my %hex = (
     E => '1110',
     F => '1111',
 );
-
-my $bits = hextobits($input);
-my $output = bitstob64($bits);
-
-print "Set 1 Challenge 1: ";
-if ($output ne $expected) {
-    print "Failed\n";
-} else {
-    print "Completed\n";
-}
 
 # convert hex string to bit string
 sub hextobits {
