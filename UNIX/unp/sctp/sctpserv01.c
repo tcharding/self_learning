@@ -13,7 +13,8 @@ main(int argc, char **argv)
 	int stream_increment=1;
 	socklen_t len;
 	size_t rd_sz;
-
+	int flag = 1;
+	
 	if (argc == 2)
 		stream_increment = atoi(argv[1]);
         sock_fd = Socket(AF_INET, SOCK_SEQPACKET, IPPROTO_SCTP);
@@ -28,7 +29,8 @@ main(int argc, char **argv)
 	evnts.sctp_data_io_event = 1;
 	Setsockopt(sock_fd, IPPROTO_SCTP, SCTP_EVENTS,
 		   &evnts, sizeof(evnts));
-
+	Setsockopt(sock_fd, IPPROTO_SCTP, SCTP_NODELAY, &flag, sizeof(int));
+	
 	Listen(sock_fd, LISTENQ);
 	for ( ; ; ) {
 		len = sizeof(struct sockaddr_in);

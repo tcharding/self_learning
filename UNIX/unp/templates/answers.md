@@ -1,5 +1,5 @@
-UNIX Network Programming - Chapter ?
-=====================================
+UNIX Network Programming - Chapter 1
+======================================
 Exercise answers - Tobin Harding.
 
 1. 
@@ -11,8 +11,3 @@ Exercise answers - Tobin Harding.
 7. 
 8. 
 9. 
-
-
-Key 
-===
-term = completed at terminal

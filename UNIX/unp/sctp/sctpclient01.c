@@ -8,7 +8,8 @@ main(int argc, char **argv)
 	int sock_fd;
 	struct sockaddr_in servaddr;
 	struct sctp_event_subscribe evnts;
-	int echo_to_all=0;
+	int echo_to_all = 0;
+	int flag = 1;
 
 	if(argc < 2)
 		err_quit("Missing host argument - use '%s host [echo]'\n",
@@ -28,6 +29,7 @@ main(int argc, char **argv)
 	evnts.sctp_data_io_event = 1;
 	Setsockopt(sock_fd,IPPROTO_SCTP, SCTP_EVENTS,
 		   &evnts, sizeof(evnts));
+	Setsockopt(sock_fd, IPPROTO_SCTP, SCTP_NODELAY, &flag, sizeof(int));
 	if(echo_to_all == 0)
 		sctpstr_cli(stdin,sock_fd,(SA *)&servaddr,sizeof(servaddr));
 	else
