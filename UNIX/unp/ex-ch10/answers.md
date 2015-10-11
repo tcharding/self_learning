@@ -19,3 +19,12 @@ Exercise answers - Tobin Harding.
    association is created implicitly when a message is first sent ancillary data
    must be sent at this time to effect socket options, only one-to-many sockets
    can piggyback this data so it arrives in time to create the association.
+7. An SCTP server does not track the state of each association because a cookie
+   is passed with each message. This has the danger that an attacker could
+   misuse eavesdropped cookies however cryptographic signatures are used to
+   combat this.
+8. Weather or not this is a good design decision depends on the expected
+   behavior of clients. If a client is expected to only need to send one message
+   then this may be a good design, if however, multiple messages are likely then
+   this design will be inefficient since the four-way-handshake will need to be
+   carried out for each message.
