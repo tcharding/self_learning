@@ -87,11 +87,13 @@ while (<$mkin_fh>) {
     # add file to SCRS
     s/\A(SRCS.*)/$1 ${basename}.c/;
     # add file to EXES
-    s/\A(EXES.*)/$1 ${basename}/;
-    # now add a makefile rule
-    my $rule = "$basename: $basename.o\n\t\$(CC) -o \$\@ $basename.o \$(LFLAG)";
-    s/(\Aall:.*)/$1\n\n$rule/;
-    print $mkout_fh "$_";
+    if ($mode eq "exe") {
+	s/\A(EXES.*)/$1 ${basename}/;
+	# now add a makefile rule
+	my $rule = "$basename: $basename.o\n\t\$(CC) -o \$\@ $basename.o \$(LFLAG)";
+	s/(\Aall:.*)/$1\n\n$rule/;
+    }
+    print $mkout_fh "$_";	
 }
 
 close $mkout_fh;
