@@ -1,17 +1,18 @@
-/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */ 
- 
+/* orginal file: ../names/daytimetcpsrv2.c */ 
 #include "unp.h" 
 #include <time.h> 
  
 int 
 main(int argc, char **argv) 
 { 
-	int i, listenfd, connfd; 
-	socklen_t addrlen, len; 
-	struct sockaddr *cliaddr; 
+	int listenfd, connfd; 
+	socklen_t len, addrlen; 
 	char buff[MAXLINE]; 
 	time_t ticks; 
- 
+	struct sockaddr_storage cliaddr; 
+	size_t nbytes;
+	int i;
+	
 	if (argc == 2) 
 		listenfd = Tcp_listen(NULL, argv[1], &addrlen); 
 	else if (argc == 3) 
@@ -19,18 +20,17 @@ main(int argc, char **argv)
 	else 
 		err_quit("usage: daytimetcpsrv2 [ <host> ] <service or port>"); 
  
-	cliaddr = Malloc(addrlen); 
- 
 	for ( ; ; ) { 
-		len = addrlen; 
-		connfd = Accept(listenfd, cliaddr, &len); 
-		printf("connection from %s\n", Sock_ntop(cliaddr, len)); 
+		len = sizeof(cliaddr); 
+		connfd = Accept(listenfd, (SA *)&cliaddr, &len); 
+		printf("connection from %s\n", Sock_ntop((SA *)&cliaddr, len)); 
  
 		ticks = time(NULL); 
 		snprintf(buff, sizeof(buff), "%.24s\r\n", ctime(&ticks)); 
-		for (i = 0; i < strlen(buff); i++) 
-			Send(connfd, &buff[i], 1, MSG_EOR); 
- 
+		nbytes = strlen(buff);
+		for (i = 0; i < nbytes; i++) {
+			Write(connfd, buff+i, 1); 
+		}
 		Close(connfd); 
 	} 
 } 

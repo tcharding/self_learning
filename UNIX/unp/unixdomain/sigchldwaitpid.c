@@ -1,15 +1,15 @@
-/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
-
-#include	"unp.h"
-
-void
-sig_chld(int signo)
-{
-	pid_t	pid;
-	int		stat;
-
-	while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0) {
-		printf("child %d terminated\n", pid);
-	}
-	return;
-}
+/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */ 
+ 
+#include "unp.h" 
+ 
+void 
+sig_chld(int signo) 
+{ 
+ pid_t pid; 
+ int stat; 
+ 
+ while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0) { 
+ printf("child %d terminated\n", pid); 
+ } 
+ return; 
+} 

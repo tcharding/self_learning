@@ -1,0 +1,51 @@
+From: Tobin Harding <me@tobin.cc>
+To: authors@unpbook.com
+Cc: 
+Bcc: 
+Subject: Qued connection limits
+Reply-To: 
+X-Mailer: Mutt 1.5.24 (2015-08-30)
+
+Hi,
+
+Re - UNIX Network Programming, Third Edition, Volume 1
+
+Thank you for your work on this book (and Mr Stevens as well), it is
+exceptional. I am currently working through the text, I have worked through
+Advanced Programming in the Unix Environment also, and am a huge fan of Mr
+Stevens's work.
+
+If I may, I have found an inconsistency in the questions and solutions that I am
+unable to resolve.
+
+Exercise 15.4 outlines a program to determine the connection queue limits for a
+socket. I first implemented a solution using Unix domain sockets and was able to
+get a table of results (as in figure 4.10). FYI limit was one more than backlog.
+
+I then tried to re-implement the solution using TCP sockets and found (using
+tcpdump) that the client sends requests indefinitely. I found this to by inline
+with what the text states (page 107), TCP does not send an RST if the connection
+queue is full.
+
+I then checked your solutions and found you have also implemented using TCP. However
+your solution uses a loop termination (MAXBACKLOG=100). With all due respect, it
+appears to me that this is of little help since the loop always terminates at
+this value telling us nothing of the maximum queue size.
+
+My only idea form here was to call accept for each connection, fork a new
+process and sleep (to keep the connection open). My hope was that the connection
+queue would become full before the system maximum number of open files was
+reached. I was also hoping that TCP would differentiate between connections and
+received SYN's in the connection queue. Alas I hit the system limit for open
+files.
+
+I was wondering, if you have time, could you please shed some light on this
+problem. Is there any way to differentiate between connections and SYN's in the
+connection queue? How did you (or Mr Stevens) originally get the values in figure
+10.4?
+
+Thank you in advance for you time, I know it is valuable and very much
+appreciate you reading this email.
+
+Yours Sincerely,
+Tobin Harding.
