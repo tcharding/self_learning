@@ -35,12 +35,12 @@ dg_cli(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
 			FD_SET(pipefd[0], &rset);
 			if ( (n = select(maxfdp1, &rset, NULL, NULL, NULL)) < 0) {
 				if (errno == EINTR) {
-					fprintf(stderr, "select returned %d\n", n);
+					/* fprintf(stderr, "select returned %d\n", n); */
 					continue;
 				} else
 					err_sys("select error");
 			}
-			fprintf(stderr, "select returned %d\n", n);
+			/* fprintf(stderr, "select returned %d\n", n); */
 			if (FD_ISSET(sockfd, &rset)) {
 				len = servlen;
 				n = Recvfrom(sockfd, recvline, MAXLINE, 0, preply_addr, &len);
