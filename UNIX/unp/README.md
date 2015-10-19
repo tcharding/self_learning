@@ -20,3 +20,6 @@ with the original file to see additions made.
 
 Sincere gratitude to the authors.
 
+list questions not completed with
+`$ grep -i 'did not complete' ex*/answers.md`
+At the end of chapter 25 I have missed 9 questions.

@@ -1,0 +1,101 @@
+Mary-Ann: 5 flowers
+Mr. Howell: 3 coconuts
+Ginger: 1 crab
+Mr. Howell: 5 papayas
+Professor: 1 papaya
+Gilligan: 1 papaya
+Professor: 1 crab
+Mary-Ann: 1 flower
+Skipper: 2 flowers
+Ginger: 2 papayas
+Mrs. Howell: 5 crabs
+Mary-Ann: 5 coconuts
+Mrs. Howell: 2 bananas
+Skipper: 5 flowers
+Ginger: 3 crabs
+Ginger: 4 coconuts
+Mrs. Howell: 4 papayas
+Mr. Howell: 2 papayas
+Professor: 4 flowers
+Gilligan: 4 papayas
+Ginger: 3 flowers
+Mr. Howell: 1 crab
+Mrs. Howell: 4 papayas
+Mary-Ann: 4 coconuts
+Professor: 4 bananas
+Professor: 3 papayas
+Professor: 1 papaya
+Professor: 1 flower
+Mrs. Howell: 3 papayas
+Professor: 2 crabs
+Ginger: 5 bananas
+Mrs. Howell: 1 banana
+Mary-Ann: 1 papaya
+Mary-Ann: 3 flowers
+Ginger: 4 crabs
+Professor: 3 bananas
+Mrs. Howell: 1 papaya
+Gilligan: 1 flower
+Professor: 3 papayas
+Mrs. Howell: 3 papayas
+Mr. Howell: 5 bananas
+Mr. Howell: 4 bananas
+Professor: 4 papayas
+Mary-Ann: 5 flowers
+Skipper: 4 flowers
+Ginger: 2 papayas
+Ginger: 2 crabs
+Skipper: 3 papayas
+Mary-Ann: 4 bananas
+Mrs. Howell: 4 crabs
+Mrs. Howell: 1 crab
+Mrs. Howell: 2 papayas
+Ginger: 3 crabs
+Mr. Howell: 2 coconuts
+Mary-Ann: 4 flowers
+Gilligan: 3 crabs
+Mary-Ann: 4 coconuts
+Mrs. Howell: 5 papayas
+Mr. Howell: 5 papayas
+Ginger: 4 flowers
+Mr. Howell: 3 coconuts
+Professor: 2 crabs
+Mary-Ann: 3 papayas
+Professor: 3 bananas
+Mrs. Howell: 5 bananas
+Mrs. Howell: 2 coconuts
+Mrs. Howell: 3 papayas
+Mr. Howell: 1 coconut
+Mrs. Howell: 4 coconuts
+Mr. Howell: 2 bananas
+Skipper: 5 papayas
+Mrs. Howell: 5 crabs
+Mary-Ann: 5 papayas
+Mrs. Howell: 1 papaya
+Gilligan: 3 papayas
+Professor: 4 crabs
+Professor: 4 coconuts
+Mr. Howell: 4 papayas
+Professor: 5 crabs
+Professor: 1 papaya
+Mr. Howell: 1 crab
+Professor: 2 flowers
+Skipper: 3 crabs
+Mary-Ann: 2 crabs
+Mrs. Howell: 2 bananas
+Mary-Ann: 3 papayas
+Mr. Howell: 5 bananas
+Mrs. Howell: 4 papayas
+Mr. Howell: 5 coconuts
+Mrs. Howell: 1 papaya
+Ginger: 2 coconuts
+Mary-Ann: 5 crabs
+Professor: 5 flowers
+Professor: 5 flowers
+Ginger: 5 coconuts
+Skipper: 4 flowers
+Mrs. Howell: 3 flowers
+Professor: 4 coconuts
+Ginger: 5 flowers
+Professor: 4 crabs
+Mary-Ann: 1 crab

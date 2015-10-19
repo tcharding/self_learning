@@ -13,7 +13,7 @@ die "Usage: $0 <ch.q>\n"
 my $qnum = $ARGV[0];
 my ($ch, $ex) = split /\./, $qnum;
 #printf "ch: %d ex: %d", $ch, $ex;
-my $file = sprintf "ex-%s-%s.pl", $ch, $ex;
+my $file = sprintf "ex%s-%s.pl", $ch, $ex;
 #print "$file\n";
 if (-e 'cur.pl') {
     system 'rm cur.pl';   
