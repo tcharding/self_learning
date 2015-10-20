@@ -8,9 +8,5 @@ Exercise answers - Tobin Harding.
 2. If the thread does not close its file descriptor then eventually the server
    will reach the system limit for maximum open files.
 3. tcpcli01-ex-26.3.c strclithread-ex-26.3.c tcpserv01-ex-26.3.c
-4. 
-5. 
-6. 
-7. 
-8. 
-9. 
+4. readline-ex-26.4.c  readline.h
+5. Completed at terminal.
