@@ -1,18 +1,18 @@
-/* Authors: W. R. Stevens, B. Fenner, A. M. Rudoff */
+#include "unp.h"
+#include "readline.h"
 
-#include	"unp.h"
-
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	int		count = 0;
+	int count = 0;
 	ssize_t	n;
-	char	recvline[MAXLINE];
-	Rline rline;
-
-	readline_rinit(STDIN_FILENO, recvbuf, MAXLINE, &rline);
+	char recvline[MAXLINE];
+	struct readln rl;
 	
-	while ( ( n = readline_r(&rline)) > 0);
+	readline_rinit(STDIN_FILENO, recvline, MAXLINE, &rl);
+
+	while ( ( n = readline_r(&rl)) > 0) {
 		count++;
+	}
 	printf("%d lines\n", count);
+	exit (0);
 }

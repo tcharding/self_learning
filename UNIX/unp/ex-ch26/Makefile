@@ -14,7 +14,7 @@ EXES =  tcpcli01-ex-26.3 tcpserv01-ex-26.3 tst-readline
 all: $(EXES) lint
 
 tst-readline: readline-ex-26.4.o tst-readline.o
-	$(CC) -o $@ tst-readline.o $(LFLAG)
+	$(CC) -o $@ readline-ex-26.4.o tst-readline.o $(LFLAG)
 
 tcpserv01-ex-26.3: tcpserv01-ex-26.3.o
 	$(CC) -o $@ tcpserv01-ex-26.3.o $(LFLAG)
