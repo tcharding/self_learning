@@ -90,98 +90,58 @@ my %hex = (
     F => '1111',
 );
 
-# convert hex string to bit string
-sub hextobits {
-    my $s = shift;
+# encoded string to bit string
+sub enc_to_bits {
+    my( $es, $bits_rep ) = @_;
     my $bits;
-    while (length($s) > 0) {
-	my $digit = substr($s, 0, 1);
-	$s = substr($s, 1);
-	$bits .= &hex_dtob($digit)
+
+    while (length($es) > 0) {
+	my $digit = substr($es, 0, 1); # get first digit
+	$es = substr($es, 1);	# and move along
+	$bits .= $$bits_rep{$digit};
     }
+
     return $bits;
 }
 
-# convert base 64 string to bit string
-sub b64tobits {
-    my $s = shift;
-    my $bits;
-    while (length($s) > 0) {
-	my $digit = substr($s, 0, 1);
-	$s = substr($s, 1);
-	$bits .= &b64_dtob($digit)
-    }
-    return $bits;
-}
+# bits string to encoded format
+sub bits_to_enc {
+    my( $bits, $bits_rep ) = @_;
+    my $es;
+    my $len;			# bits per digit
 
-# convert bit string to base 64 string
-sub bitstob64 {
-    my $bits = shift;
-    my $s;
-    my $len = 6;
-    if (length($bits) %  $len != 0) {
-	die "bitstob4: string not mod $len\n";
-    }
+    my @values = @$bits_rep{keys %$bits_rep};
+    $len = length( $values[0] );
+
     while (length($bits) > 0) {
 	my $b = substr($bits, 0, $len);
 	$bits = substr($bits, $len);
-	$s .= b64_btod($b);
+	$es .= bits_to_digit($b, $bits_rep);
     }
-    return $s;
+
+    return $es;
 }
 
-# convert bit string to hex string
-sub bitstohex {
-    my $bits = shift;
-    my $s;
-    my $len = 4;
-    if (length($bits) %  $len != 0) {
-	die "bitstohex: string not mod $len\n";
-    }
-    while (length($bits) > 0) {
-	my $b = substr($bits, 0, $len);
-	$bits = substr($bits, $len);
-	$s .= b64_btod($b);
-    }
-    return $s;
-}
+# convert bits to digit
+sub bits_to_digit {
+    my ($bits, $bits_rep) = @_;
 
-# hex digit to bit string (length 4)
-sub hex_dtob {
-    my $digit = shift;
-    for (keys %hex) {
-	if ($_ eq $digit) {
-	    return $hex{$_};
-	}
-    }
-}
-
-# base 64 digit to bit string (length 6)
-sub b64_dotb {
-    my $digit = shift;
-    for (keys %b64) {
-	if ($_ eq $digit) {
-	    return $b64{$_};
-	}
-    }
-}
-
-# convert length 6 bit string to base 64 digit
-sub b64_btod {
-    my $bits = shift;
-    for (keys %b64) {
-	if ($b64{$_} eq $bits) {
+    for (keys %$bits_rep) {
+	if ($$bits_rep{$_} eq $bits) {
 	    return $_;
 	}
     }
+    die "Digit not found\n";
 }
 
-# convert length 4 bit string to hex digit
-sub hex_btod {
-    my $bits = shift;	     
-    for (keys %hex) {
-	if ($hex{$_} eq $bits) {
+# convert digit to bits
+sub digit_to_bits {
+    my( $bits, $bits_rep ) = @_;
+
+    for (keys %$bits_rep) {
+	if ($$bits_rep{$_} eq $bits) {
 	    return $_;
 	}
     }
+    die "Bit string error";
 }
