@@ -92,17 +92,17 @@ my %hex_digit = (
 
 # bits string to encoded format
 sub encode {
-    my( $bits, $bits_rep ) = @_;
+    my( $bits, $digits ) = @_;
     my $es;
     my $len;			# bits per digit
 
-    my @values = @$bits_rep{keys %$bits_rep};
+    my @values = @$digits{keys %$digits};
     $len = length( $values[0] );
 
     while (length($bits) > 0) {
 	my $b = substr($bits, 0, $len);
 	$bits = substr($bits, $len);
-	$es .= bits_to_digit($b, $bits_rep);
+	$es .= bits_to_digit($b, $digits);
     }
 
     return $es;
