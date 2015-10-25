@@ -9,8 +9,8 @@ my $option; 			# command line option
 my $person;			# command line arg: NAME
 my %birthday = (
     Tobin => '15 04 1981',
-    Amanda => '01 10 1972',
-    Mya => '19 10 2002',
+    Amanda => '01 8 1972',
+    Mya => '19 8 2002',
     Milla => '24 12 2009',
     Taivas => '27 11 2010',
     Charles => '17 12 2012',
@@ -48,7 +48,7 @@ sub birthday {
     }
     my $length = &max_len(keys %birthday);
     (my $day, my $month, my $year) = split / /, $birthday{$person};
-    printf "-${length}s %s/%s/%s\n", $person, $day, $month, $year;
+    printf "%-${length}s %s/%s/%s\n", $person, $day, $month, $year;
 }
 
 sub age {

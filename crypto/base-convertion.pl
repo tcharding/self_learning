@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-my %b64 = (
+my %b64_digit = (
     A => '000000',
     B => '000001',
     C => '000010',
@@ -71,7 +71,7 @@ my %b64 = (
     '/' =>'111111',
 );
 
-my %hex = (
+my %hex_digit = (
     0 => '0000',
     1 => '0001',
     2 => '0010',
@@ -90,22 +90,8 @@ my %hex = (
     F => '1111',
 );
 
-# encoded string to bit string
-sub enc_to_bits {
-    my( $es, $bits_rep ) = @_;
-    my $bits;
-
-    while (length($es) > 0) {
-	my $digit = substr($es, 0, 1); # get first digit
-	$es = substr($es, 1);	# and move along
-	$bits .= $$bits_rep{$digit};
-    }
-
-    return $bits;
-}
-
 # bits string to encoded format
-sub bits_to_enc {
+sub encode {
     my( $bits, $bits_rep ) = @_;
     my $es;
     my $len;			# bits per digit
@@ -122,12 +108,24 @@ sub bits_to_enc {
     return $es;
 }
 
-# convert bits to digit
-sub bits_to_digit {
-    my ($bits, $bits_rep) = @_;
+# encoded string to bit string
+sub decode {
+    my( $es, $digits ) = @_;
+    my $bits;
+    while (length($es) > 0) {
+	my $digit = substr($es, 0, 1); # get first digit
+	$es = substr($es, 1);	# and move along
+	$bits .= $$digits{$digit};
+    }
+    return $bits;
+    
+}
 
-    for (keys %$bits_rep) {
-	if ($$bits_rep{$_} eq $bits) {
+#convert bits to digit
+sub bits_to_digit {
+    my ($bits, $digits) = @_;
+    for (keys %$digits) {
+	if ($$digits{$_} eq $bits) {
 	    return $_;
 	}
     }
@@ -136,10 +134,10 @@ sub bits_to_digit {
 
 # convert digit to bits
 sub digit_to_bits {
-    my( $bits, $bits_rep ) = @_;
+    my( $bits, $digits ) = @_;
 
-    for (keys %$bits_rep) {
-	if ($$bits_rep{$_} eq $bits) {
+    for (keys %$digits) {
+	if ($$digits{$_} eq $bits) {
 	    return $_;
 	}
     }
