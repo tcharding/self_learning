@@ -143,3 +143,57 @@ sub digit_to_bits {
     }
     die "Bit string error";
 }
+
+# return first nchars of s and rest of s
+sub first_nchars {
+    my( $s, $nchars ) = @_;
+    my $chars = substr( $s, 0, $nchars );
+    $s = substr( $s, $nchars );
+    return( $s, $chars );
+}
+
+# binary string to encoded format TODO: add padding
+sub encode {
+    my( $bits, $digits ) = @_;
+    my ( $es, $bpd );
+				# get bits per digit
+    my @values = @$digits{keys %$digits};
+    $bpd = length( $values[0] );
+				# convert
+    while( length( $bits ) > 0 ) {
+	($bits, $b) = first_nchars( $bits, $bpd );
+	$es .= bits_to_digit($b, $digits);
+    }
+    return $es;
+}
+
+# convert encoded string to binary format
+sub decode {
+    my( $es, $digits ) = @_;
+    $es = uc $es;		# all our digits are uppercase
+    my( $bits, $digit );
+
+    while( length( $es ) > 0 ) {
+	($es, $digit) = first_nchars($es, 1);
+	$bits .= $$digits{ $digit };
+    }
+    return $bits;
+}
+
+# bits string it ASCII characters
+sub encode_ascii {
+    my $bits = shift;
+    my $hex = encode( $bits, \%hex_digit );
+    unless ($hex) {
+	die "encode_ascii: no hex value\n  bits: $bits\n";
+    }
+    $hex =~ s/(([0-9a-f][0-9a-f])+)/pack('H*', $1)/ie;
+    return $hex;
+}
+
+# convert decimal integer to binary string
+sub dec2bin {
+    my $str = unpack("B32", pack("N", shift));
+    $str =~ s/^0+(?=\d)//;	# otherwise you'll get leading zeros
+    return $str;
+}
