@@ -13,10 +13,6 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
 name: Animal
-provides:
-  Animal:
-    file: lib/Animal.pm
-    version: '0.01'
 resources:
   license: http://opensource.org/licenses/artistic-license-2.0.php
 version: '0.01'

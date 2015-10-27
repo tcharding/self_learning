@@ -1,6 +1,4 @@
 do{ my $x = {
-       'Animal-*' => 1,
-       'Animal-0.01' => 1,
-       'blib' => 1
+       'Animal-*' => 1
      };
 $x; }

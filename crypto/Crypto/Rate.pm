@@ -6,19 +6,34 @@ use Crypto::Util;
 
 our @ISA = ('Exporter');
 our @EXPORT = qw(
-		    rate_by_printable
-		    rate_by_punctuation
-		    rate_by_most_frequent
-		    rate_by_least_frequent
-		    rate_by_common
+		    rate_simple
+		    rate_printable
+		    rate_punctuation
+		    rate_most_frequent
+		    rate_least_frequent
+		    rate_common
 	    );
+
 my @alpha = ("a".."z","A".."Z");
 my @alphanum = ("a".."z","A".."Z", 0..9);
 my @common = ("a".."z","A".."Z", 0..9, '\'', '\"', ' ', '.', ',', '?', '!', '(', ')', '\n');
 my @most = qw/ e t a o i /;
 my @least = qw/ z q x j k /;
 
-sub rate_by_printable {
+sub rate_simple {
+    my $m = shift;
+    my $score;
+
+    $score += rate_printable( $m );
+    $score += rate_punctuation( $m );
+    $score += rate_most_frequent( $m );
+    $score += rate_least_frequent( $m );
+    $score += rate_common( $m );
+
+    return $score;
+}
+
+sub rate_printable {
     my $m = shift;
     my( $printable, $total ) = &cnt_rate( $m, \&is_printable);
 
@@ -47,7 +62,7 @@ sub rate_by_printable {
     return $score;
 }
 
-sub rate_by_punctuation {
+sub rate_punctuation {
     my $m = shift;
     my( $cnt, $total ) = &cnt_rate( $m, \&is_punc);
 
@@ -66,7 +81,7 @@ sub rate_by_punctuation {
     return 20 if ($p < 0.50);
 }
 
-sub rate_by_most_frequent {
+sub rate_most_frequent {
     my $m = shift;
     my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@most);
     return 0 unless $total;	# no data, zero rating
@@ -78,7 +93,7 @@ sub rate_by_most_frequent {
     return 25 if is_between( $p, 0.20, 0.55 );
     return 0;
 }
-sub rate_by_least_frequent {
+sub rate_least_frequent {
     my $m = shift;
     my $printable;
     my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@least );
@@ -98,7 +113,7 @@ sub rate_by_least_frequent {
     return 0;
 }
 
-sub rate_by_common {
+sub rate_common {
     my $m = shift;
     my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@common);
     return 0 unless $total;	# no data, zero rating

@@ -4,7 +4,6 @@ use 5.006;
 use strict;
 use warnings;
 
-
 =head1 NAME
 
 Animal - The great new Animal!

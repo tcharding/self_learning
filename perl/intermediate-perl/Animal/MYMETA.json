@@ -25,12 +25,6 @@
          }
       }
    },
-   "provides" : {
-      "Animal" : {
-         "file" : "lib/Animal.pm",
-         "version" : "0.01"
-      }
-   },
    "release_status" : "stable",
    "resources" : {
       "license" : [
