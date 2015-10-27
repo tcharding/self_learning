@@ -1,4 +1,4 @@
-package Crypto::Utils;
+package Crypto::Util;
 use strict;
 use Exporter;
 
