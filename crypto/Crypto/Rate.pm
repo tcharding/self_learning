@@ -20,29 +20,30 @@ my @least = qw/ z q x j k /;
 
 sub rate_by_printable {
     my $m = shift;
-    my( $cnt, $total ) = &cnt_rate( $m, \&is_printable);
+    my( $printable, $total ) = &cnt_rate( $m, \&is_printable);
 
     return 0 if ($total == 0);	# no data, zero rating
-    return 100 unless $cnt;	# no unprintable characters, max rating
+    return 100 if ($printable == $total);
+    
     my $score = 0;
     # rate on absolute value of cnt
-    my $unprintable = $total - $cnt;
+    my $unprintable = $total - $printable;
     if ($unprintable < 2) {
-	$score += 50
+	$score += 100
     } elsif ($unprintable < 5) {
-	$score += 30;
+	$score += 60;
     } elsif ($unprintable < 10) {
 	$score += 10;
     }
-    				# rate on percentage value of cnt
-    my $p = $unprintable / $total;
-    if ($p < 0.05) {
-	$score += 50;
-    }elsif ($p < 0.10) {
-	$score += 30;
-    }elsif ($p < 0.20) {
-	$score += 10;
-    }
+    # 				# rate on percentage value of cnt
+    # my $p = $unprintable / $total;
+    # if ($p < 0.05) {
+    # 	$score += 50;
+    # } elsif ($p < 0.10) {
+    # 	$score += 30;
+    # } elsif ($p < 0.20) {
+    # 	$score += 10;
+    # }
     return $score;
 }
 
@@ -51,6 +52,13 @@ sub rate_by_punctuation {
     my( $cnt, $total ) = &cnt_rate( $m, \&is_punc);
 
     return 0 unless $total;	# no data, zero rating
+				# short circuit if too many unprintable
+    my $printable;
+    ( $printable, $total ) = &cnt_rate( $m, \&is_printable );
+    my $unprintable = $total - $printable;
+    if ($unprintable > 3) {
+	return 0;
+    }
     				# rate on percentage value of cnt
     my $p = $cnt / $total;
     return 100 if ($p < 0.10);
@@ -133,6 +141,8 @@ sub is_printable {
 sub is_punc {
     my $byte = shift;
     my $v = encode_hex( $byte );
+    $v = hex( $v );
+
     if ( ($v >= 33 && $v <= 47) ||
 	     ($v >= 58 && $v <= 64) ||
 	     ($v >= 91 && $v <= 96) ||
@@ -153,10 +163,10 @@ sub is_member {
     return 0;
 }
 
-# return 1 if v is between min and max inclusive
+# return 1 if v is between min and max exclusive
 sub is_between {
     my( $v, $min, $max ) = @_;
-    if ($v >= $min && $v <= $max) {
+    if ($v > $min && $v < $max) {
 	return 1;
     }
     return 0;

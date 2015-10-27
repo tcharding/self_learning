@@ -103,7 +103,9 @@ sub repeating_xor {
     my( $in, $key ) = @_;
     my $out;
     my $klen = length( $key );
-
+    if ($klen == 0) {
+	return;
+    }
     for ( my $i = 0; $i < length( $in ); $i++ ) {
 	my $ki = $i % $klen;
 	$out .= &_xor_bit( substr( $in, $i, 1 ), substr( $key, $ki, 1 ));
