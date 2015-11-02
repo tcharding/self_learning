@@ -8,7 +8,6 @@ require Exporter;
 
 our @ISA = qw(Exporter);
 
-# will save memory.
 our %EXPORT_TAGS = (
     'all' => [ qw(
 		     encode_hex encode_b64 encode_ascii

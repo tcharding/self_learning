@@ -4,3 +4,4 @@ MANIFEST
 README
 t/Util.t
 lib/Crypto/Util.pm
+lib/Crypto/Analysis.pm
