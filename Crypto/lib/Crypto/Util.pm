@@ -205,7 +205,7 @@ sub _encode_int {
     my @values = @$digits{keys %$digits};
     $bpd = length( $values[0] );
 				# convert
-    while( length( $bits ) > 0 ) {
+    while( length( $bits ) >= $bpd ) {
 	($bits, $b) = _first_nchars( $bits, $bpd );
 	$es .= _bits_to_digit($b, $digits);
     }

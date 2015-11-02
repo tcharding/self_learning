@@ -3,6 +3,13 @@ Makefile.PL
 MANIFEST
 README
 t/Util.t
+t/00-load.t
+t/Analysis.t
 lib/Crypto/Util.pm
 lib/Crypto/Analysis.pm
+lib/Crypto/Keylen.pm
 script/chal-1.pl
+script/chal-2.pl
+script/chal-3.pl
+script/chal-4.pl
+script/chal-5.pl
