@@ -2,5 +2,5 @@ Changes
 Makefile.PL
 MANIFEST
 README
-t/Crypto-Util.t
+t/Util.t
 lib/Crypto/Util.pm
