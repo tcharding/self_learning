@@ -1,7 +1,0 @@
-Build.PL
-Changes
-lib/Animal.pm
-MANIFEST			This list of files
-README
-t/t
-t/xt

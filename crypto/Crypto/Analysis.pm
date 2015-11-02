@@ -9,12 +9,14 @@ our @ISA = ('Exporter');
 our @EXPORT = qw(
 		    bruteforce_scx
 		    rate_msgs
+		    num_top_rated
 		    get_top_rated
 	    );
 
 sub bruteforce_scx {
-    my $c = shift;
-    my %scx;
+    my( $c, $scx ) = @_;
+    my %hash;
+    $scx = \%hash unless (defined $scx );
     
     for ( 32..126 ) {
 				# convert integer to bit string length 8
@@ -25,27 +27,27 @@ sub bruteforce_scx {
 				# decrypt and store result
 	my $k = encode_ascii( $bk );
 	my $m = &repeating_xor( $c, $bk );
-	$scx{ $m }{ key } = $k;
+	$$scx{ $m }{ key } = $k;
     }
-    return \%scx;
+    return $scx;
 }
 
-# sub num_top_rated {
-#     my $scx = shift;
-#     my( $max, $cnt );
-# 				# get max rating
-#     $max = -1;
-#     for my $m ( keys %$scx ) {
-# 	my $rating = $$scx{ $m }[1];
-# 	$max = $rating if ( $rating > $max );
-#     }
-# 				# count msgs with max rating
-#     for my $m ( keys %$scx ) {
-# 	my $rating = $$scx{ $m }[1];
-# 	$cnt++ if ( $rating == $max );
-#     }
-#     return $cnt;
-# }
+sub num_top_rated {
+    my $scx = shift;
+    my( $max, $cnt );
+				# get max rating
+    $max = -1;
+    for my $m ( keys %$scx ) {
+	my $rating = $$scx{ $m }{ rating };
+	$max = $rating if ( $rating > $max );
+    }
+				# count msgs with max rating
+    for my $m ( keys %$scx ) {
+	my $rating = $$scx{ $m }{ rating };
+	$cnt++ if ( $rating == $max );
+    }
+    return $cnt;
+}
 
 sub get_top_rated {
     my $scx = shift;
