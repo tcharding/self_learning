@@ -1,0 +1,6 @@
+Revision history for Perl extension Animal.
+
+0.01  Mon Nov  2 14:59:06 2015
+	- original version; created by h2xs 1.23 with options
+		-AX -n Animal
+
