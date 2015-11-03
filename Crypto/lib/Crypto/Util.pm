@@ -12,7 +12,7 @@ our %EXPORT_TAGS = (
     'all' => [ qw(
 		     encode_hex encode_b64 encode_ascii
 		     decode_hex decode_b64 decode_ascii
-		     dec2bin repeating_xor byte_val
+		     dec2bin repeating_xor byte_val dump_bits
 	     )],
     'hex' => [ qw(
 		     encode_hex decode_hex
@@ -123,6 +123,19 @@ my %hex_digit = (
     E => '1110',
     F => '1111',
 );
+
+# pretty print bit string
+sub dump_bits {
+    for (@_) {
+	my $bits = $_;
+	while (length($bits) > 0) {
+	    my $byte = substr($bits, 0, 8);
+	    $bits = substr($bits, 8);
+	    print("$byte ");
+	}
+	print "\n";
+    }
+}
 
 # xor input bit string against key
 sub repeating_xor {

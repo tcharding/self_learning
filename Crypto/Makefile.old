@@ -188,8 +188,7 @@ PERL_ARCHIVE_AFTER =
 TO_INST_PM = lib/Crypto/Analysis.pm \
 	lib/Crypto/Keylen.pm \
 	lib/Crypto/Test.pm \
-	lib/Crypto/Util.pm \
-	trans.pl
+	lib/Crypto/Util.pm
 
 PM_TO_BLIB = lib/Crypto/Analysis.pm \
 	blib/lib/Crypto/Analysis.pm \
@@ -198,9 +197,7 @@ PM_TO_BLIB = lib/Crypto/Analysis.pm \
 	lib/Crypto/Test.pm \
 	blib/lib/Crypto/Test.pm \
 	lib/Crypto/Util.pm \
-	blib/lib/Crypto/Util.pm \
-	trans.pl \
-	$(INST_LIB)/Crypto/trans.pl
+	blib/lib/Crypto/Util.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -486,7 +483,7 @@ realclean_subdirs :
 # Delete temporary files (via clean) and also delete dist files
 realclean purge ::  clean realclean_subdirs
 	- $(RM_F) \
-	  $(MAKEFILE_OLD) $(FIRST_MAKEFILE) 
+	  $(FIRST_MAKEFILE) $(MAKEFILE_OLD) 
 	- $(RM_RF) \
 	  $(DISTVNAME) 
 
@@ -872,8 +869,7 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  lib/Crypto/Analysis.pm blib/lib/Crypto/Analysis.pm \
 	  lib/Crypto/Keylen.pm blib/lib/Crypto/Keylen.pm \
 	  lib/Crypto/Test.pm blib/lib/Crypto/Test.pm \
-	  lib/Crypto/Util.pm blib/lib/Crypto/Util.pm \
-	  trans.pl $(INST_LIB)/Crypto/trans.pl 
+	  lib/Crypto/Util.pm blib/lib/Crypto/Util.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 

@@ -26,17 +26,6 @@ our @EXPORT = qw(
 
 our $VERSION = '0.01';
 
-sub dump_bits {
-    for (@_) {
-	my $bits = $_;
-	while (length($bits) > 0) {
-	    my $byte = substr($bits, 0, 8);
-	    $bits = substr($bits, 8);
-	    print("$byte ");
-	}
-	print "\n";
-    }
-}
 # guess key length using Friedman method
 sub keylen_ic {
     my( $c, $max ) = @_;
