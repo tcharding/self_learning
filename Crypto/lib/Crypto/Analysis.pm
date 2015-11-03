@@ -37,6 +37,7 @@ sub bruteforce_scx {
     return \%scx;
 }
 
+# single character key repeating_xor
 sub repeating_xor {
     my( $hex, $key ) = @_;
     my( $out );
@@ -64,7 +65,7 @@ sub get_top_rated {
 	    $max = $rating if ( $rating > $max );	    
 	}
     }
-				# count msgs with max rating
+
     for my $char ( keys %$scx ) {
 	my $rating = $$scx{ $char }{ rating };
 	if ( $rating == $max ) {

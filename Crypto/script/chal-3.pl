@@ -24,7 +24,6 @@ if (defined $plaintext) {
 sub sift {
     my $scx = shift;
     &rate_msgs( $scx );
-#    print Dumper($scx);
     my $hex = get_top_rated( $scx );
     return hex_to_ascii( $hex );
 }
