@@ -3,79 +3,89 @@ use strict;
 use warnings;
 use feature qw/say/;
 
+use MIME::Base64 qw(encode_base64 decode_base64);
 use lib qw(/home/tobin/build/github/self_learning/Crypto/lib);
-use Crypto::Util qw( decode_b64 encode_ascii decode_ascii dump_bits);
+use Crypto::Convert qw(:all);
 use Crypto::Analysis qw(:all);
 use Crypto::Keylen qw(:all);
 use Data::Dumper;
 
-my $c = &get_input;
-my $KEYLEN = 29;		# see &guess_keylen
-&build_key( $c, $KEYLEN );
 
-#for ( 2 .. 40 ) {
-#    &build_key( $c, $_ );
-#}
+my $file = "script/6.txt";
+open my $fh, '<', $file or die "Cannot open file: $file\n";
+    
+my $asc = do { local( $/ ) ; <$fh> } ;
+my $ciphertext = decode_base64($asc);
+my $hex = unpack( 'H*', $ciphertext );
+
+# say "Guessing key length using Friedman method";
+# my $max_keylen = 40;
+# my $nprint = 5;
+# &printn_sorted_by_value( $nprint, keylen_ic( $hex, $max_keylen ));
+my $keylen = 29;		# from &keylen_ic
+
+# my $key = &build_key( $hex, $keylen );
+# print hex_to_ascii($key); -> "Terminator X: Bring the noise"
+my $key = "5465726d696e61746f7220583a204272696e6720746865206e6f697365"; # &build_key
+
+my $p = &repeating_xor( $hex, $key );
+$p = &hex_to_ascii($p);
+print "$p\n";
+
+# multi character key repeating_xor, all inputs and outputs are in hex
+sub repeating_xor {
+    my( $in, $key ) = @_;
+    my $klen = length( $key );
+    my $out;
+
+    my $ki = 0;
+    while (length( $in ) > 0) {
+    	$ki = $ki % $klen;
+    	my $a = substr($key, $ki, 2);
+    	my $b = substr($in, 0, 2);
+    	$in = substr($in, 2);
+    	$ki += 2;
+    	$out .= unpack('H*',pack('H*', $a) ^ pack('H*', $b));
+    }
+    return $out;
+}
 
 # single char xor each block to find key character
 sub build_key {
-    my( $c, $keylen ) = @_;
-    my $trans_blocks = &transpose( $c , $keylen);
+    my( $hex, $keylen ) = @_;
+    my $trans_blocks = &transpose( $hex , $keylen);
     my( $key, $fail );
 
+    $fail = 0;
     for (@$trans_blocks) {
 	my $scx = &bruteforce_scx( $_ );
 	&rate_msgs( $scx );
-	# for my $m (keys %$scx) {
-	#     my $p = encode_ascii($m);
-	#     #	dump_bits($m);
-	#     print( "$$scx{$m}{key} ($$scx{$m}{rating}) $p\n");
-	# }
- 
-	my $top_rated = &get_top_rated( $scx );
-	my $num = @$top_rated;
-	if ( $num == 1 ) {
-	    my $m = pop @$top_rated;
-	    $key .= $$scx{ $m }{ key };
-	} else {
-	    print "found $num top_rated\n";
-	    for my $m (@$top_rated) {
-		my $p = encode_ascii($m);
-		print( "$$scx{$m}{key} ($$scx{$m}{rating}) $p\n");
+	my $top_hex = get_top_rated( $scx );
+	if (defined $top_hex) {
+	    for my $char (keys %$scx) {
+		my $this_hex = $$scx{ $char }{ hex };
+		if ( $this_hex eq $top_hex ) {
+		    $key .= $char;
+		}
 	    }
-	    say "";
-	    $fail = 1;
+	} else {
 	    $key .= "*";
+	    $fail = 1;
 	}
     }
-    print "k: $keylen ($fail): $key\n";	
-
+    return $key;
 }
 
 
-# Resulting Key length: 29
-sub guess_keylen {
-    my $n_to_print = 5;		
-    say "Guessing key length using Friedman method";
-    &printn_sorted_by_value( $n_to_print, keylen_ic( $c, 40 ));
-}
+# # Resulting Key length: 29
+# sub guess_keylen {
+#     my $n_to_print = 5;		
+#     say "Guessing key length using Friedman method";
+#     &printn_sorted_by_value( $n_to_print, keylen_ic( $c, 40 ));
+# }
 
-# get input data
-sub get_input {
-    my $file = "script/6.txt";
-    open my $fh, '<', $file or die "Cannot open file: $file\n";
-    
-    my $input;
-    while ( <$fh> ) {
-	chomp;
-	$input .= $_;
-    }
-    my $ilen = length( $input );
-    if( ($ilen * 6) % 8 != 0 ) {
-	warn "input is not byte aligned, will need padding";
-    }
-    return decode_b64($input);
-}
+
+
 
 sub printn_sorted_by_value {
     my( $n, $hash ) = @_;

@@ -10,8 +10,6 @@ our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = (
     'all' => [ qw(
-		     edit_distance
-		     keylen_ed
 		     keylen_ic
 		     transpose
 	     )],
@@ -28,24 +26,24 @@ our $VERSION = '0.01';
 
 # guess key length using Friedman method
 sub keylen_ic {
-    my( $c, $max ) = @_;
+    my( $hex, $max ) = @_;
     my %ic_per_knchars;
     $max = 40 unless defined $max;
     my $C = 26;			# Normalizing co-efficient 
 
     for my $nchars (2..$max) {
-	my $trans_blocks = &transpose( $c, $nchars );
+	my $trans_blocks = &transpose( $hex, $nchars );
 	my( $sum, $total );
 	for my $t ( @$trans_blocks ) {
 	    my( $n, $N ); # https://en.wikipedia.org/wiki/Index_of_coincidence
-	    $N = length( $t ) / 8; # 8 bits per char
+	    $N = length( $t ) / 2; # 2 hex digits per char
 	    for ( 0 .. $N-1 ) {
 		$n = 0;
-		my $i = $_ * 8;
-		my $byte = substr( $t, $i, 8 );
+		my $i = $_ * 2;
+		my $byte = substr( $t, $i, 2 );
 		for ( 0 .. $N-1 ) {
-		    my $i = $_ * 8;
-		    my $cmp = substr( $t, $i, 8 );
+		    my $i = $_ * 2;
+		    my $cmp = substr( $t, $i, 2 );
 
 		    if ( $cmp eq $byte ) {
 			$n++;
@@ -100,12 +98,12 @@ sub edit_distance {
 
 # return array size n containing input bit string transposed by byte
 sub transpose {
-    my( $data, $n ) = @_;
+    my( $hex, $n ) = @_;
     my @blocks;
     
-    for (my $i = 0; $i < length( $data ); $i += 8) {
-	my $block = ($i / 8) % $n;
-	$blocks[$block] .= substr( $data, $i, 8 );
+    for (my $i = 0; $i < length( $hex ); $i += 2) {
+	my $block = ($i / 2) % $n;
+	$blocks[$block] .= substr( $hex, $i, 2 );
     }
     return \@blocks;
 }
