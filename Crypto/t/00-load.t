@@ -7,5 +7,6 @@ use Test::More;
 BEGIN { use_ok('Crypto::Util') };
 BEGIN { use_ok('Crypto::Analysis') };
 BEGIN { use_ok('Crypto::Keylen') };
+BEGIN { use_ok('Crypto::Test') };
 
 done_testing();

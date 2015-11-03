@@ -12,6 +12,8 @@ our %EXPORT_TAGS = (
     'all' => [ qw(
 		     edit_distance
 		     keylen_ed
+		     keylen_ic
+		     transpose
 	     )],
 );
 
@@ -23,6 +25,55 @@ our @EXPORT = qw(
 );
 
 our $VERSION = '0.01';
+
+sub dump_bits {
+    for (@_) {
+	my $bits = $_;
+	while (length($bits) > 0) {
+	    my $byte = substr($bits, 0, 8);
+	    $bits = substr($bits, 8);
+	    print("$byte ");
+	}
+	print "\n";
+    }
+}
+# guess key length using Friedman method
+sub keylen_ic {
+    my( $c, $max ) = @_;
+    my %ic_per_knchars;
+    $max = 40 unless defined $max;
+    my $C = 26;			# Normalizing co-efficient 
+
+    for my $nchars (2..$max) {
+	my $trans_blocks = &transpose( $c, $nchars );
+	my( $sum, $total );
+	for my $t ( @$trans_blocks ) {
+	    my( $n, $N ); # https://en.wikipedia.org/wiki/Index_of_coincidence
+	    $N = length( $t ) / 8; # 8 bits per char
+	    for ( 0 .. $N-1 ) {
+		$n = 0;
+		my $i = $_ * 8;
+		my $byte = substr( $t, $i, 8 );
+		for ( 0 .. $N-1 ) {
+		    my $i = $_ * 8;
+		    my $cmp = substr( $t, $i, 8 );
+
+		    if ( $cmp eq $byte ) {
+			$n++;
+		    }
+		}
+	    }
+	    my $step = ($n * ($n - 1)) / ($N * ($N - 1)); # n(n-1) / N(N-1)
+	    $sum += $step;
+	    my $ic = $sum * $C;
+#	    print "$nchars: $ic\n";
+	    $total += $ic;
+	}
+	$ic_per_knchars{$nchars} = $total / $nchars;
+    }
+    return \%ic_per_knchars;
+}
+
 
 # guess key length using edit distance
 sub keylen_ed {
@@ -56,6 +107,18 @@ sub edit_distance {
 	}
     }
     return $ed;
+}
+
+# return array size n containing input bit string transposed by byte
+sub transpose {
+    my( $data, $n ) = @_;
+    my @blocks;
+    
+    for (my $i = 0; $i < length( $data ); $i += 8) {
+	my $block = ($i / 8) % $n;
+	$blocks[$block] .= substr( $data, $i, 8 );
+    }
+    return \@blocks;
 }
 
 1;

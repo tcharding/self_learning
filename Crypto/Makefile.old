@@ -185,19 +185,22 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = hamming.pl \
-	lib/Crypto/Analysis.pm \
+TO_INST_PM = lib/Crypto/Analysis.pm \
 	lib/Crypto/Keylen.pm \
-	lib/Crypto/Util.pm
+	lib/Crypto/Test.pm \
+	lib/Crypto/Util.pm \
+	trans.pl
 
-PM_TO_BLIB = hamming.pl \
-	$(INST_LIB)/Crypto/hamming.pl \
-	lib/Crypto/Analysis.pm \
+PM_TO_BLIB = lib/Crypto/Analysis.pm \
 	blib/lib/Crypto/Analysis.pm \
 	lib/Crypto/Keylen.pm \
 	blib/lib/Crypto/Keylen.pm \
+	lib/Crypto/Test.pm \
+	blib/lib/Crypto/Test.pm \
 	lib/Crypto/Util.pm \
-	blib/lib/Crypto/Util.pm
+	blib/lib/Crypto/Util.pm \
+	trans.pl \
+	$(INST_LIB)/Crypto/trans.pl
 
 
 # --- MakeMaker platform_constants section:
@@ -866,10 +869,11 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  hamming.pl $(INST_LIB)/Crypto/hamming.pl \
 	  lib/Crypto/Analysis.pm blib/lib/Crypto/Analysis.pm \
 	  lib/Crypto/Keylen.pm blib/lib/Crypto/Keylen.pm \
-	  lib/Crypto/Util.pm blib/lib/Crypto/Util.pm 
+	  lib/Crypto/Test.pm blib/lib/Crypto/Test.pm \
+	  lib/Crypto/Util.pm blib/lib/Crypto/Util.pm \
+	  trans.pl $(INST_LIB)/Crypto/trans.pl 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 

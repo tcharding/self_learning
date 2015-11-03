@@ -16,6 +16,7 @@ my %scx;
 #my $scx = &bruteforce_scx( $c );
 &bruteforce_scx( $c, \%scx );
 &rate_msgs( \%scx );
+
 my $top_rated = &get_top_rated( \%scx );
 
 my $num = @$top_rated;

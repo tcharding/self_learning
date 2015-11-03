@@ -68,10 +68,15 @@ sub get_top_rated {
     my $scx = shift;
     my( $max, @top_rated );
 				# get max rating
-    $max = -1;
+    my $first_time = 0;
     for my $m ( keys %$scx ) {
 	my $rating = $$scx{ $m }{ rating };
-	$max = $rating if ( $rating > $max );
+	if ($first_time == 0) {
+	    $max = $rating;
+	    $first_time = 1;
+	} else {
+	    $max = $rating if ( $rating > $max );	    
+	}
     }
 				# count msgs with max rating
     for my $m ( keys %$scx ) {
