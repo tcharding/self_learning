@@ -3,9 +3,7 @@ package Crypto::Analysis;
 use 5.022000;
 use strict;
 use warnings;
-
-use lib qw( /home/tobin/build/github/self_learning/Crypto/lib/ );
-use Crypto::Util qw( :all );
+use Crypto::Convert qw(:all);
 
 require Exporter;
 
@@ -15,10 +13,8 @@ our %EXPORT_TAGS = (
     'all' => [ qw(
 		    bruteforce_scx
 		    rate_msgs
-		    num_top_rated
 		    get_top_rated
 	     )] );
-
 
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
@@ -29,48 +25,38 @@ our @EXPORT = qw(
 our $VERSION = '0.01';
 
 sub bruteforce_scx {
-    my( $c, $scx ) = @_;
-    my %hash;
-    $scx = \%hash unless (defined $scx );
-    
-    for ( 32..126 ) {
-				# convert integer to bit string length 8
-	my $bk = dec2bin( $_ );
-	while ( length($bk) < 8) {
-	    $bk = "0" . $bk;
-	}
-				# decrypt and store result
-	my $k = encode_ascii( $bk );
-	my $m = &repeating_xor( $c, $bk );
-	$$scx{ $m }{ key } = $k;
+    my $hex = shift;
+    my %scx;
+
+    for ( 32 .. 126 ) {
+	my $char = chr($_);
+	my $key = ascii_to_hex( $char );
+	my $xord_hex = repeating_xor( $hex, $key );
+	$scx{ $key }{ hex } = $xord_hex;
     }
-    return $scx;
+    return \%scx;
 }
 
-sub num_top_rated {
-    my $scx = shift;
-    my( $max, $cnt );
-				# get max rating
-    $max = -1;
-    for my $m ( keys %$scx ) {
-	my $rating = $$scx{ $m }{ rating };
-	$max = $rating if ( $rating > $max );
+sub repeating_xor {
+    my( $hex, $key ) = @_;
+    my( $out );
+
+    while (length( $hex ) > 0) {
+	my $byte = substr($hex, 0, 2);
+	$hex = substr($hex, 2);
+	$out .= unpack('h*',pack('h*', $byte) ^ pack('h*', $key));
     }
-				# count msgs with max rating
-    for my $m ( keys %$scx ) {
-	my $rating = $$scx{ $m }{ rating };
-	$cnt++ if ( $rating == $max );
-    }
-    return $cnt;
+    return $out;
 }
 
+# return $hex string of top rated message
 sub get_top_rated {
     my $scx = shift;
-    my( $max, @top_rated );
+    my( $max, @top_rated, $hex );
 				# get max rating
     my $first_time = 0;
-    for my $m ( keys %$scx ) {
-	my $rating = $$scx{ $m }{ rating };
+    for my $char ( keys %$scx ) {
+	my $rating = $$scx{ $char }{ rating };
 	if ($first_time == 0) {
 	    $max = $rating;
 	    $first_time = 1;
@@ -79,27 +65,32 @@ sub get_top_rated {
 	}
     }
 				# count msgs with max rating
-    for my $m ( keys %$scx ) {
-	my $rating = $$scx{ $m }{ rating };
+    for my $char ( keys %$scx ) {
+	my $rating = $$scx{ $char }{ rating };
 	if ( $rating == $max ) {
-	    push @top_rated, $m;
+	    push @top_rated, $$scx{ $char }{ hex };
 	}
     }
-    return \@top_rated;
+    my $n = @top_rated;
+    if ($n == 1) {
+	return pop @top_rated;
+    } 
+    return undef;
 }
 
 # accepts optional rating function otherwise uses &rate_simple
 sub rate_msgs {
-    my( $scx, $fn ) = @_;
+    my( $scx ) = @_;
 
-    for my $m (keys %$scx ) {
-	my $rating;
-	if ( defined $fn ) {
-	    $rating = &$fn( $m )
-	} else {
-	    $rating = &rate_simple( $m );
-	}
-	$$scx{ $m }{ rating } = $rating;
+    for my $char (keys %$scx ) {
+	my $score;
+	my $hex = $$scx{ $char }{ hex };
+	$score += rate_printable( $hex );
+	$score += rate_punctuation( $hex );
+	$score += rate_most_frequent( $hex );
+	$score += rate_least_frequent( $hex );
+	$score += rate_common( $hex );
+	$$scx{ $char }{ rating } = $score;
     }
 }
 
@@ -109,23 +100,10 @@ my @common = ("a".."z","A".."Z", 0..9, '\'', '\"', ' ', '.', ',', '?', '!', '(',
 my @most = qw/ e t a o i /;
 my @least = qw/ z q x j k /;
 
-sub rate_simple {
-    my $m = shift;
-    my $score;
-
-    $score += rate_printable( $m );
-    $score += rate_punctuation( $m );
-    $score += rate_most_frequent( $m );
-    $score += rate_least_frequent( $m );
-    $score += rate_common( $m );
-
-    return $score;
-}
-
 # return -100 - 100
 sub rate_printable {
-    my $m = shift;
-    my( $printable, $total ) = &cnt_rate( $m, \&is_printable);
+    my $hex = shift;
+    my( $printable, $total ) = &cnt_rate( $hex, \&is_printable);
 
     return 0 if ($total == 0);	# no data, zero rating
     return 100 if ($printable == $total);
@@ -141,8 +119,8 @@ sub rate_printable {
 
 # return -100 - 100
 sub rate_common {
-    my $m = shift;
-    my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@common);
+    my $hex = shift;
+    my( $cnt, $total ) = &cnt_rate( $hex, \&is_member, \@common);
     return 0 unless $total;	# no data, zero rating
 
     my $p = $cnt / $total;
@@ -159,13 +137,13 @@ sub rate_common {
 
 # return -50 - 50
 sub rate_punctuation {
-    my $m = shift;
-    my( $cnt, $total ) = &cnt_rate( $m, \&is_punc);
+    my $hex = shift;
+    my( $cnt, $total ) = &cnt_rate( $hex, \&is_punc);
 
     return 0 unless $total;	# no data, zero rating
 				# short circuit if too many unprintable
     my $printable;
-    ( $printable, $total ) = &cnt_rate( $m, \&is_printable );
+    ( $printable, $total ) = &cnt_rate( $hex, \&is_printable );
     my $unprintable = $total - $printable;
     if ($unprintable > 3) {
 	return 0;
@@ -181,8 +159,8 @@ sub rate_punctuation {
 
 # return -50 - 50
 sub rate_most_frequent {
-    my $m = shift;
-    my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@most);
+    my $hex = shift;
+    my( $cnt, $total ) = &cnt_rate( $hex, \&is_member, \@most);
     return 0 unless $total;	# no data, zero rating
 
     my $p = $cnt / $total;
@@ -195,10 +173,10 @@ sub rate_most_frequent {
 
 # return -50 - 50
 sub rate_least_frequent {
-    my $m = shift;
+    my $hex = shift;
     my $printable;
-    my( $cnt, $total ) = &cnt_rate( $m, \&is_member, \@least );
-    ( $printable, $total ) = &cnt_rate( $m, \&is_printable );
+    my( $cnt, $total ) = &cnt_rate( $hex, \&is_member, \@least );
+    ( $printable, $total ) = &cnt_rate( $hex, \&is_printable );
 #    print "$cnt, $total\n";
 				# short circuit if too many unprintable
     my $unprintable = $total - $printable;
@@ -217,23 +195,22 @@ sub rate_least_frequent {
 
 # return number of characters that pass rate_fn ($set is passed to rate_fn)
 sub cnt_rate {
-    my( $m, $rate_fn, $set ) = @_;
+    my( $hex, $rate_fn, $set ) = @_;
     my( $cnt, $total ) = ( 0, 0 );
 
-    while( length( $m ) > 0 ) {
+    while( length( $hex ) > 0 ) {
 	$total++;
-	my $byte = substr( $m, 0, 8);
-	$m = substr( $m , 8);
+	my $byte = substr( $hex, 0, 2);
+	$hex = substr( $hex , 2);
 	$cnt += &$rate_fn( $byte, $set );
     }
+
     return( $cnt, $total );
 }
 
 # return 1 if byte is an ASCII character else 0
 sub is_printable {
-    my $byte = shift;		# 8 digit bit string
-
-    my $hex = encode_hex( $byte );
+    my $hex = shift;		# 2 digit hex string
 
     if ( (hex( $hex ) >= 32) && (hex( $hex ) <= 126 ) ) {
 	return 1;		# true
@@ -243,9 +220,8 @@ sub is_printable {
 
 # does not include space (ASCII 32)
 sub is_punc {
-    my $byte = shift;
-    my $v = encode_hex( $byte );
-    $v = hex( $v );
+    my $hex = shift;
+    my $v = hex( $hex );
 
     if ( ($v >= 33 && $v <= 47) ||
 	     ($v >= 58 && $v <= 64) ||
@@ -257,8 +233,8 @@ sub is_punc {
 }
 
 sub is_member {
-    my( $byte, $set ) = @_;
-    my $char = encode_ascii( $byte );
+    my( $hex, $set ) = @_;
+    my $char = hex_to_ascii( $hex );
     for (@$set) {
 	if ($_ eq $char) {
 	    return 1;

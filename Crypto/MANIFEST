@@ -5,6 +5,7 @@ README
 t/Util.t
 t/00-load.t
 t/Analysis.t
+lib/Crypto/Convert.pm
 lib/Crypto/Util.pm
 lib/Crypto/Analysis.pm
 lib/Crypto/Keylen.pm
