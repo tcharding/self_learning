@@ -10,9 +10,15 @@ ok(my $padded = pad_pkcs_7( $s , 16));
 #diag( "len: %s s: %s\n", length($padded), $padded );
 
 $s = "this is a message";	# 17 characters
-my $pblocks = &split_into_blocks( $s, 3 );
+my $pblocks = &split_string_into_blocks( $s, 3 );
 for (@$pblocks) {
     is(length( $_ ), 3);
 }
 is(@$pblocks, 6, "plaintext split into blocks and padded");
+
+$s = "this";
+$padded = &pad( $s, 8 );
+is(length( $padded ), 8, "padding 4 to 8 bytes");
+#my $i = $len / $size * $size;
+is((4 - (4 % 8)), 0, "calc");
 done_testing();

@@ -12,12 +12,11 @@ my $key = "YELLOW SUBMARINE";
 my $iv = "THIS IS 16 BYTES";
 
 my $plaintext = "this is the top secret message";
-my $ciphertext = encrypt_aes_cbc( $plaintext, $key, $iv );
-$plaintext = decrypt_aes_cbc( $ciphertext, $key, $iv );
+my $ciphertext = encrypt( $plaintext, $key, $iv );
+$plaintext = decrypt( $ciphertext, $key, $iv );
 print "$plaintext\n";
 
-# AES 128 CBC mode, key is 16 byte string, iv is 32 digit hex string
-sub encrypt_aes_cbc {
+sub encrypt {
     my( $plaintext, $key, $iv ) = @_;
 				# sanity checks
     if( length($iv) != 16) {	# 16 bytes
@@ -26,57 +25,41 @@ sub encrypt_aes_cbc {
     if( length($key) != 16) {	# 16 bytes
 	die "key must be 16 bytes long";
     }
-    				# set up cipher and $iv
+    				# hexify inputs
+    my $blocks = split_string_into_blocks( $plaintext, 16 );	# 16 byte blocks
     my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
-    $iv = ascii_to_hex( $iv );
-
-				# split message into blocks and hexify
-    my $hex = ascii_to_hex( $plaintext );
-    my $pblocks = split_into_blocks( $plaintext, 32 );	# 32 hex digits for 16 bytes
-
-    				# now chain block cipher mode
-    my( $bin, $ciphertetx );
-    my $feedback = $iv;
-    my $first = 0;
-    for my $current (@$pblocks) {
-	my $input = unpack('H*',pack('H*', $feedback) ^ pack('H*', $current));
-	my $bin = $cipher->encrypt( $input );
-	if ($first == 0) {
-	    $ciphertext = $bin;
-	    $first = 1;
-	} else {
-	    $ciphertext = pack('H*', unpack('H*', $ciphertext) . unpack('H*', $bin) );
-	}
-	$feedback = unpack('H*', $bin);
+    				# now chain block cipher 
+    my( $bin, $ciphertext );
+    my $feedback = pack( 'A*', $iv );
+    for (@$blocks) {
+	my $input = $feedback ^ pack('A*', $_);
+	my $bin = $cipher->encrypt( $input ); # encrypt as hex string (As 128)
+	$ciphertext .= $bin;
+	$feedback = $bin;
     }
+
     return $ciphertext;
 }
-# AES 128 CBC mode, all inputs are in ASCII
-sub decrypt_aes_cbc {
+sub decrypt {
+
     my( $ciphertext, $key, $iv ) = @_;
-    				# sanity checks
+				# sanity checks
     if( length($iv) != 16) {	# 16 bytes
 	die "IV must be 16 bytes long";
     }
     if( length($key) != 16) {	# 16 bytes
 	die "key must be 16 bytes long";
     }
-    				# set up cipher and $iv
+    				# hexify inputs
+    my $blocks = split_bin_into_blocks( $ciphertext, 16 );
     my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
-    $iv = ascii_to_hex( $iv );
 
-				# split message into blocks and hexify
-    $plaintext = ascii_to_hex( $plaintext );
-    my $pblocks = split_into_blocks( $plaintext, 32 );	# 32 hex digits for 16 bytes
-
-				# now chain block cipher mode
-    my $feedback = $iv;
-    my $hex;
-    for (@$pblocks) {
-	my $input = pack('H*', $_);
-	my $hblock = $cipher->decrypt( $input );
-	$hex .= unpack('H*',pack('H*', $feedback) ^ pack('H*', $hblock));
+    		# now chain block cipher mode
+    my $feedback = pack( 'A*', $iv );
+    my $plaintext;
+    for (@$blocks) {
+	$plaintext .=  $cipher->decrypt( $_ ) ^ $feedback;
 	$feedback = $_;
     }
-    return hex_to_ascii( $hex );
+    return $plaintext;
 }
