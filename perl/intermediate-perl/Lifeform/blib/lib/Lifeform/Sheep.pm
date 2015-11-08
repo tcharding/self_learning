@@ -1,4 +1,4 @@
-package Horse;
+package Sheep;
 use parent qw(Animal);
 
 use 5.022000;
@@ -31,8 +31,13 @@ our $VERSION = '0.01';
 
 # Preloaded methods go here.
 
+sub speak {
+    my $class = shift;
+    $class->SUPER::speak(@_);
+    say "sheep has spoken";
+}
 sub sound {
-    'neigh';
+    'baaaah';
 }
 
 1;

@@ -1,4 +1,4 @@
-# This Makefile is for the Crypto::Analysis extension to perl.
+# This Makefile is for the Lifeform::Animal extension to perl.
 #
 # It was generated automatically by MakeMaker version
 # 7.0401 (Revision: 70401) from the contents of
@@ -11,14 +11,14 @@
 
 #   MakeMaker Parameters:
 
-#     ABSTRACT_FROM => q[lib/Crypto/Analysis.pm]
+#     ABSTRACT_FROM => q[lib/Lifeform/Animal.pm]
 #     AUTHOR => [q[Tobin Harding <me@tobin.cc>]]
 #     BUILD_REQUIRES => {  }
 #     CONFIGURE_REQUIRES => {  }
-#     NAME => q[Crypto::Analysis]
+#     NAME => q[Lifeform::Animal]
 #     PREREQ_PM => {  }
 #     TEST_REQUIRES => {  }
-#     VERSION_FROM => q[lib/Crypto/Analysis.pm]
+#     VERSION_FROM => q[lib/Lifeform/Animal.pm]
 
 # --- MakeMaker post_initialize section:
 
@@ -55,8 +55,8 @@ VENDORLIBEXP = /usr/share/perl5/vendor_perl
 AR_STATIC_ARGS = cr
 DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
-NAME = Crypto::Analysis
-NAME_SYM = Crypto_Analysis
+NAME = Lifeform::Animal
+NAME_SYM = Lifeform_Animal
 VERSION = 0.01
 VERSION_MACRO = VERSION
 VERSION_SYM = 0_01
@@ -145,11 +145,11 @@ MM_REVISION = 70401
 # PARENT_NAME = NAME without BASEEXT and no trailing :: (eg Foo::Bar)
 # DLBASE  = Basename part of dynamic library. May be just equal BASEEXT.
 MAKE = make
-FULLEXT = Crypto/Analysis
-BASEEXT = Analysis
-PARENT_NAME = Crypto
+FULLEXT = Lifeform/Animal
+BASEEXT = Animal
+PARENT_NAME = Lifeform
 DLBASE = $(BASEEXT)
-VERSION_FROM = lib/Crypto/Analysis.pm
+VERSION_FROM = lib/Lifeform/Animal.pm
 OBJECT = 
 LDFROM = $(OBJECT)
 LINKTYPE = dynamic
@@ -161,14 +161,20 @@ C_FILES  =
 O_FILES  = 
 H_FILES  = 
 MAN1PODS = 
-MAN3PODS = lib/Crypto/Keylen.pm
+MAN3PODS = lib/Lifeform/Animal.pm \
+	lib/Lifeform/Cow.pm \
+	lib/Lifeform/Horse.pm \
+	lib/Lifeform/LivingCreature.pm \
+	lib/Lifeform/Mouse.pm \
+	lib/Lifeform/Person.pm \
+	lib/Lifeform/Sheep.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIBDEP)$(DFSEP)Config.pm $(PERL_INCDEP)$(DFSEP)config.h
 
 # Where to build things
-INST_LIBDIR      = $(INST_LIB)/Crypto
-INST_ARCHLIBDIR  = $(INST_ARCHLIB)/Crypto
+INST_LIBDIR      = $(INST_LIB)/Lifeform
+INST_ARCHLIBDIR  = $(INST_ARCHLIB)/Lifeform
 
 INST_AUTODIR     = $(INST_LIB)/auto/$(FULLEXT)
 INST_ARCHAUTODIR = $(INST_ARCHLIB)/auto/$(FULLEXT)
@@ -184,25 +190,28 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = conversions.pl \
-	lib/Crypto/Analysis.pm \
-	lib/Crypto/Block.pm \
-	lib/Crypto/Convert.pm \
-	lib/Crypto/Keylen.pm \
-	lib/Crypto/Template.pm
+TO_INST_PM = lib/Lifeform/Animal.pm \
+	lib/Lifeform/Cow.pm \
+	lib/Lifeform/Horse.pm \
+	lib/Lifeform/LivingCreature.pm \
+	lib/Lifeform/Mouse.pm \
+	lib/Lifeform/Person.pm \
+	lib/Lifeform/Sheep.pm
 
-PM_TO_BLIB = conversions.pl \
-	$(INST_LIB)/Crypto/conversions.pl \
-	lib/Crypto/Analysis.pm \
-	blib/lib/Crypto/Analysis.pm \
-	lib/Crypto/Block.pm \
-	blib/lib/Crypto/Block.pm \
-	lib/Crypto/Convert.pm \
-	blib/lib/Crypto/Convert.pm \
-	lib/Crypto/Keylen.pm \
-	blib/lib/Crypto/Keylen.pm \
-	lib/Crypto/Template.pm \
-	blib/lib/Crypto/Template.pm
+PM_TO_BLIB = lib/Lifeform/Animal.pm \
+	blib/lib/Lifeform/Animal.pm \
+	lib/Lifeform/Cow.pm \
+	blib/lib/Lifeform/Cow.pm \
+	lib/Lifeform/Horse.pm \
+	blib/lib/Lifeform/Horse.pm \
+	lib/Lifeform/LivingCreature.pm \
+	blib/lib/Lifeform/LivingCreature.pm \
+	lib/Lifeform/Mouse.pm \
+	blib/lib/Lifeform/Mouse.pm \
+	lib/Lifeform/Person.pm \
+	blib/lib/Lifeform/Person.pm \
+	lib/Lifeform/Sheep.pm \
+	blib/lib/Lifeform/Sheep.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -271,8 +280,8 @@ CI = ci -u
 RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
-DISTNAME = Crypto-Analysis
-DISTVNAME = Crypto-Analysis-0.01
+DISTNAME = Lifeform-Animal
+DISTVNAME = Lifeform-Animal-0.01
 
 
 # --- MakeMaker macro section:
@@ -426,9 +435,21 @@ POD2MAN = $(POD2MAN_EXE)
 
 
 manifypods : pure_all  \
-	lib/Crypto/Keylen.pm
+	lib/Lifeform/Animal.pm \
+	lib/Lifeform/Cow.pm \
+	lib/Lifeform/Horse.pm \
+	lib/Lifeform/LivingCreature.pm \
+	lib/Lifeform/Mouse.pm \
+	lib/Lifeform/Person.pm \
+	lib/Lifeform/Sheep.pm
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) -u \
-	  lib/Crypto/Keylen.pm $(INST_MAN3DIR)/Crypto::Keylen.$(MAN3EXT) 
+	  lib/Lifeform/Animal.pm $(INST_MAN3DIR)/Lifeform::Animal.$(MAN3EXT) \
+	  lib/Lifeform/Cow.pm $(INST_MAN3DIR)/Lifeform::Cow.$(MAN3EXT) \
+	  lib/Lifeform/Horse.pm $(INST_MAN3DIR)/Lifeform::Horse.$(MAN3EXT) \
+	  lib/Lifeform/LivingCreature.pm $(INST_MAN3DIR)/Lifeform::LivingCreature.$(MAN3EXT) \
+	  lib/Lifeform/Mouse.pm $(INST_MAN3DIR)/Lifeform::Mouse.$(MAN3EXT) \
+	  lib/Lifeform/Person.pm $(INST_MAN3DIR)/Lifeform::Person.$(MAN3EXT) \
+	  lib/Lifeform/Sheep.pm $(INST_MAN3DIR)/Lifeform::Sheep.$(MAN3EXT) 
 
 
 
@@ -495,7 +516,7 @@ realclean purge ::  clean realclean_subdirs
 metafile : create_distdir
 	$(NOECHO) $(ECHO) Generating META.yml
 	$(NOECHO) $(ECHO) '---' > META_new.yml
-	$(NOECHO) $(ECHO) 'abstract: unknown' >> META_new.yml
+	$(NOECHO) $(ECHO) 'abstract: '\''Perl extension for blah blah blah'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'author:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  - '\''Tobin Harding <me@tobin.cc>'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'build_requires:' >> META_new.yml
@@ -508,7 +529,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) 'meta-spec:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  url: http://module-build.sourceforge.net/META-spec-v1.4.html' >> META_new.yml
 	$(NOECHO) $(ECHO) '  version: '\''1.4'\''' >> META_new.yml
-	$(NOECHO) $(ECHO) 'name: Crypto-Analysis' >> META_new.yml
+	$(NOECHO) $(ECHO) 'name: Lifeform-Animal' >> META_new.yml
 	$(NOECHO) $(ECHO) 'no_index:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  directory:' >> META_new.yml
 	$(NOECHO) $(ECHO) '    - t' >> META_new.yml
@@ -518,7 +539,7 @@ metafile : create_distdir
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
-	$(NOECHO) $(ECHO) '   "abstract" : "unknown",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "abstract" : "Perl extension for blah blah blah",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "author" : [' >> META_new.json
 	$(NOECHO) $(ECHO) '      "Tobin Harding <me@tobin.cc>"' >> META_new.json
 	$(NOECHO) $(ECHO) '   ],' >> META_new.json
@@ -531,7 +552,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",' >> META_new.json
 	$(NOECHO) $(ECHO) '      "version" : "2"' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
-	$(NOECHO) $(ECHO) '   "name" : "Crypto-Analysis",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "name" : "Lifeform-Animal",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "no_index" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '      "directory" : [' >> META_new.json
 	$(NOECHO) $(ECHO) '         "t",' >> META_new.json
@@ -856,7 +877,7 @@ testdb_static :: testdb_dynamic
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
 	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="$(VERSION)">' > $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '    <ABSTRACT></ABSTRACT>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '    <ABSTRACT>Perl extension for blah blah blah</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Tobin Harding &lt;me@tobin.cc&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-thread-multi-5.22" />' >> $(DISTNAME).ppd
@@ -869,12 +890,13 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  conversions.pl $(INST_LIB)/Crypto/conversions.pl \
-	  lib/Crypto/Analysis.pm blib/lib/Crypto/Analysis.pm \
-	  lib/Crypto/Block.pm blib/lib/Crypto/Block.pm \
-	  lib/Crypto/Convert.pm blib/lib/Crypto/Convert.pm \
-	  lib/Crypto/Keylen.pm blib/lib/Crypto/Keylen.pm \
-	  lib/Crypto/Template.pm blib/lib/Crypto/Template.pm 
+	  lib/Lifeform/Animal.pm blib/lib/Lifeform/Animal.pm \
+	  lib/Lifeform/Cow.pm blib/lib/Lifeform/Cow.pm \
+	  lib/Lifeform/Horse.pm blib/lib/Lifeform/Horse.pm \
+	  lib/Lifeform/LivingCreature.pm blib/lib/Lifeform/LivingCreature.pm \
+	  lib/Lifeform/Mouse.pm blib/lib/Lifeform/Mouse.pm \
+	  lib/Lifeform/Person.pm blib/lib/Lifeform/Person.pm \
+	  lib/Lifeform/Sheep.pm blib/lib/Lifeform/Sheep.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 

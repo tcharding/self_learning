@@ -1,4 +1,4 @@
-# This Makefile is for the Animal extension to perl.
+# This Makefile is for the Lifeform::Animal extension to perl.
 #
 # It was generated automatically by MakeMaker version
 # 7.0401 (Revision: 70401) from the contents of
@@ -11,14 +11,14 @@
 
 #   MakeMaker Parameters:
 
-#     ABSTRACT_FROM => q[lib/Animal.pm]
+#     ABSTRACT_FROM => q[lib/Lifeform/Animal.pm]
 #     AUTHOR => [q[Tobin Harding <me@tobin.cc>]]
 #     BUILD_REQUIRES => {  }
 #     CONFIGURE_REQUIRES => {  }
-#     NAME => q[Animal]
+#     NAME => q[Lifeform::Animal]
 #     PREREQ_PM => {  }
 #     TEST_REQUIRES => {  }
-#     VERSION_FROM => q[lib/Animal.pm]
+#     VERSION_FROM => q[lib/Lifeform/Animal.pm]
 
 # --- MakeMaker post_initialize section:
 
@@ -55,8 +55,8 @@ VENDORLIBEXP = /usr/share/perl5/vendor_perl
 AR_STATIC_ARGS = cr
 DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
-NAME = Animal
-NAME_SYM = Animal
+NAME = Lifeform::Animal
+NAME_SYM = Lifeform_Animal
 VERSION = 0.01
 VERSION_MACRO = VERSION
 VERSION_SYM = 0_01
@@ -145,11 +145,11 @@ MM_REVISION = 70401
 # PARENT_NAME = NAME without BASEEXT and no trailing :: (eg Foo::Bar)
 # DLBASE  = Basename part of dynamic library. May be just equal BASEEXT.
 MAKE = make
-FULLEXT = Animal
+FULLEXT = Lifeform/Animal
 BASEEXT = Animal
-PARENT_NAME = 
+PARENT_NAME = Lifeform
 DLBASE = $(BASEEXT)
-VERSION_FROM = lib/Animal.pm
+VERSION_FROM = lib/Lifeform/Animal.pm
 OBJECT = 
 LDFROM = $(OBJECT)
 LINKTYPE = dynamic
@@ -161,20 +161,14 @@ C_FILES  =
 O_FILES  = 
 H_FILES  = 
 MAN1PODS = 
-MAN3PODS = lib/Animal.pm \
-	lib/Cow.pm \
-	lib/Horse.pm \
-	lib/LivingCreature.pm \
-	lib/Mouse.pm \
-	lib/Person.pm \
-	lib/Sheep.pm
+MAN3PODS = lib/Lifeform/Animal.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIBDEP)$(DFSEP)Config.pm $(PERL_INCDEP)$(DFSEP)config.h
 
 # Where to build things
-INST_LIBDIR      = $(INST_LIB)
-INST_ARCHLIBDIR  = $(INST_ARCHLIB)
+INST_LIBDIR      = $(INST_LIB)/Lifeform
+INST_ARCHLIBDIR  = $(INST_ARCHLIB)/Lifeform
 
 INST_AUTODIR     = $(INST_LIB)/auto/$(FULLEXT)
 INST_ARCHAUTODIR = $(INST_ARCHLIB)/auto/$(FULLEXT)
@@ -190,28 +184,10 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/Animal.pm \
-	lib/Cow.pm \
-	lib/Horse.pm \
-	lib/LivingCreature.pm \
-	lib/Mouse.pm \
-	lib/Person.pm \
-	lib/Sheep.pm
+TO_INST_PM = lib/Lifeform/Animal.pm
 
-PM_TO_BLIB = lib/Animal.pm \
-	blib/lib/Animal.pm \
-	lib/Cow.pm \
-	blib/lib/Cow.pm \
-	lib/Horse.pm \
-	blib/lib/Horse.pm \
-	lib/LivingCreature.pm \
-	blib/lib/LivingCreature.pm \
-	lib/Mouse.pm \
-	blib/lib/Mouse.pm \
-	lib/Person.pm \
-	blib/lib/Person.pm \
-	lib/Sheep.pm \
-	blib/lib/Sheep.pm
+PM_TO_BLIB = lib/Lifeform/Animal.pm \
+	blib/lib/Lifeform/Animal.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -280,8 +256,8 @@ CI = ci -u
 RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
-DISTNAME = Animal
-DISTVNAME = Animal-0.01
+DISTNAME = Lifeform-Animal
+DISTVNAME = Lifeform-Animal-0.01
 
 
 # --- MakeMaker macro section:
@@ -435,21 +411,9 @@ POD2MAN = $(POD2MAN_EXE)
 
 
 manifypods : pure_all  \
-	lib/Animal.pm \
-	lib/Cow.pm \
-	lib/Horse.pm \
-	lib/LivingCreature.pm \
-	lib/Mouse.pm \
-	lib/Person.pm \
-	lib/Sheep.pm
+	lib/Lifeform/Animal.pm
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) -u \
-	  lib/Animal.pm $(INST_MAN3DIR)/Animal.$(MAN3EXT) \
-	  lib/Cow.pm $(INST_MAN3DIR)/Cow.$(MAN3EXT) \
-	  lib/Horse.pm $(INST_MAN3DIR)/Horse.$(MAN3EXT) \
-	  lib/LivingCreature.pm $(INST_MAN3DIR)/LivingCreature.$(MAN3EXT) \
-	  lib/Mouse.pm $(INST_MAN3DIR)/Mouse.$(MAN3EXT) \
-	  lib/Person.pm $(INST_MAN3DIR)/Person.$(MAN3EXT) \
-	  lib/Sheep.pm $(INST_MAN3DIR)/Sheep.$(MAN3EXT) 
+	  lib/Lifeform/Animal.pm $(INST_MAN3DIR)/Lifeform::Animal.$(MAN3EXT) 
 
 
 
@@ -529,7 +493,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) 'meta-spec:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  url: http://module-build.sourceforge.net/META-spec-v1.4.html' >> META_new.yml
 	$(NOECHO) $(ECHO) '  version: '\''1.4'\''' >> META_new.yml
-	$(NOECHO) $(ECHO) 'name: Animal' >> META_new.yml
+	$(NOECHO) $(ECHO) 'name: Lifeform-Animal' >> META_new.yml
 	$(NOECHO) $(ECHO) 'no_index:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  directory:' >> META_new.yml
 	$(NOECHO) $(ECHO) '    - t' >> META_new.yml
@@ -552,7 +516,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",' >> META_new.json
 	$(NOECHO) $(ECHO) '      "version" : "2"' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
-	$(NOECHO) $(ECHO) '   "name" : "Animal",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "name" : "Lifeform-Animal",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "no_index" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '      "directory" : [' >> META_new.json
 	$(NOECHO) $(ECHO) '         "t",' >> META_new.json
@@ -890,13 +854,7 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  lib/Animal.pm blib/lib/Animal.pm \
-	  lib/Cow.pm blib/lib/Cow.pm \
-	  lib/Horse.pm blib/lib/Horse.pm \
-	  lib/LivingCreature.pm blib/lib/LivingCreature.pm \
-	  lib/Mouse.pm blib/lib/Mouse.pm \
-	  lib/Person.pm blib/lib/Person.pm \
-	  lib/Sheep.pm blib/lib/Sheep.pm 
+	  lib/Lifeform/Animal.pm blib/lib/Lifeform/Animal.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 

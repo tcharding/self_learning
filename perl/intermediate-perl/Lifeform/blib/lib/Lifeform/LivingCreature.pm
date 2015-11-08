@@ -1,5 +1,4 @@
-package Animal;
-#use parent qw(LivingCreature);
+package LivingCreature;
 
 use 5.022000;
 use strict;
@@ -32,13 +31,10 @@ our $VERSION = '0.01';
 # Preloaded methods go here.
 
 sub speak {
-    my $class = shift;
-    print "a $class goes ", $class->sound, "!\n";
+    die 'You must define speak() in a subclass';
 }
 
-sub sound {
-    die 'You must define sound in subclass';
-}
+
 1;
 __END__
 # Below is stub documentation for your module. You'd better edit it!
