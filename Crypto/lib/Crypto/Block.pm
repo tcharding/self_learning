@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = (
     'all' => [ qw(
-		     pad_pkcs_7 pad
+		     pad_pkcs_7 pad strip_padding
 		     split_string_into_blocks
 		     split_bin_into_blocks
 		     encrypt_aes_cbc
@@ -89,6 +89,15 @@ sub pad_pkcs_7 {
     
     my $padlen = $size - $nbytes;
     $s .= chr(0x04) x $padlen;
+    return $s;
+}
+sub strip_padding {
+    my $s = shift;
+    my $i = index $s, chr(0x04);
+    
+    if ($i != -1) {		# found padding
+	$s = substr( $s, 0, $i );
+    }
     return $s;
 }
 sub encrypt_aes_cbc {

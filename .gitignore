@@ -1,6 +1,7 @@
 # soft links
 UNIX/*/cur
 UNIX/*/src
+cur
 
 # Object files
 *.o
