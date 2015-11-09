@@ -7,9 +7,6 @@ use Data::Dumper;
 use MIME::Base64 qw(encode_base64 decode_base64);
 use Crypto::Block qw/:all/;
 
-my $file = "7.out.txt";
-open my $fh, '<', $file or die "Cannot open $file";
-my $message = do { local( $/ ) ; <$fh> } ;
 my $key = &random_16_chars;
 
 # from question
@@ -29,12 +26,11 @@ if (has_repeats( unpack('H*', $c))) {
     print "Cipher appears to be running in ECB mode\n";
 }
 
-my $first_bit = &cryptanalize;
-print "$first_bit\n";
+my $p = &cryptanalize;
+print "\n$p\n";
 
 sub cryptanalize {
     my $fn = \&encryption_oracle;
-    my $block_size = 16;	# from above
     my $p = "";
     my $bufsz = length( &$fn("") );
     
@@ -76,7 +72,7 @@ sub build_dictionary {
     }
     return \%d;
 }
-
+ 
 sub guess_block_size {
     my $len;
     my $c = encryption_oracle("");
@@ -100,6 +96,7 @@ sub encryption_oracle {
     
     return $cipher->encrypt( $input );
 }
+
 sub cryptanalize_block {
     my $fn = \&encryption_oracle;
     my $block_size = 16;	# from above

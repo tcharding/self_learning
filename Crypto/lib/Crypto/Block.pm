@@ -91,11 +91,17 @@ sub pad_pkcs_7 {
     $s .= chr(0x04) x $padlen;
     return $s;
 }
+
 sub strip_padding {
     my $s = shift;
     my $i = index $s, chr(0x04);
-    
+
     if ($i != -1) {		# found padding
+				# check padding
+	my $padding = substr( $s, $i );
+	for (split //, $padding) {
+	    croak "Padding error" if ($_ != chr(0x04));
+	}
 	$s = substr( $s, 0, $i );
     }
     return $s;
@@ -156,7 +162,7 @@ sub has_repeats {
 	for( $j = $i + $chunk; $j < length( $hex ); $j += $chunk ) {
 	    my $cmp = substr( $hex, $j, $chunk );
 	    if( $byte eq $cmp ) {
-		return 1;	# true
+		return $i;	# true
 	    }
 	}
     }

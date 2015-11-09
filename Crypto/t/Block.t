@@ -19,6 +19,7 @@ is(@$pblocks, 6, "plaintext split into blocks and padded");
 $s = "this";
 $padded = &pad( $s, 8 );
 is(length( $padded ), 8, "padding 4 to 8 bytes");
-#my $i = $len / $size * $size;
-is((4 - (4 % 8)), 0, "calc");
+$s = strip_padding( $s );
+is( (index $s, chr(0x04)), -1, "No padding present");
+
 done_testing();
