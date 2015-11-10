@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use feature qw/say/;
-
+use Data::Dumper;
 #
 # Single-byte XOR cipher
 #
@@ -16,16 +16,13 @@ my $c = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 say "Set 1 Challenge 3, performing cryptanalysis on ciphertext ...";
 
 my $scx = &bruteforce_scx( $c );
-my $plaintext = hex_to_ascii( &sift( $scx ) );
+&rate_msgs( $scx );
+my $hex = &get_top_rated( $scx );	# returns top rated or undefined
 
-if (defined $plaintext) {
-    print "$plaintext\n";
+if ( defined $hex ) {
+    printf "%s\n", &hex_to_ascii( $hex );
 } else {
-    say "Cannot determine top rated plain text";
+    print "Unable to determine top rated message\n";
 }
 
-sub sift {
-    my $scx = shift;
-    &rate_msgs( $scx );
-    get_top_rated( $scx );	# returns top rated or undefined
-}
+
