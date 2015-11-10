@@ -15,7 +15,7 @@ open my $fh, '<', $file or die "Cannot open file: $file $!";
 my @maybe;			# ECB candidates
 while  (<$fh>) {
     chomp;
-    if (has_repeating_blocks( $_, 16 )) {
+    if (has_repeating_blocks( $_, 16 ) != -1) {
 	push @maybe, $_;
     }
 }

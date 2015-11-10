@@ -10,6 +10,8 @@ our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = ( 'all' => [ qw(
 				      hex_to_ascii ascii_to_hex
+				      pseudo_random_int
+				      pseudo_random_string
 				   )],
 		 );
 
@@ -20,6 +22,24 @@ our @EXPORT = qw(
 );
 
 our $VERSION = '0.01';
+
+# return a pseudo random integer min <= n < max
+sub pseudo_random_int {
+    my( $min, $max ) = @_;
+    return (int(rand($max - $min)) + $min);
+}
+
+sub pseudo_random_string {
+    my( $len ) = @_;
+    my $s;
+    $len = 16 unless defined $len; # default to 16
+    my( $min, $max ) = ( 33, 126 ); # printable characters excluding 'space'
+
+    for (1 .. $len) {
+	$s .= chr(&pseudo_random_int($min, $max));
+    }
+    return $s;  
+}
 
 # hex -> ascii
 sub hex_to_ascii {

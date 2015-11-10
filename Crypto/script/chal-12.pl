@@ -3,15 +3,21 @@ use strict;
 use warnings;
 use feature qw/say/;
 
-use Data::Dumper;
+#
+# Byte-at-a-time ECB decryption (Simple)
+#
+
 use MIME::Base64 qw(encode_base64 decode_base64);
+use Crypt::Rijndael;
+use Crypto::Block qw/:all/;
+use Crypto::Base qw/:all/;
 
-my $key = &random_16_chars;
-
-# from question
+# global data for encryption oracle
+my $key = &pseudo_random_string( 16 ); # fixed unknown key
 my $append = "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg" .
     "aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq" .
     "dXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK";
+$append = decode_base64( $append );
 
 # get block size
 my $block_size = &guess_block_size;
@@ -21,28 +27,25 @@ print "Cipher block size: $block_size\n";
 my $input = "this is 16 bytes";
 $input = $input . $input;
 my $c = encryption_oracle( $input );
-if (has_repeats( unpack('H*', $c))) {
+if (has_repeating_blocks( unpack('H*', $c)) != -1) {
     print "Cipher appears to be running in ECB mode\n";
+} else {
+    die "Cipher does not appear to be running in ECB mode, aborting ...\n";
 }
 
 my $p = &cryptanalize;
 print "\n$p\n";
 
 sub cryptanalize {
-    my $fn = \&encryption_oracle;
     my $p = "";
-    my $bufsz = length( &$fn("") );
+    my $bufsz = length( &encryption_oracle("") ); # how much data are we recovering
     
     for (1 .. $bufsz) {
-	my $di = "A" x ($bufsz - $_);
-	$di .= $p;
-	my $dict = &build_dictionary( $di );
+	my $dict = &build_dictionary( "A" x ($bufsz - $_) . $p );
+	my $c = &encryption_oracle( "A" x ($bufsz - $_) );
+				# get first bufsz bytes (x2 because it's hex)
+	my $hex = substr( unpack('H*', $c), 0, ($bufsz * 2)); 
 
-	my $ci = "A" x ($bufsz - $_);
-	my $c = encryption_oracle( $ci );
-
-	my $hex = unpack('H*', $c);
-	$hex = substr( $hex, 0, ($bufsz * 2)); # first half
 	for (keys %$dict) {
 	    if ($$dict{$_} eq $hex) {
 		$p .= $_;
@@ -51,7 +54,6 @@ sub cryptanalize {
     }
     return $p;
 }
-
 
 #    my $nrepeats = ($blockn * $block_size) + ($block_size - 1);
 sub build_dictionary {
@@ -71,50 +73,29 @@ sub build_dictionary {
     }
     return \%d;
 }
- 
+
+# guess block size from ciphertext encrypted by oracle 
 sub guess_block_size {
-    my $len;
-    my $c = encryption_oracle("");
-    $len = length( $c );
     my $next = 0;
     my($s, $cnt) = ("", 0);
+				# get base length, encrypt empty string
+    my $len = length ( encryption_oracle( $s ) ); 
+
     while ($next <= $len) {
-	$cnt++;
-	$s = "A" x $cnt;
-	$next = length( encryption_oracle($s));
+	$s .= "A";		# add one byte to input
+	$next = length( encryption_oracle( $s ) );
     }
-    return $next - $len;
+    return $next - $len;	# block size
 }
 
+#
+# Encryption Oracle
+#
 sub encryption_oracle {
-    my $message = shift;
-    $message .= decode_base64($append);
-
-    my $input = &pad( $message, 16 );
+    my $m = shift;
+    $m .= $append;
+    $m = &pad( $m, 16 );
     my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
     
-    return $cipher->encrypt( $input );
-}
-
-sub cryptanalize_block {
-    my $fn = \&encryption_oracle;
-    my $block_size = 16;	# from above
-    my $p = "";
-    
-    for (1 .. $block_size) {
-	my $di = "A" x ($block_size - $_);
-	$di .= $p;
-	my $dict = &build_dictionary( $di );
-
-	my $ci = "A" x ($block_size - $_);
-
-	my $c = encryption_oracle( $ci );
-	my $hex = unpack('H32', $c);
-	for (keys %$dict) {
-	    if ($$dict{$_} eq $hex) {
-		$p .= $_;
-	    }
-	}
-    }
-    return $p;
+    return $cipher->encrypt( $m );
 }
