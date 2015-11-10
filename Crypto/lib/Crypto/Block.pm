@@ -7,20 +7,23 @@ use warnings;
 use Carp;
 require Exporter;
 
+use Crypt::Rijndael;
 use Crypto::Base qw/ pseudo_random_string /;
 
 our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = ( 'all' => [ qw(
 				      has_repeating_blocks
-				      pad pad_pkcs_7 strip_padding
 				      encrypt_aes_cbc decrypt_aes_cbc
 				      split_string_into_blocks
 				      split_bin_into_blocks
-
+				      pad strip_padding 
+				      is_pad_correct
 			      ) ],
 		     'pad' => [ qw(
-				      pad pad_pkcs_7 strip_padding
+				      pad pad_pkcs_7
+				      strip_padding strip_pkcs_7
+				      is_pad_correct
 			      )],
 		 );
 
@@ -44,7 +47,7 @@ sub split_string_into_blocks {
     				# handle last bit of string if present
     if( length( $string ) > 0 ) {
 	die "error $!" if( length( $string ) >= $size ); # defensive programming
-	$block = pad_pkcs_7( $string, $size );
+	$block = pad( $string, $size );
 	push @blocks, $block;
     }
     return \@blocks;
@@ -121,48 +124,80 @@ sub decrypt_aes_cbc {
     return $plaintext;
 }
 
-# pad 'string' to multiple of 'size' using &pad_pkcs_7
+# add padding as specified by pkcs#7
 sub pad {
     my( $string, $size ) = @_;
     my $len = length( $string );
     $size = 16 unless defined $size; # default 16 bytes
-    
-    if (( $len % $size ) == 0) {
-	return $string;
+				
+    my $pad;			# padding length and byte value
+    if ($len > $size) {		     # more than one block
+	$pad = $size - ($len % $size);	
+    } else {
+	$pad = $size - $len;
     }
-    my $i = $len - (($len + $size) % $size);
-    my $padded = substr( $string, 0, $i );
-    $padded .= pad_pkcs_7( substr( $string, $i ), $size );
-    return $padded;
-}
-# add padding bytes 0x04 to string input
-sub pad_pkcs_7 {
-    my( $s, $size ) = @_;
+    $pad = $size if $pad == 0;	# must have some padding
 
-    my $nbytes = length( $s );
-    croak "requested block size is smaller than block"
-	if( $nbytes > $size );
-    
-    my $padlen = $size - $nbytes;
-    $s .= chr(0x04) x $padlen;
-    return $s;
+    $string .= chr($pad) x $pad;
+    return $string;
+
 }
+# # add padding bytes to single block
+# sub pad_pkcs_7 {
+#     my( $s, $size ) = @_;
+
+#     my $len = length( $s );
+#     my $pad = $size - $len;
+#     $pad = $size if $pad == 0;
+
+#     croak "requested block size is smaller than block"
+# 	if( $len < 0 );
+    
+#     $s .= chr($pad) x $pad;
+#     return $s;
+# }
+# # strip padding bytes from single block
+# sub strip_pkcs_7 {
+#     my( $block, $len ) = @_;
+#     $len = 16 unless defined $len;
+#     my $pad = ord(substr($block, -1));
+#     if ($pad < 0 || $pad > $len) {
+# 	croak "Block is incorrectly padded";
+#     }
+#     return substr( $block, 0, $len - $pad );
+# }
 
 # strip padding
 sub strip_padding {
-    my $s = shift;
-    my $i = index $s, chr(0x04);
-
-    if ($i != -1) {		# found padding
-	my $padding = substr( $s, $i );
-	for (split //, $padding) {
-	    croak "Padding does not conform to PKCS#7" if ($_ ne chr(0x04));
-	}
-	$s = substr( $s, 0, $i );
+    my( $s, $block_size ) = @_;
+    $block_size = 16 unless defined $block_size;
+    
+    if (is_pad_correct( $s, $block_size ) == 0) {
+	croak "Data not padded correctly";
     }
-    return $s;
+    my $pad = ord(substr($s, -1));
+    if ($pad < 0 || $pad > $block_size) {
+	die "programmer error";
+    }
+    
+    return substr( $s, 0, length($s) - $pad );
 }
 
+# verify padding
+sub is_pad_correct {
+    my( $s, $block_size ) = @_;
+    $block_size = 16 unless defined $block_size;
+    
+    my $pad = ord(substr($s, -1));
+    if ($pad < 0 || $pad > $block_size) {
+	return 0;
+    }
+    my $padding = substr($s, 0 - $pad);
+    for (split //, $padding) {
+	return 0 if ($_ ne chr($pad));
+    }
+    return 1;			# yes
+}
 # Checks input hex string for repeating blocks (16 byte length)
 # Returns start of first repeating block if found or -1 if not.
 #
