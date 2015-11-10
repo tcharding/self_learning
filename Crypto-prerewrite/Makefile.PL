@@ -3,10 +3,10 @@ use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
-    NAME              => 'Crypto::Base',
-    VERSION_FROM      => 'lib/Crypto/Base.pm', # finds $VERSION, requires EU::MM from perl >= 5.5
+    NAME              => 'Crypto::Analysis',
+    VERSION_FROM      => 'lib/Crypto/Analysis.pm', # finds $VERSION, requires EU::MM from perl >= 5.n5
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
-    ABSTRACT_FROM     => 'lib/Crypto/Base.pm', # retrieve abstract from module
+    ABSTRACT_FROM     => 'lib/Crypto/Analysis.pm', # retrieve abstract from module
     AUTHOR            => 'Tobin Harding <me@tobin.cc>',
     #LICENSE           => 'perl',
     #Value must be from legacy list of licenses here

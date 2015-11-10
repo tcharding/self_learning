@@ -4,9 +4,7 @@ use warnings;
 
 use Test::More;
 
-BEGIN { use_ok('Crypto::Convert') };
-BEGIN { use_ok('Crypto::Analysis') };
-BEGIN { use_ok('Crypto::Keylen') };
-BEGIN { use_ok('Crypto::Block') };
+BEGIN { use_ok('Crypto::Base') };
+BEGIN { use_ok('Crypto::Vigenere') };
 
 done_testing();

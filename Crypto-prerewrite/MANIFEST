@@ -1,0 +1,17 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/00-load.t
+t/Block.t
+lib/Crypto/Convert.pm
+lib/Crypto/Analysis.pm
+lib/Crypto/Keylen.pm
+lib/Crypto/Block.pm
+script/chal-1.pl
+script/chal-2.pl
+script/chal-3.pl
+script/chal-4.pl
+script/chal-5.pl
+script/chal-6.pl
+script/set1.pl

@@ -1,0 +1,6 @@
+Revision history for Perl extension Crypto::Util.
+
+0.01  Mon Nov  2 22:06:19 2015
+	- original version; created by h2xs 1.23 with options
+		-AX -n Crypto::Util
+
