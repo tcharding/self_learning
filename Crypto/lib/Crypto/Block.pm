@@ -3,15 +3,18 @@ package Crypto::Block;
 use 5.022000;
 use strict;
 use warnings;
+
 use Carp;
 require Exporter;
+
+use Crypto::Base qw/ pseudo_random_string /;
 
 our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = ( 'all' => [ qw(
 				      has_repeating_blocks
 				      pad pad_pkcs_7 strip_padding
-				      encrypt_aes_cbc encrypt_aes_ecb
+				      encrypt_aes_cbc decrypt_aes_cbc
 				      split_string_into_blocks
 				      split_bin_into_blocks
 
@@ -69,7 +72,9 @@ sub split_bin_into_blocks {
 
 sub encrypt_aes_cbc {
     my( $plaintext, $key, $iv ) = @_;
-				# sanity checks
+    # sanity checks
+
+    $iv = &pseudo_random_string( 16 ) unless $iv;
     if( length($iv) != 16) {	# 16 bytes
 	die "IV must be 16 bytes long";
     }
@@ -94,6 +99,7 @@ sub encrypt_aes_cbc {
 sub decrypt_aes_cbc {
 
     my( $ciphertext, $key, $iv ) = @_;
+    $iv = &pseudo_random_string( 16 ) unless $iv;
 				# sanity checks
     if( length($iv) != 16) {	# 16 bytes
 	die "IV must be 16 bytes long";
@@ -142,16 +148,16 @@ sub pad_pkcs_7 {
     return $s;
 }
 
+# strip padding
 sub strip_padding {
     my $s = shift;
     my $i = index $s, chr(0x04);
 
     if ($i != -1) {		# found padding
-	# 			# check padding
-	# my $padding = substr( $s, $i );
-	# for (split //, $padding) {
-	#     die "Padding error" if ($_ != chr(0x04));
-	# }
+	my $padding = substr( $s, $i );
+	for (split //, $padding) {
+	    croak "Padding does not conform to PKCS#7" if ($_ ne chr(0x04));
+	}
 	$s = substr( $s, 0, $i );
     }
     return $s;
