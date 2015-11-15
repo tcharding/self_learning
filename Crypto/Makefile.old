@@ -189,6 +189,7 @@ PERL_ARCHIVE_AFTER =
 TO_INST_PM = attack.pl \
 	lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
+	lib/Crypto/Stream.pm \
 	lib/Crypto/Vigenere.pm \
 	lib/Crypto/template
 
@@ -198,6 +199,8 @@ PM_TO_BLIB = attack.pl \
 	blib/lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
 	blib/lib/Crypto/Block.pm \
+	lib/Crypto/Stream.pm \
+	blib/lib/Crypto/Stream.pm \
 	lib/Crypto/Vigenere.pm \
 	blib/lib/Crypto/Vigenere.pm \
 	lib/Crypto/template \
@@ -875,6 +878,7 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  attack.pl $(INST_LIB)/Crypto/attack.pl \
 	  lib/Crypto/Base.pm blib/lib/Crypto/Base.pm \
 	  lib/Crypto/Block.pm blib/lib/Crypto/Block.pm \
+	  lib/Crypto/Stream.pm blib/lib/Crypto/Stream.pm \
 	  lib/Crypto/Vigenere.pm blib/lib/Crypto/Vigenere.pm \
 	  lib/Crypto/template blib/lib/Crypto/template 
 	$(NOECHO) $(TOUCH) pm_to_blib

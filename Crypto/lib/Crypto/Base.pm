@@ -12,6 +12,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 				      hex_to_ascii ascii_to_hex
 				      pseudo_random_int
 				      pseudo_random_string
+				      dump_hex
 				   )],
 		 );
 
@@ -22,6 +23,16 @@ our @EXPORT = qw(
 );
 
 our $VERSION = '0.01';
+
+sub dump_hex {
+    my $hex = shift;
+    while (length($hex) > 0) {
+	my $h = substr($hex, 0, 2);
+	$hex = substr($hex, 2);
+	print "0x$h ";
+    }
+    print "\n";
+}
 
 # return a pseudo random integer min <= n < max
 sub pseudo_random_int {
