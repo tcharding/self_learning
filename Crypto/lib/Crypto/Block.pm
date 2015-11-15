@@ -110,7 +110,7 @@ sub decrypt_aes_cbc {
     if( length($key) != 16) {	# 16 bytes
 	die "key must be 16 bytes long";
     }
-    				# hexify inputs
+    				# hexify input
     my $blocks = split_bin_into_blocks( $ciphertext, 16 );
     my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
 

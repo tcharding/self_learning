@@ -40,75 +40,12 @@ sub attack_padding_oracle {
 	$hex = substr( $hex, $size );
 	push @blocks, $block;
     }
-    if (length($hex) > 0) {
-	warn "hex string still has data!"; # input error
-    }
-    my $nblocks = @blocks;
-    print "nblocks: $nblocks\n";
-    my $cnt = 0;
-#    my $plaintext = &attack_first_block( $iv, $blocks[0] );
- #   $plaintext .= "\n";
-    print "bugs in first block attack\n";
-    my $plaintext .= &attack_second_block( $iv, $blocks[0], $blocks[1] );
-    $plaintext .= "\n";
-    $plaintext .= &attack_third_block( $iv, $blocks[0], $blocks[1], $blocks[2] );
-    $plaintext .= "\n";
-    if ($blocks[3]) {
-	$plaintext .= &attack_fourth_block();
-	$plaintext .= "\n";
-    }
-    print $plaintext;
+   
+    my $s = attack_first_block($iv, $blocks[0], $blocks[1] );
+    print "$s\n";
 }
-
 
 sub attack_first_block {
-    my( $iv, $first ) = @_;
-    my $p = "";
-
-    my $found;
-    for my $byte (1 .. 1) {
-	my $modi = 16 - ($byte); # byte index we are modifying
-	
-	my $front = substr($iv, 0, $modi); # front 
-	my $back = "";			      # back 
-	if (length( $p ) > 0) {		      
-#	    my $b = substr($iv_in, $modi);
-#	    $back = build_known( $p, $byte, $b );
-	}
-	
-	my $b = pack('A*', substr($iv, $modi, 1)); 
-	my $p = pack('C*', $byte);
-	my $z;			# third byte required for XOR
-	
-	$found = 0;		      
-	for (1..16, 32..126) {	# padding characters plus printable characters
-	    my $char = chr($_);	
-	    $z = pack('A*', $char);	# guessed plaintext byte
-
-				# build modified IV
-	    $iv = $front;
-	    $iv .= unpack('A*', ($b ^ $z ^ $p));  # add modified byte
-	    if ($back ne "") {		     # add back if defined
-		$iv .= $back
-	    }
-	    print "new iv: $iv\n";
-	    			# query the oracle
-	    if (&padding_oracle( $iv, $first ) ){
-		$p = $char . $p;
-		$found = 1;
-#		printf "got char:*%s* (hex: %s)\n", $char, ascii_to_hex($char);
-	    }
-	    last if ($found == 1); # end guess character loop
-	} # end guess character loop
-	last if ($found == 0); # end byte loop
-    } # end byte loop
-    if ($found == 0) {
-	return "Error attack_first_block, char unfound";
-    }
-    return $p;
-}
-
-sub attack_second_block {
     my( $iv, $first, $second ) = @_;
 
     my $p = "";
@@ -156,59 +93,7 @@ sub attack_second_block {
     }
     return $p;
 }
-sub attack_third_block {
-    my( $iv, $first, $second, $third ) = @_;
-
-    my $p = "";
-
-    my $found;
-    for my $byte (1 .. 16) {
-	my $modi = 32 - ($byte * 2); # byte index we are modifying
-	
-	my $front = substr($second, 0, $modi); # bit still to do (hex)
-	my $mod = substr($second, $modi, 2);   # ciphertext byte to modify
-	my $back = "";			      # back of block
-
-	if (length( $p ) > 0) {		       
-	    my $b = substr($second, $modi + 2); # +2 for mod_byte
-	    $back = build_known( $p, $byte, $b );
-	}
-	
-	my $ct = pack('H*', $mod);    # ciphertext byte
-	my $pd = pack('C*', $byte); # target padding byte
-	$found = 0;		      
-	for (1..16, 32..126) {	# padding characters plus printable characters
-	    my $char = chr($_);	
-	    my $pt = pack('A*', $char);	# guessed plaintext byte
-
-				# build modified ciphertext
-	    my $c = pack('H*', $first);
-	    $c .= pack('H*', $front); # front
-	    $c .= $pt ^ $ct ^ $pd;;  # add modified byte
-	    if ($back ne "") {		     # add back if defined
-		$c .= pack('H*', $back);  
-	    }				     
-	    $c .= pack('H*', $third);   # add third block
-
-	    			# query the oracle
-	    if (&padding_oracle( $iv, $c ) ){
-		$p = $char . $p;
-		$found = 1;
-#		printf "got char:*%s* (hex: %s)\n", $char, ascii_to_hex($char);
-	    }
-	    last if ($found == 1); # end guess character loop
-	} # end guess character loop
-	last if ($found == 0); # end byte loop
-    } # end byte loop
-    if ($found == 0) {
-	return "Error attack_third_block, char unfound p: $p";
-    }
-    return $p;
-}
-sub attack_fourth_block {
-    return "attack_fourth_block not yet implemented";
-}
-
+# 
 
 # build byte by byte XOR of cx, p, pad. Return hex.
 sub build_known {
@@ -284,3 +169,58 @@ sub encryption_oracle {
     return ($iv, $c);
 }
 
+
+#
+#
+# Archive
+# 
+sub attack_block_iv {
+    my ($iv, $block) = @_;
+    $iv = ascii_to_hex( $iv );
+    my $p = "";
+
+    my $found;
+    for my $byte (1 .. 16) {
+	my $modi = 32 - ($byte * 2); # byte index we are modifying
+	
+	my $front = substr($iv, 0, $modi); # bit still to do (hex)
+	my $mod = substr($iv, $modi, 2);   # ciphertext byte to modify
+	my $back = "";			      # back of block
+
+	if (length( $p ) > 0) {		       
+	    my $b = substr($iv, $modi + 2); # +2 for mod_byte
+	    $back = build_known( $p, $byte, $b );
+	}
+	
+	my $ct = pack('H*', $mod);    # ciphertext byte
+	my $pd = pack('C*', $byte); # target padding byte
+	$found = 0;		      
+	for (1..16, 32..126) {	# padding characters plus printable characters
+	    my $char = chr($_);	
+	    my $pt = pack('A*', $char);	# guessed plaintext byte
+
+				# build modified block
+	    my $mod_block = pack('H*', $front); # front
+	    $mod_block .= $pt ^ $ct ^ $pd;;  # add modified byte
+	    if ($back ne "") {		     # add back if defined
+		$mod_block .= pack('H*', $back);  
+	    }
+	    $iv = unpack('H*', $mod_block);
+	    $iv = hex_to_ascii( $iv );
+	    
+	    # query the oracle
+	    if (&padding_oracle( $iv, $block ) ){
+		$p = $char . $p;
+		$found = 1;
+#		printf "got char:*%s* (hex: %s)\n", $char, ascii_to_hex($char);
+	    }
+	    last if ($found == 1); # end guess character loop
+	} # end guess character loop
+	last if ($found == 0); # end byte loop
+    } # end byte loop
+    if ($found == 0) {
+	die "Error, char unfound\n";
+    }
+    return $p;
+
+}

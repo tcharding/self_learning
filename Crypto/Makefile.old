@@ -186,12 +186,15 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/Crypto/Base.pm \
+TO_INST_PM = attack.pl \
+	lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
 	lib/Crypto/Vigenere.pm \
 	lib/Crypto/template
 
-PM_TO_BLIB = lib/Crypto/Base.pm \
+PM_TO_BLIB = attack.pl \
+	$(INST_LIB)/Crypto/attack.pl \
+	lib/Crypto/Base.pm \
 	blib/lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
 	blib/lib/Crypto/Block.pm \
@@ -486,7 +489,7 @@ realclean_subdirs :
 # Delete temporary files (via clean) and also delete dist files
 realclean purge ::  clean realclean_subdirs
 	- $(RM_F) \
-	  $(FIRST_MAKEFILE) $(MAKEFILE_OLD) 
+	  $(MAKEFILE_OLD) $(FIRST_MAKEFILE) 
 	- $(RM_RF) \
 	  $(DISTVNAME) 
 
@@ -869,6 +872,7 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  attack.pl $(INST_LIB)/Crypto/attack.pl \
 	  lib/Crypto/Base.pm blib/lib/Crypto/Base.pm \
 	  lib/Crypto/Block.pm blib/lib/Crypto/Block.pm \
 	  lib/Crypto/Vigenere.pm blib/lib/Crypto/Vigenere.pm \
