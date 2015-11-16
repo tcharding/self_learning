@@ -14,10 +14,10 @@ our @ISA = qw(Exporter);
 
 our %EXPORT_TAGS = ( 'all' => [ qw(
 				      has_repeating_blocks
-				      encrypt_aes_cbc decrypt_aes_cbc
 				      split_string_into_blocks
 				      split_bin_into_blocks
-				      pad strip_padding 
+				      pad 
+				      strip_padding 
 				      is_pad_correct
 			      ) ],
 		     'pad' => [ qw(
@@ -34,7 +34,8 @@ our @EXPORT = qw(
 );
 
 our $VERSION = '0.01';
-# split 'string' into 'size' blocks, pad if necessary with &pad_pkcs_7
+
+# split 'string' into 'size' blocks
 sub split_string_into_blocks {
     my( $string, $size ) = @_;
     my( @blocks, $block );
@@ -42,12 +43,6 @@ sub split_string_into_blocks {
     while( length( $string ) >= $size ) {
 	$block = substr( $string, 0, $size );
 	$string = substr( $string, $size );
-	push @blocks, $block;
-    }
-    				# handle last bit of string if present
-    if( length( $string ) > 0 ) {
-	die "error $!" if( length( $string ) >= $size ); # defensive programming
-	$block = pad( $string, $size );
 	push @blocks, $block;
     }
     return \@blocks;
@@ -73,56 +68,6 @@ sub split_bin_into_blocks {
     return \@bin;
 }
 
-sub encrypt_aes_cbc {
-    my( $plaintext, $key, $iv ) = @_;
-    # sanity checks
-
-    $iv = &pseudo_random_string( 16 ) unless $iv;
-    if( length($iv) != 16) {	# 16 bytes
-	die "IV must be 16 bytes long";
-    }
-    if( length($key) != 16) {	# 16 bytes
-	die "key must be 16 bytes long";
-    }
-    				# hexify inputs
-    my $blocks = split_string_into_blocks( $plaintext, 16 );	# 16 byte blocks
-    my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
-    				# now chain block cipher 
-    my( $bin, $ciphertext );
-    my $feedback = pack( 'A*', $iv );
-    for (@$blocks) {
-	my $input = $feedback ^ pack('A*', $_);
-	my $bin = $cipher->encrypt( $input ); # encrypt as hex string (As 128)
-	$ciphertext .= $bin;
-	$feedback = $bin;
-    }
-
-    return $ciphertext;
-}
-sub decrypt_aes_cbc {
-
-    my( $ciphertext, $key, $iv ) = @_;
-    $iv = &pseudo_random_string( 16 ) unless $iv;
-				# sanity checks
-    if( length($iv) != 16) {	# 16 bytes
-	die "IV must be 16 bytes long";
-    }
-    if( length($key) != 16) {	# 16 bytes
-	die "key must be 16 bytes long";
-    }
-    				# hexify input
-    my $blocks = split_bin_into_blocks( $ciphertext, 16 );
-    my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
-
-    		# now chain block cipher mode
-    my $feedback = pack( 'A*', $iv );
-    my $plaintext;
-    for (@$blocks) {
-	$plaintext .=  $cipher->decrypt( $_ ) ^ $feedback;
-	$feedback = $_;
-    }
-    return $plaintext;
-}
 
 # add padding as specified by pkcs#7
 sub pad {
@@ -142,30 +87,6 @@ sub pad {
     return $string;
 
 }
-# # add padding bytes to single block
-# sub pad_pkcs_7 {
-#     my( $s, $size ) = @_;
-
-#     my $len = length( $s );
-#     my $pad = $size - $len;
-#     $pad = $size if $pad == 0;
-
-#     croak "requested block size is smaller than block"
-# 	if( $len < 0 );
-    
-#     $s .= chr($pad) x $pad;
-#     return $s;
-# }
-# # strip padding bytes from single block
-# sub strip_pkcs_7 {
-#     my( $block, $len ) = @_;
-#     $len = 16 unless defined $len;
-#     my $pad = ord(substr($block, -1));
-#     if ($pad < 0 || $pad > $len) {
-# 	croak "Block is incorrectly padded";
-#     }
-#     return substr( $block, 0, $len - $pad );
-# }
 
 # strip padding
 sub strip_padding {
@@ -189,12 +110,25 @@ sub is_pad_correct {
     $block_size = 16 unless defined $block_size;
     
     my $pad = ord(substr($s, -1));
-    if ($pad < 0 || $pad > $block_size) {
+    if ($pad < 0 || $pad > $block_size) { # padding byte correct
 	return 0;
     }
+				# all padding bytes correct
+    my $count;
     my $padding = substr($s, 0 - $pad);
     for (split //, $padding) {
+	++$count;
 	return 0 if ($_ ne chr($pad));
+    }
+    if ($count != $pad) {
+	return 0;	      # padding byte equals number of padded bytes
+    }
+				# final byte of 0x01 gives false positive
+    if ($pad == 1) {
+	my $second_last = ord(substr($s, -2, 1));
+	if ($second_last > 0 && $second_last <= $block_size) {
+	    return 0;
+	}
     }
     return 1;			# yes
 }

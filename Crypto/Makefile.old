@@ -163,6 +163,7 @@ H_FILES  =
 MAN1PODS = 
 MAN3PODS = lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
+	lib/Crypto/MT19937.pm \
 	lib/Crypto/Vigenere.pm
 
 # Where is the Config information that we are using/depend on
@@ -189,6 +190,8 @@ PERL_ARCHIVE_AFTER =
 TO_INST_PM = attack.pl \
 	lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
+	lib/Crypto/Cipher.pm \
+	lib/Crypto/MT19937.pm \
 	lib/Crypto/Stream.pm \
 	lib/Crypto/Vigenere.pm \
 	lib/Crypto/template
@@ -199,6 +202,10 @@ PM_TO_BLIB = attack.pl \
 	blib/lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
 	blib/lib/Crypto/Block.pm \
+	lib/Crypto/Cipher.pm \
+	blib/lib/Crypto/Cipher.pm \
+	lib/Crypto/MT19937.pm \
+	blib/lib/Crypto/MT19937.pm \
 	lib/Crypto/Stream.pm \
 	blib/lib/Crypto/Stream.pm \
 	lib/Crypto/Vigenere.pm \
@@ -430,10 +437,12 @@ POD2MAN = $(POD2MAN_EXE)
 manifypods : pure_all  \
 	lib/Crypto/Base.pm \
 	lib/Crypto/Block.pm \
+	lib/Crypto/MT19937.pm \
 	lib/Crypto/Vigenere.pm
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) -u \
 	  lib/Crypto/Base.pm $(INST_MAN3DIR)/Crypto::Base.$(MAN3EXT) \
 	  lib/Crypto/Block.pm $(INST_MAN3DIR)/Crypto::Block.$(MAN3EXT) \
+	  lib/Crypto/MT19937.pm $(INST_MAN3DIR)/Crypto::MT19937.$(MAN3EXT) \
 	  lib/Crypto/Vigenere.pm $(INST_MAN3DIR)/Crypto::Vigenere.$(MAN3EXT) 
 
 
@@ -878,6 +887,8 @@ pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	  attack.pl $(INST_LIB)/Crypto/attack.pl \
 	  lib/Crypto/Base.pm blib/lib/Crypto/Base.pm \
 	  lib/Crypto/Block.pm blib/lib/Crypto/Block.pm \
+	  lib/Crypto/Cipher.pm blib/lib/Crypto/Cipher.pm \
+	  lib/Crypto/MT19937.pm blib/lib/Crypto/MT19937.pm \
 	  lib/Crypto/Stream.pm blib/lib/Crypto/Stream.pm \
 	  lib/Crypto/Vigenere.pm blib/lib/Crypto/Vigenere.pm \
 	  lib/Crypto/template blib/lib/Crypto/template 

@@ -10,9 +10,12 @@ use feature qw/say/;
 use Crypt::Rijndael;
 use Crypto::Block qw/:all/;
 use Crypto::Base qw/:all/;
+use Crypto::Cipher qw/:all/;
 
 use constant CBC => 1;
 use constant ECB => 2;
+
+print STDOUT "error message\n";
 
 my $debug = "on";		# comment out to turn off
 

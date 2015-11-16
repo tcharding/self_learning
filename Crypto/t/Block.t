@@ -42,7 +42,7 @@ is( $stripped , $s, "strip 2" );
 
 $s = "thisis";
 $stripped = strip_padding( pad($s, $blsz), $blsz);
-is( $stripped , $s, "strip 3" );
+is( $stripped , $s, "strip 3");
 
 # test is_pad_correct
 my $char = "a";			# random character
@@ -62,7 +62,7 @@ push @wrong_num,"abcd" . chr(4) x 3;
 push @wrong_num,"abcd" . chr(4) x 2;
 push @wrong_num,"abcd" . chr(4) x 1;
 				# mixed padding
-#push @mixed,"abcdef" . chr(2) . chr(1);  correctly padded?
+push @mixed,"abcdef" . chr(2) . chr(1);  
 push @mixed,"abcdef" . chr(1) . chr(2);
 push @mixed,"abcde" . chr(1) . chr(2) . chr(4);
 push @mixed,"abcde" . chr(1) . chr(3) . chr(3);
