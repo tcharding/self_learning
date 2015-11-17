@@ -13,7 +13,7 @@ my( $u, $d ) = (11, 0xFFFFFFFF16);
 my( $s, $b ) = (7, 0x9D2C568016);
 my( $t, $c ) = (15, 0xEFC6000016);
 
-my $seed = &gen_seed;
+my $seed = &gen_seed;  # long run time
 print "seed: $seed\n";
 &seed( $seed );
 my $v = extract_number();

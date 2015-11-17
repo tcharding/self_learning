@@ -57,6 +57,7 @@ sub encryption_oracle {
 	my $cipher = Crypt::Rijndael->new( $key, Crypt::Rijndael::MODE_ECB() );
 	$c = $cipher->encrypt( $input );
     } elsif ($mode == CBC) {			# cbc mode
+	$p = pad( $p, 16 );
 	$c = &encrypt_aes_cbc( $p, $key, $iv );
     } else {
 	die "Unknown mode: $mode\n";	# programmer error

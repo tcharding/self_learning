@@ -16,6 +16,7 @@ our @ISA = qw(Exporter);
 our %EXPORT_TAGS = ( 'all' => [ qw(
 				      seed
 				      extract_number
+				      get_state
 			      )
 			    ] );
 
@@ -33,15 +34,20 @@ my $index = 0;
 
 my( $w, $n, $m, $r ) = (32, 624, 397, 31);
 
-my( $u, $d ) = (11, 0xFFFFFFFF16);
-my( $s, $b ) = (7, 0x9D2C568016);
-my( $t, $c ) = (15, 0xEFC6000016);
-my $a = 0x9908B0DF16;
+my( $u, $d ) = (11, 0xFFFFFFFF);
+my( $s, $b ) = (7, 0x9D2C5680);
+my( $t, $c ) = (15, 0xEFC60000);
+my $a = 0x9908B0DF;
 my $l = 18;
 my $f = 1812433253;
 
 my $lower_mask = 0x80000000;
 my $upper_mask = 0x7fffffff;
+
+# for dev
+sub get_state {
+    return \@state;
+}
 
 sub seed {
     my $seed = shift;
@@ -64,10 +70,10 @@ sub extract_number {
 	&twist();
     }
     my $y = $state[$index];
-    $y = $y ^ (($y >> $u) & $d);
+    $y = $y ^ (($y >> $u));
     $y = $y ^ (($y << $s) & $b);
     $y = $y ^ (($y << $t) & $c);
-    $y = $y ^ ($y >> 1);
+    $y = $y ^ ($y >> $l);
 
     $index++;		
     return int32( $y );
