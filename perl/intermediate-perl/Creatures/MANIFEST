@@ -4,6 +4,7 @@ MANIFEST
 README
 t/Animal.t
 t/00-load.t
+lib/RaceHorse.pm
 lib/LivingCreature.pm
 lib/Person.pm
 lib/Animal.pm
@@ -11,5 +12,6 @@ lib/Cow.pm
 lib/Horse.pm
 lib/Mouse.pm
 lib/Sheep.pm
+lib/Barn.pm
 bin/barnyard.pl
 

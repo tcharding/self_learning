@@ -5,6 +5,8 @@ use 5.022000;
 use strict;
 use warnings;
 
+our $VERSION = '0.01';
+
 sub new {
     my( $class, $name ) = @_;
     my $self = {Name => $name, Color => $class->default_color };
@@ -41,4 +43,10 @@ sub eat {
 sub sound {
     die 'You must define sound in subclass';
 }
+
+sub DESTROY {
+    my $self = shift;
+    print '[', $self->name, " has died.]\n";
+}
+
 1;
