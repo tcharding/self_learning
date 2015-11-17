@@ -5,10 +5,38 @@ use 5.022000;
 use strict;
 use warnings;
 
-sub speak {
-    my $class = shift;
-    print "a $class goes ", $class->sound, "!\n";
+sub new {
+    my( $class, $name ) = @_;
+    my $self = {Name => $name, Color => $class->default_color };
+    bless $self, $class;
 }
+
+sub default_color { 'brown' };
+
+sub color {
+    my $self = shift;
+    $self->{Color};
+}
+
+sub set_color {
+    my $self = shift;
+    $self->{Color} = shift;
+}
+
+sub set_name { $_[0]->{Name} = $_[1] };
+
+sub name {
+    my $either = shift;
+    ref $either
+	? $either->{Name}		# it's an instance 
+	: "An unnamed $either";	# it's a class
+}
+
+sub eat {
+    my( $either, $food ) = @_;
+    print $either->name, " eats $food.\n";
+}
+
 
 sub sound {
     die 'You must define sound in subclass';

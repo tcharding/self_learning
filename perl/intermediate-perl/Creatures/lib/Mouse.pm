@@ -11,7 +11,7 @@ sub sound {
 
 sub speak {
     my $class = shift;
-    Animal::speak($class);	# MESSY
+    $class->SUPER::speak(@_);
     print "[but you can barely hear it!]\n";
 }
 

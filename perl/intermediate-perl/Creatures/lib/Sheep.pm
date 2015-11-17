@@ -9,4 +9,6 @@ sub sound {
     'baaaah';
 }
 
+sub default_color { 'white' };
+
 1;

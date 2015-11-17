@@ -6,8 +6,8 @@ use warnings;
 
 
 sub speak {
-    my $class = shift;
-    print "a $class goes ", $class->sound, "!\n";
+    my $either = shift;
+    print $either->name,  " goes ", $either->sound, "!\n";
 }
 
 
