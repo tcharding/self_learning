@@ -7,16 +7,24 @@ use feature qw/say/;
 # Crack an MT19937 seed using brute force
 #
 
-use Crypto::MT19937 qw/:all/;
+#use Crypto::MT19937 qw/:all/;
+use Crypto::Prng;
 
-my( $u, $d ) = (11, 0xFFFFFFFF16);
-my( $s, $b ) = (7, 0x9D2C568016);
-my( $t, $c ) = (15, 0xEFC6000016);
+my( $u, $d ) = (11, 0xFFFFFFFF);
+my( $s, $b ) = (7, 0x9D2C5680);
+my( $t, $c ) = (15, 0xEFC60000);
+my $a = 0x9908B0DF;
+my $l = 18;
+my $f = 1812433253;
 
-my $seed = &gen_seed;  # long run time
-print "seed: $seed\n";
-&seed( $seed );
-my $v = extract_number();
+#my $seed = &gen_seed;  # long run time if large seed, we brute force from 0
+my $seed = 632;
+#print "seed: $seed\n";
+
+my $prng = Crypto::Prng->new;
+
+$prng->seed( $seed );
+my $v = $prng->extract_number();
 
 my $guessed_seed = &attack_mt19937( $v );
 
@@ -28,26 +36,26 @@ if ($seed == $guessed_seed) {
 }
 
 sub attack_mt19937 {
-    my $val = shift;
+    my $pnr = shift;
     my $max = 2**32;
-    for (0 .. $max) {
-	my $seed = mt19937_value( $_ );
-	if ($seed == $val) {
-	    return $_;
+    
+    for my $seed (0 .. $max) {
+	my $val = mt19937_value( $seed );
+	if ($val == $pnr) {
+	    return $seed;
 	}
     }
     return -1;
-
 }
 
 # simulate MT19937 first value of sequence
 sub mt19937_value {
     my $y = shift;
 
-    $y = $y ^ (($y >> $u) & $d);
+    $y = $y ^ (($y >> $u));
     $y = $y ^ (($y << $s) & $b);
     $y = $y ^ (($y << $t) & $c);
-    $y = $y ^ ($y >> 1);
+    $y = $y ^ ($y >> $l);
 
     return int32( $y );
 }
@@ -65,5 +73,6 @@ sub gen_seed {
     chomp $date;
     my @s = split /\./, $date;
     @s = split /\+/, $s[1];
-    return $s[0];
+
+    return int32($s[0]);
 }

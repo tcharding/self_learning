@@ -10,5 +10,6 @@ BEGIN { use_ok('Crypto::Block') };
 BEGIN { use_ok('Crypto::Stream') };
 BEGIN { use_ok('Crypto::Cipher') };
 BEGIN { use_ok('Crypto::MT19937') };
+BEGIN { use_ok('Crypto::Prng') };
 
 done_testing();

@@ -1,6 +1,0 @@
-Revision history for Perl extension Lifeform::Animal.
-
-0.01  Wed Nov  4 09:24:43 2015
-	- original version; created by h2xs 1.23 with options
-		-AX -n Lifeform::Animal
-

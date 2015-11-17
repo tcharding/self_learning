@@ -6,9 +6,11 @@ t/Base.t
 t/Block.t
 t/Cipher.t
 t/Stream.t
+t/MT19337.t
 lib/Crypto/Base.pm
 lib/Crypto/Block.pm
 lib/Crypto/Cipher.pm
 lib/Crypto/Stream.pm
 lib/Crypto/Vigenere.pm
 lib/Crypto/MT19937.pm
+lib/Crypto/Prng.pm	

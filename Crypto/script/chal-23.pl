@@ -7,7 +7,8 @@ use feature qw/say/;
 # Clone an MT19937 RNG from its output
 # 
 
-use Crypto::MT19937 qw/:all/;
+#use Crypto::MT19937 qw/:all/;
+use Crypto::Prng;
 use English;
 
 ## MT19937 globals 
@@ -27,6 +28,10 @@ my $l = 18;
 my $f = 1812433253;
 ## end MT19937 globals
 
+my $seed = 203;			# random seed!
+my $prng = Crypto::Prng->new();	
+$prng->seed($seed);		# seed the generator
+
 &test_untemper;
 &clone_state();
 &solve_challenge;
@@ -39,7 +44,7 @@ sub solve_challenge {
     print "Set 2 Challenge 23: ";
     for (1 .. $checks) {
 	my $pred = &l_extract_number;
-	my $gen = &extract_number;
+	my $gen = $prng->extract_number;
 	if ($pred != $gen) {
 	    $failed = 1;
 	} 
@@ -52,11 +57,9 @@ sub solve_challenge {
 }
 
 sub clone_state {
-    my $seed = 203;		
-    &seed( $seed );		# seed the generator
 
     for (1 .. $n) {
-	my $v = &extract_number;
+	my $v = $prng->extract_number;
 	my $seed = untemper( $v );
 	push @state, $seed;
 	$index++;
