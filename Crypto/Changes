@@ -1,6 +1,0 @@
-Revision history for Perl extension Crypto::Base.
-
-0.01  Tue Nov 10 10:18:16 2015
-	- original version; created by h2xs 1.23 with options
-		-AX -n Crypto::Base
-
