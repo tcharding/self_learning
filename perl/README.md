@@ -1,4 +1,8 @@
 Perl Books
 ==========
-* learning-perl: Learning Perl - Randal L. Schwartz, brian d foy and Tob Phoenix
-* intermediate-perl: Intermediate Perl - Randal L. Schwartz, brian d foy and Tob Phoenix
+
+__learning-perl__:  
+Learning Perl - Randal L. Schwartz, brian d foy and Tom Phoenix, Sixth edition.
+
+__intermediate-perl__:  
+Intermediate Perl - Randal L. Schwartz, brian d foy and Tom Phoenix, Second edition.
