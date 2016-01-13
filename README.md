@@ -28,14 +28,8 @@ Directory Listing
 __cpl__:  
 The C Programming Language - Brian W. Kernighan, Denis M. Ritchie, Second edition.
 
-__UNIX/apue__:  
-Advanced Programming in the UNIX Environment - Stevens and Rago, Third Edition.
-
-__UNIX/usp__:  
-UNIX SYSTEMS Programming - Kay A. Robbins, Steven Robbins.
-
-__UNIX/unp__:
-UNIX Network Programming - Stevens, Fenner, Rudoff, Volume 1, Third Edition.
+__blp__:
+Beginning Linux Programming - Neil Matthew and Richard Stones.
 
 __perl/learning-perl__:  
 Learning Perl - Randal L. Schwartz, brian d foy and Tom Phoenix, Sixth edition.
@@ -46,5 +40,25 @@ Intermediate Perl - Randal L. Schwartz, brian d foy and Tom Phoenix, Second edit
 __pthw__:  
 Python the Hard Way - Zed A. Shaw.
 
-__blp__:
-Beginning Linux Programming - Neil Matthew and Richard Stones.
+__scheme/little-schemer__:  
+The Little Schemer - Daniel P. Friedman and Matthais Felleisen (Fourth Edition).
+
+__scheme/seasoned-schemer__:  
+The Seasoned Schemer - Daniel P. Friedman and Matthais Felleisen (Fourth
+Edition).
+
+__scheme/scheme-programming-language__:
+The Scheme Programming Language - R. Kent Dybvig (Fourth Edition).
+
+__scheme/sicp__:
+Structure and Interpretation of Computer Programs - Harold Abelson and Gerald
+Jay Sussman with Julie Sussman 
+
+__UNIX/apue__:  
+Advanced Programming in the UNIX Environment - Stevens and Rago, Third Edition.
+
+__UNIX/usp__:  
+UNIX SYSTEMS Programming - Kay A. Robbins, Steven Robbins.
+
+__UNIX/unp__:
+UNIX Network Programming - Stevens, Fenner, Rudoff, Volume 1, Third Edition.
