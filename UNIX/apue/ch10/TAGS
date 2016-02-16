@@ -1,0 +1,46 @@
+
+sig2string.c,69
+int main(8,134
+char *sig2string(sig2string25,474
+void msg(34,626
+
+multi_alarm.c,491
+#define SIG_MSG 3,38
+#define MAX_ALRM 4,80
+typedef struct linked_list_node 10,279
+	sig_atomic_t t;11,313
+	struct linked_list_node *next;next12,330
+} ll_t;13,362
+static ll_t *head;head24,628
+static jmp_buf env_alrm;25,647
+int main(28,696
+static void sig_alrm(59,1420
+static unsigned int multi_alarm(73,1763
+static int add_alrm(94,2315
+static unsigned int next_alrm(124,2938
+static void ll_rmhead(134,3112
+static ll_t *ll_creat(ll_creat145,3272
+static void ll_free(154,3412
+
+sig2string.c,69
+int main(8,134
+char *sig2string(sig2string25,474
+void msg(34,626
+
+multi_alarm.c,492
+#define SIG_MSG 3,38
+#define MAX_ALRM 4,80
+typedef struct linked_list_node 10,279
+	sig_atomic_t t;11,313
+	struct linked_list_node *next;next12,330
+} ll_t;13,362
+static ll_t *head;head24,629
+static jmp_buf env_alrm;25,648
+int main(28,697
+static void sig_alrm(59,1421
+static unsigned int multi_alarm(73,1764
+static void add_alrm(94,2316
+static unsigned int next_alrm(123,2929
+static void ll_rmhead(133,3103
+static ll_t *ll_creat(ll_creat145,3273
+static void ll_free(154,3413

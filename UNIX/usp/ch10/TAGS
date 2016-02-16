@@ -1,0 +1,577 @@
+
+virtualtimers.h,27
+#define VIRT_TIMERS_H2,22
+
+virtualtimers.c,445
+#define MAXTIMERS 3,44
+typedef struct timerdata 5,65
+	long active[active6,92
+	int events 7,157
+	int numevents;8,209
+	int running;9,254
+} timerdata_t;10,303
+static timerdata_t timers;14,352
+int getevent(17,436
+int getnumevents(27,601
+int getrunning(33,723
+long getvalue(39,789
+int removetop(50,981
+int timerinit(59,1101
+void timerstart(77,1306
+void timerstop(88,1478
+void waitforevent(97,1579
+static void timerhandler(104,1676
+
+virtualtimers.h,27
+#define VIRT_TIMERS_H2,22
+
+tst-virtualtimers.c,15
+int main(4,45
+
+virtualtimers.c,692
+#define MAXTIMERS 3,44
+#define VERBOSE 4,64
+typedef struct timerdata 6,83
+	long active[active7,110
+	int events 8,175
+	int numevents;9,248
+	int running;10,293
+} timerdata_t;11,342
+static timerdata_t timers;16,445
+int getevent(24,639
+int getnumevents(34,804
+int getrunning(40,926
+long getvalue(46,992
+int removetop(57,1192
+int timerinit(68,1347
+void timerstart(86,1557
+void timerstop(96,1735
+void waitforevent(110,1985
+static void timerhandler(117,2082
+static int addevent(130,2344
+static int rmevent(154,2852
+void run_tests(176,3288
+static void t_rmevent(183,3363
+static void t_addevent(200,3630
+static void pprint_events(215,3865
+static void pprint_active(226,4070
+
+virtualtimers.h,49
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(5,72
+
+show.h,20
+#define SHOW_H2,15
+
+hardwaretimer.c,227
+int blockinterrupt(4,45
+int catchsetup(8,85
+long gethardwaretimer(12,138
+int is_interuptblocked(16,181
+void sethardwaretimer(20,225
+void stophadwaretimer(24,268
+void unblockinterrupt(28,302
+void waitforinterrupt(32,336
+
+virtualtimers.c,813
+#define MAXTIMERS 4,62
+#define OFF 5,82
+#define EMPTY 6,137
+#define traceflag 7,199
+typedef struct timerdata 9,255
+	long active[active10,282
+	int events 11,347
+	int numevents;12,407
+	int running;13,452
+} timerdata_t;14,501
+static timerdata_t timers;19,542
+int getevent(34,947
+int getnumevents(44,1144
+int getrunning(50,1266
+long getvalue(56,1385
+int removetop(66,1613
+int timerinit(77,1799
+void timerstart(95,2054
+void timerstop(107,2410
+void waitforevent(120,2611
+int checktimer(132,2824
+static void timerhandler(152,3239
+static void start_next_running(166,3607
+static int addevent(191,4186
+static int rmevent(204,4451
+int vt_unit_tests(224,4881
+static void t_addrm_event(233,4982
+static void dump_events(268,5740
+static void dump_active(279,5943
+static void clear_events(290,6162
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,262
+#define MILLION 4,71
+static double initialtod 6,97
+static int maxtimers;7,129
+static double getrealativetime(11,224
+static double gettime(16,298
+static void showtimerdata(29,589
+static double timetodouble(46,1004
+void show(54,1189
+void showinit(80,1744
+
+virtualtimers.h,49
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(5,72
+
+show.h,20
+#define SHOW_H2,15
+
+hardwaretimer.c,227
+int blockinterrupt(4,45
+int catchsetup(8,85
+long gethardwaretimer(12,138
+int is_interuptblocked(16,181
+void sethardwaretimer(20,225
+void stophadwaretimer(24,268
+void unblockinterrupt(28,302
+void waitforinterrupt(32,336
+
+virtualtimers.c,813
+#define MAXTIMERS 4,62
+#define OFF 5,82
+#define EMPTY 6,137
+#define traceflag 7,199
+typedef struct timerdata 9,255
+	long active[active10,282
+	int events 11,347
+	int numevents;12,407
+	int running;13,452
+} timerdata_t;14,501
+static timerdata_t timers;19,542
+int getevent(34,947
+int getnumevents(44,1144
+int getrunning(50,1266
+long getvalue(56,1385
+int removetop(66,1613
+int timerinit(77,1799
+void timerstart(95,2054
+void timerstop(107,2410
+void waitforevent(120,2611
+int checktimer(132,2824
+static void timerhandler(152,3239
+static void start_next_running(166,3607
+static int addevent(191,4186
+static int rmevent(204,4451
+int vt_unit_tests(224,4881
+static void t_addrm_event(233,4982
+static void dump_events(268,5740
+static void dump_active(279,5943
+static void clear_events(290,6162
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,262
+#define MILLION 4,71
+static double initialtod 6,97
+static int maxtimers;7,129
+static double getrealativetime(11,224
+static double gettime(16,298
+static void showtimerdata(29,589
+static double timetodouble(46,1004
+void show(54,1189
+void showinit(80,1745
+
+virtualtimers.h,162
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+typedef int Timer;6,92
+typedef int Event;7,111
+struct timer 9,131
+	int set;10,146
+	struct timeval tv;11,156
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(5,72
+
+show.h,20
+#define SHOW_H2,15
+
+showremote.c,360
+#define MILLION 10,195
+#define MSGBUFSIZE 11,220
+static double initialtod 13,244
+static LFILE *lf;lf14,276
+static int maxtimers;15,294
+static void snprintfappend(19,389
+static void createlogstring(30,641
+static double getrelativetime(47,1204
+static double gettime(51,1323
+static double timetodouble(62,1642
+void showinit(67,1844
+void show(77,2101
+
+hardwaretimer.c,375
+#define MILLION 3,44
+enum {FALSE,FALSE5,70
+enum {FALSE, TRUE}TRUE5,70
+static sigset_t oldmask;7,118
+int catchsetup(12,227
+int is_interuptblocked(26,570
+int blockinterrupt(38,823
+void unblockinterrupt(53,1181
+long gethardwaretimer(66,1534
+void sethardwaretimer(76,1740
+void stophardwaretimer(87,2034
+void waitforinterrupt(93,2175
+static long tvtomicro(106,2488
+
+virtualtimers.c,741
+#define MAXTIMERS 4,62
+#define traceflag 5,82
+typedef struct timerdata 7,138
+	struct timer active[active8,165
+	Timer events 9,218
+	int numevents;10,273
+	int running;11,325
+} timerdata_t;12,375
+static timerdata_t timers;14,411
+enum { OFF,16,440
+enum { OFF, ON 16,440
+int vt_init(33,896
+void waitforevent(48,1172
+int vt_getnumevents(55,1302
+Timer vt_getevent(61,1402
+Timer vt_rmhead(73,1697
+void vt_start(86,1953
+void vt_stop(102,2387
+Timer vt_running(138,3202
+struct timeval getvalue(144,3317
+static void vt_sig_alrm(155,3559
+static int add_event(198,4733
+static int rm_event(212,5043
+static void clear_events(228,5405
+int vt_unit_tests(240,5618
+static void t_addrm_event(249,5719
+static void dump_events(284,6492
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,261
+#define MILLION 4,71
+static double initialtod 6,97
+static int maxtimers;7,129
+static double getrelativetime(11,224
+static double gettime(16,297
+static void showtimerdata(29,588
+static double timetodouble(46,1003
+void show(59,1248
+void showinit(85,1806
+
+virtualtimers.h,149
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+#define TRACEFLAG 5,91
+#define MAXTIMERS 7,147
+typedef int Timer;9,168
+typedef int Event;10,187
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(5,72
+
+show.h,20
+#define SHOW_H2,15
+
+showremote.c,360
+#define MILLION 10,195
+#define MSGBUFSIZE 11,220
+static double initialtod 13,244
+static LFILE *lf;lf14,276
+static int maxtimers;15,294
+static void snprintfappend(19,389
+static void createlogstring(30,641
+static double getrelativetime(47,1204
+static double gettime(51,1323
+static double timetodouble(62,1642
+void showinit(67,1844
+void show(77,2101
+
+hardwaretimer.c,375
+#define MILLION 3,44
+enum {FALSE,FALSE5,70
+enum {FALSE, TRUE}TRUE5,70
+static sigset_t oldmask;7,118
+int catchsetup(12,227
+int is_interuptblocked(26,570
+int blockinterrupt(38,823
+void unblockinterrupt(53,1181
+long gethardwaretimer(66,1534
+void sethardwaretimer(76,1740
+void stophardwaretimer(87,2034
+void waitforinterrupt(93,2175
+static long tvtomicro(106,2488
+
+virtualtimers.c,752
+typedef struct timerdata 5,63
+	struct timer active[active6,90
+	Timer events 7,143
+	int numevents;8,198
+	int running;9,250
+} timerdata_t;10,300
+static timerdata_t timers;12,336
+enum { OFF,14,365
+enum { OFF, ON 14,365
+int vt_init(33,902
+void waitforevent(48,1178
+int vt_getnumevents(55,1308
+Timer vt_getevent(61,1408
+Timer vt_rmhead(73,1703
+void vt_start(86,1959
+void vt_stop(103,2427
+Timer vt_running(139,3242
+struct timeval getvalue(145,3357
+static int timer_state(156,3578
+static int turn_off(162,3694
+static void vt_sig_alrm(168,3807
+static int add_event(211,4981
+static int rm_event(225,5291
+static void clear_events(241,5653
+int vt_unit_tests(253,5866
+static void t_addrm_event(262,5967
+static void dump_events(297,6740
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,261
+#define MILLION 4,71
+static double initialtod 6,97
+static int maxtimers;7,129
+static double getrelativetime(11,224
+static double gettime(16,297
+static void showtimerdata(29,588
+static double timetodouble(46,1003
+void show(59,1248
+void showinit(85,1806
+
+virtualtimers.h,149
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+#define TRACEFLAG 5,91
+#define MAXTIMERS 7,147
+typedef int Timer;9,168
+typedef int Event;10,187
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(5,72
+
+show.h,20
+#define SHOW_H2,15
+
+showremote.c,360
+#define MILLION 10,195
+#define MSGBUFSIZE 11,220
+static double initialtod 13,244
+static LFILE *lf;lf14,276
+static int maxtimers;15,294
+static void snprintfappend(19,389
+static void createlogstring(30,641
+static double getrelativetime(47,1204
+static double gettime(51,1323
+static double timetodouble(62,1642
+void showinit(67,1844
+void show(77,2101
+
+hardwaretimer.c,375
+#define MILLION 3,44
+enum {FALSE,FALSE5,70
+enum {FALSE, TRUE}TRUE5,70
+static sigset_t oldmask;7,118
+int catchsetup(12,227
+int is_interuptblocked(26,570
+int blockinterrupt(38,823
+void unblockinterrupt(53,1181
+long gethardwaretimer(66,1534
+void sethardwaretimer(76,1740
+void stophardwaretimer(87,2034
+void waitforinterrupt(93,2175
+static long tvtomicro(106,2488
+
+virtualtimers.c,779
+typedef struct timerdata 5,63
+	struct timer active[active6,90
+	Timer events 7,143
+	int numevents;8,198
+	int running;9,250
+} timerdata_t;10,300
+static timerdata_t timers;12,336
+enum { OFF,14,365
+enum { OFF, ON 14,365
+int virtt_init(33,908
+void waitforevent(48,1190
+int virtt_getnumevents(55,1323
+Timer virtt_getevent(61,1429
+Timer virtt_rmhead(73,1730
+void virtt_start(86,1995
+void virtt_stop(103,2475
+Timer virtt_running(139,3302
+struct timeval getvalue(145,3423
+static int timer_state(156,3644
+static int turn_off(162,3760
+static void virtt_sig_alrm(168,3876
+static int add_event(211,5059
+static int rm_event(225,5369
+static void clear_events(241,5731
+int virtt_unit_tests(253,5947
+static void t_addrm_event(262,6051
+static void dump_events(297,6824
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,261
+#define MILLION 4,71
+static double initialtod 6,97
+static int maxtimers;7,129
+static double getrelativetime(11,224
+static double gettime(16,297
+static void showtimerdata(29,588
+static double timetodouble(46,1003
+void show(59,1248
+void showinit(85,1806
+
+virtualtimers.h,169
+#define VIRT_TIMERS_H2,22
+#define VERBOSE 4,45
+#define TRACEFLAG 5,91
+#define MAXTIMERS 7,147
+#define OFF 8,167
+typedef int Timer;10,183
+typedef int Event;11,202
+
+test-runner.c,15
+int main(5,61
+
+tst-virtualtimers.c,15
+int main(7,95
+
+timermain.c,15
+int main(6,90
+
+helper.c,23
+void write_tspec(3,18
+
+show.h,20
+#define SHOW_H2,15
+
+showremote.c,360
+#define MILLION 11,261
+#define MSGBUFSIZE 12,286
+static double initialtod 14,310
+static LFILE *lf;lf15,342
+static int maxtimers;16,360
+static void snprintfappend(20,455
+static void createlogstring(31,707
+static double getrelativetime(48,1270
+static double gettime(52,1389
+static double timetodouble(63,1708
+void showinit(68,1910
+void show(78,2167
+
+hardwaretimer.c,314
+#define MILLION 3,44
+static sigset_t oldmask;5,70
+enum {FALSE,FALSE6,95
+enum {FALSE, TRUE}TRUE6,95
+int ht_init(11,223
+int ht_isblocked(25,557
+int ht_block(37,798
+void ht_unblock(52,1144
+long ht_get(65,1482
+void ht_set(76,1712
+void ht_stop(89,2064
+void ht_wait(95,2176
+static long tvtomicro(107,2419
+
+virtualtimers.c,956
+enum {FALSE,FALSE6,90
+enum {FALSE, TRUE}TRUE6,90
+struct timerdata 8,138
+	struct timespec active[active9,157
+	Timer events[events10,213
+	int numevents;11,267
+	int running;12,319
+static struct timerdata timers;15,393
+enum { UNSET,17,427
+enum { UNSET, SET 17,427
+int virtt_init(36,985
+void virtt_wait(51,1251
+Timer virtt_start(58,1421
+void virtt_startt(71,1674
+void virtt_stop(87,2148
+Timer virtt_running(99,2380
+int virtt_value(105,2507
+int virtt_getnumevents(114,2705
+Timer virtt_rmhead(132,3176
+static void write_tspec(146,3440
+static void write_timer(150,3544
+void virtt_write_active(156,3647
+void virtt_write_events(166,3803
+void virtt_write_running(176,3979
+static int timer_state(190,4228
+static void clear_timer(204,4487
+static void virtt_sig_alrm(218,4739
+static int add_event(265,6048
+static int rm_event(279,6360
+static void clear_events(300,6789
+int virtt_unit_tests(312,7005
+static void t_addrm_event(321,7109
+
+hardwaretimer.h,26
+#define HARD_TIMER_H2,21
+
+show.c,197
+#define MILLION 4,71
+static int maxtimers;6,97
+static struct timespec initial;7,119
+static int getrelativetime(9,152
+static void showtimerdata(23,421
+void show(40,718
+void show_init(67,1278

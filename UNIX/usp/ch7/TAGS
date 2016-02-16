@@ -1,0 +1,452 @@
+
+vector.h,160
+#define TCH_VECTOR_H2,21
+	int slots;9,95
+	int cnt;10,107
+	data_t **data;data11,117
+} VECTOR;12,133
+typedef void Freefunc(14,144
+typedef int Func(15,195
+
+string.h,26
+#define TCH_STRING_H2,21
+
+ring.c,15
+int main(4,51
+
+biring.c,111
+enum { IN,4,38
+enum { IN, OUT 4,38
+int main(10,195
+static int msg_all(71,1685
+static void pprintt(91,2160
+
+tst-vector.c,94
+#define NUM 4,57
+int main(10,210
+static void dump_data_t(36,683
+static void free_d(48,847
+
+fib.c,167
+#define PIPE_BUF 4,54
+enum { IN,7,83
+enum { IN, OUT 7,83
+int main(14,260
+static void child_fn(77,1859
+static long fib_add(104,2650
+static int read_seq(114,2839
+
+vector.c,243
+#define INIT_SLOTS 4,60
+VECTOR *v_creat(v_creat8,155
+void v_free(22,399
+int v_add(36,644
+	data_t **d;d63,1289
+	int total,64,1302
+	int total, res;64,1302
+	total 66,1320
+	for (i = 0; i < v->cnt;cnt70,1397
+		d 71,1429
+		res 74,1525
+
+tokenring.c,88
+int tr_init(9,150
+int tr_dup_in(21,441
+int tr_dup_out(28,611
+int tr_close_fd(35,774
+
+string.c,25
+char *s_dup(s_dup8,122
+
+data.h,71
+#define TCH_DATA_H2,19
+	char c;7,82
+	char *s;s8,91
+} data_t;9,101
+
+tokenring.h,128
+#define TOKENRING_H2,20
+enum { IN,4,41
+enum { IN, OUT 4,41
+struct ring 6,60
+	int in;7,74
+	int out;8,112
+	int fd[fd9,151
+
+ring3.c,80
+int main(7,137
+static void ptrastr(58,1189
+static void wastesometime(70,1374
+
+ringchildbreak.c,48
+int main(9,212
+static void print_ring(66,1464
+
+ringnobreak.c,48
+int main(9,212
+static void print_ring(76,1641
+
+sbiring.c,313
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 7,58
+	int in;8,72
+	int out;9,81
+	int fd[fd10,91
+int main(21,406
+static int msg_all(73,1592
+static void pprintt(93,2067
+static void ring_init(103,2272
+static void ring_dup_in(111,2449
+static void ring_dup_out(116,2569
+static void ring_close_fd(121,2682
+
+token_mutex.c,295
+#define _XOPEN_SOURCE1,0
+#define PIPE_BUF 4,56
+#define TOKEN 6,84
+enum { IN,8,103
+enum { IN, OUT 8,103
+int main(17,354
+static void read_token(78,1562
+static void write_token(90,1843
+static void critical_section(101,2036
+static void ptrastr(114,2339
+static void wastesometime(126,2524
+
+tst-processchar.c,16
+int main(6,105
+
+ring4.c,80
+int main(7,137
+static void ptrastr(59,1190
+static void wastesometime(71,1375
+
+torus.c,314
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 7,58
+	int in;8,72
+	int out;9,81
+	int fd[fd10,91
+int main(21,406
+static int msg_all(99,2196
+static void pprintt(119,2671
+static void ring_init(129,2876
+static void ring_dup_in(137,3053
+static void ring_dup_out(142,3173
+static void ring_close_fd(147,3286
+
+data.c,255
+data_t *adt_alloc(adt_alloc11,179
+data_t *adt_creat(adt_creat22,382
+data_t *adt_dup(adt_dup40,732
+void adt_free(48,850
+char *adt_tostring(adt_tostring58,1011
+static void adt_err_doit(86,1485
+void adt_err_sys(116,2214
+void adt_err_msg(126,2368
+
+ringpp.c,204
+typedef struct transformation 6,77
+	char c;7,109
+	char *s;s8,118
+} trans_t;9,128
+int main(14,227
+static int get_trans(66,1477
+		int size;75,1622
+		int count;76,1634
+		trans_t *data;data77,1647
+
+hostgen.c,15
+int main(4,39
+
+processchar.c,22
+int processchar(4,97
+
+ring2.c,15
+int main(4,51
+
+imp.c,933
+enum { FALSE,10,148
+enum { FALSE, TRUE 10,148
+enum msg_type 12,171
+	TOKEN,13,187
+	TOKEN, HOST2HOST,13,187
+	TOKEN, HOST2HOST, IMP2HOST,13,187
+	TOKEN, HOST2HOST, IMP2HOST, HOST2IMP,13,187
+	TOKEN, HOST2HOST, IMP2HOST, HOST2IMP, IMP2IMP13,187
+enum msg_status 16,238
+	NONE,17,256
+	NONE, NEW,17,256
+	NONE, NEW, ACK,17,256
+	NONE, NEW, ACK, ERR,17,256
+struct msg 20,282
+	enum msg_type type;21,295
+	enum msg_status status;22,320
+	int sid;23,345
+	int did;24,376
+	int num;25,412
+int main(46,1098
+static int host(88,1974
+static int imp(93,2035
+static int init_host(182,4750
+static ssize_t read_msg(208,5324
+static ssize_t write_msg(219,5632
+static int write_token(242,6266
+static char *format_msg(format_msg258,6512
+static char *format_status(format_status291,7226
+static char *format_type(format_type325,7845
+static void err_pid_sys(361,8511
+static void err_pid_msg(371,8729
+static void err_pid_doit(382,8958
+
+ring1.c,15
+int main(4,51
+
+ring5.c,80
+int main(7,137
+static void ptrastr(59,1190
+static void wastesometime(71,1375
+
+tst-data.c,16
+int main(8,148
+
+ringtopology.c,48
+int main(9,212
+static void print_ring(66,1463
+
+sring.c,311
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 6,57
+	int in;7,71
+	int out;8,80
+	int fd[fd9,90
+int main(20,405
+static int msg_all(62,1254
+static void pprintt(82,1729
+static void ring_init(92,1934
+static void ring_dup_in(100,2111
+static void ring_dup_out(105,2231
+static void ring_close_fd(110,2344
+
+vector.h,188
+#define TCH_VECTOR_H2,21
+typedef struct vector 8,95
+	int slots;9,119
+	int cnt;10,131
+	data_t **data;data11,141
+} vec_t;12,180
+typedef void Freefunc(14,190
+typedef int Func(15,241
+
+string.h,26
+#define TCH_STRING_H2,21
+
+ring.c,15
+int main(4,51
+
+biring.c,111
+enum { IN,4,38
+enum { IN, OUT 4,38
+int main(10,195
+static int msg_all(71,1685
+static void pprintt(91,2160
+
+tst-vector.c,56
+#define NUM 5,75
+int main(10,186
+int test_fn(52,1114
+
+fib.c,167
+#define PIPE_BUF 4,54
+enum { IN,7,83
+enum { IN, OUT 7,83
+int main(14,260
+static void child_fn(77,1859
+static long fib_add(104,2650
+static int read_seq(114,2839
+
+vector.c,116
+#define INIT_SLOTS 5,77
+vec_t *v_creat(v_creat9,172
+void v_free(23,413
+int v_add(41,705
+int v_foreach(72,1474
+
+tokenring.c,88
+int tr_init(9,150
+int tr_dup_in(21,441
+int tr_dup_out(28,611
+int tr_close_fd(35,774
+
+string.c,25
+char *s_dup(s_dup8,122
+
+data.h,71
+#define TCH_DATA_H2,19
+	char c;7,82
+	char *s;s8,91
+} data_t;9,101
+
+tokenring.h,128
+#define TOKENRING_H2,20
+enum { IN,4,41
+enum { IN, OUT 4,41
+struct ring 6,60
+	int in;7,74
+	int out;8,112
+	int fd[fd9,151
+
+ring3.c,80
+int main(7,137
+static void ptrastr(58,1189
+static void wastesometime(70,1374
+
+ringchildbreak.c,48
+int main(9,212
+static void print_ring(66,1464
+
+ringnobreak.c,48
+int main(9,212
+static void print_ring(76,1641
+
+sbiring.c,313
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 7,58
+	int in;8,72
+	int out;9,81
+	int fd[fd10,91
+int main(21,406
+static int msg_all(73,1592
+static void pprintt(93,2067
+static void ring_init(103,2272
+static void ring_dup_in(111,2449
+static void ring_dup_out(116,2569
+static void ring_close_fd(121,2682
+
+token_mutex.c,295
+#define _XOPEN_SOURCE1,0
+#define PIPE_BUF 4,56
+#define TOKEN 6,84
+enum { IN,8,103
+enum { IN, OUT 8,103
+int main(17,354
+static void read_token(78,1562
+static void write_token(90,1843
+static void critical_section(101,2036
+static void ptrastr(114,2339
+static void wastesometime(126,2524
+
+tst-processchar.c,16
+int main(6,105
+
+ring4.c,80
+int main(7,137
+static void ptrastr(59,1190
+static void wastesometime(71,1375
+
+torus.c,314
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 7,58
+	int in;8,72
+	int out;9,81
+	int fd[fd10,91
+int main(21,406
+static int msg_all(99,2196
+static void pprintt(119,2671
+static void ring_init(129,2876
+static void ring_dup_in(137,3053
+static void ring_dup_out(142,3173
+static void ring_close_fd(147,3286
+
+data.c,280
+data_t *adt_alloc(adt_alloc11,179
+data_t *adt_creat(adt_creat22,388
+data_t *adt_dup(adt_dup40,738
+void adt_free(48,856
+char *adt_tostring(adt_tostring58,1017
+static void adt_err_doit(87,1504
+void adt_err_sys(117,2237
+void adt_err_msg(127,2391
+int adt_pprint(138,2564
+
+ringpp.c,50
+int main(10,182
+static int parse_config(68,1647
+
+hostgen.c,15
+int main(4,39
+
+processchar.c,22
+int processchar(4,97
+
+ring2.c,15
+int main(4,51
+
+imp.c,933
+enum { FALSE,10,148
+enum { FALSE, TRUE 10,148
+enum msg_type 12,171
+	TOKEN,13,187
+	TOKEN, HOST2HOST,13,187
+	TOKEN, HOST2HOST, IMP2HOST,13,187
+	TOKEN, HOST2HOST, IMP2HOST, HOST2IMP,13,187
+	TOKEN, HOST2HOST, IMP2HOST, HOST2IMP, IMP2IMP13,187
+enum msg_status 16,238
+	NONE,17,256
+	NONE, NEW,17,256
+	NONE, NEW, ACK,17,256
+	NONE, NEW, ACK, ERR,17,256
+struct msg 20,282
+	enum msg_type type;21,295
+	enum msg_status status;22,320
+	int sid;23,345
+	int did;24,376
+	int num;25,412
+int main(46,1098
+static int host(88,1974
+static int imp(93,2035
+static int init_host(182,4750
+static ssize_t read_msg(208,5324
+static ssize_t write_msg(219,5632
+static int write_token(242,6266
+static char *format_msg(format_msg258,6512
+static char *format_status(format_status291,7226
+static char *format_type(format_type325,7845
+static void err_pid_sys(361,8511
+static void err_pid_msg(371,8729
+static void err_pid_doit(382,8958
+
+ring1.c,15
+int main(4,51
+
+ring5.c,80
+int main(7,137
+static void ptrastr(59,1190
+static void wastesometime(71,1375
+
+tst-data.c,16
+int main(8,148
+
+ringtopology.c,48
+int main(9,212
+static void print_ring(66,1463
+
+sring.c,311
+enum { IN,4,38
+enum { IN, OUT 4,38
+struct ring 6,57
+	int in;7,71
+	int out;8,80
+	int fd[fd9,90
+int main(20,405
+static int msg_all(62,1254
+static void pprintt(82,1729
+static void ring_init(92,1934
+static void ring_dup_in(100,2111
+static void ring_dup_out(105,2231
+static void ring_close_fd(110,2344

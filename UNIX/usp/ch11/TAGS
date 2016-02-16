@@ -1,0 +1,43 @@
+
+tst-parse.c,35
+int main(5,60
+int t_parse(17,310
+
+main.c,65
+#define PROMPT 4,60
+int main(14,247
+static void prompt(46,795
+
+exec.c,162
+#define FFLAG 4,53
+#define FMODE 5,98
+void execute(16,455
+static void exec_simple(28,756
+static void exec_redirect(37,987
+static void exec_pipeline(72,1856
+
+input.c,471
+#define BLANK 5,79
+char *getinput(getinput20,614
+struct command *cmd_creat(cmd_creat35,902
+void cmd_free(61,1413
+void cmd_write(77,1763
+static int argv_parse(96,2160
+static char *io_parse(io_parse138,3244
+static int process_redirect(164,3804
+static void writes_null(203,4486
+static void writev_null(211,4664
+static struct command *cmd_init(cmd_init227,4875
+int input_unit_tests(241,5163
+static void t_argv_parse(248,5238
+static void t_io_parse(273,5740
+
+ush.h,190
+#define USH_H2,14
+#define DEBUG 4,29
+#define DP(5,45
+struct command 7,113
+	char **argv;argv8,130
+	char *infile;infile9,170
+	char *outfile;outfile10,207
+	char **pipev;pipev11,246

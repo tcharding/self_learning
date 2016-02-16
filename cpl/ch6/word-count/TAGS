@@ -1,0 +1,54 @@
+
+getch.c,111
+#define	BUFSIZE 5,90
+static char buf[buf7,112
+static int bufp 8,163
+int getch(11,253
+void ungetch(17,364
+
+tnode.h,147
+#define _TNODE_H2,17
+struct tnode 5,52
+	char *word;word6,85
+	int count;7,98
+	struct tnode *left;left8,110
+	struct tnode *right;right9,131
+
+getword.c,19
+int getword(6,143
+
+word-count-alphabetic.c,39
+#define MAXWORD 7,79
+int main(11,153
+
+word-count-numerical.c,39
+#define MAXWORD 7,95
+int main(11,169
+
+tnode.c,155
+#define _XOPEN_SOURCE 6,95
+struct tnode *addtree(addtree12,235
+void treeprint(31,754
+void treedump(41,938
+static struct tnode *talloc(talloc51,1129
+
+adt.h,160
+#define _ADT_H2,15
+struct wc 4,31
+	char *word;word5,67
+	int count;6,80
+struct adt 10,121
+	int size;11,159
+	int num;12,170
+	struct wc *data[data13,180
+
+adt.c,253
+#define _XOPEN_SOURCE 5,76
+#define ALLOC 8,147
+struct adt *adt_creat(adt_creat13,275
+void adt_free(27,495
+int adt_add(37,617
+void adt_print(65,1300
+void adt_qsort(74,1437
+static struct wc *wc_creat(wc_creat79,1473
+static void wc_free(92,1714

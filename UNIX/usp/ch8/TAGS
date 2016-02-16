@@ -1,0 +1,37 @@
+
+sig-catcher.c,115
+#define SIGBUF 3,40
+double ticks;7,123
+int main(10,160
+static void sig_quit(22,396
+static void writed(63,1383
+
+showtimes.c,65
+#define NUM 4,106
+static void showtimes(7,161
+int main(29,803
+
+asyncmonitorsignal.c,416
+static struct aiocb aiocb;6,88
+static sig_atomic_t doneflag;7,115
+static int fdout,8,145
+static int fdout, globalerror,8,145
+static int fdout, globalerror, totalbytes;8,145
+static void aiohandler(13,265
+static int readstart(41,860
+static void seterror(51,1015
+int getbytes(61,1227
+int getdone(70,1346
+int geterror(76,1440
+int initread(86,1538
+int initsignal(116,2297
+int supenduntilmaybeready(129,2594
+
+asyncmonitorsignal.h,21
+#define USP_AMS2,16
+
+asyncsignalmain.c,79
+#define BLKSIZE 5,90
+#define MODE 6,111
+int main(10,185
+void dowork(45,893

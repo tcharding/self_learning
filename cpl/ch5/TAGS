@@ -1,0 +1,109 @@
+
+stack.c,100
+enum { MAXVAL 6,91
+static int sp 8,115
+double val[val9,166
+void push(12,242
+double pop(22,417
+
+sort.c,150
+enum { MAXLINES=4,40
+int main(22,530
+static void qsort(70,1503
+static int ignstrcmp(87,2032
+static int numcmp(92,2132
+static void swap(110,2378
+
+ptr.c,119
+enum { MAXLINE 4,40
+int main(12,226
+void reverse(40,611
+void copy(52,808
+int th_getline(62,986
+void itoa(83,1271
+
+sortlines.c,168
+	MAXLINES 6,67
+	BUFSIZE 7,85
+int main(19,352
+int readlines(35,719
+void writelines(55,1140
+void th_qsort(62,1304
+int th_getline(80,1823
+static void swap(99,2098
+
+string.c,134
+enum { BUFSIZE 3,20
+int main(9,184
+char *th_strncpy(th_strncpy37,987
+char *th_strncat(th_strncat50,1274
+int th_strncmp(65,1630
+
+readlines.c,82
+	BUFSIZE 6,67
+int readlines(16,320
+void writelines(36,738
+int getline(51,1022
+
+tail.c,110
+	N 6,67
+	BUFSIZE 7,117
+int main(15,284
+int readlines(41,850
+void writelines(61,1268
+int getline(69,1447
+
+getch.c,105
+	BUFSIZE 6,79
+static char buf[buf9,100
+static int bufp 10,151
+int getch(13,241
+void ungetch(19,352
+
+getint.c,36
+int main(11,149
+int getint(21,309
+
+expr.c,17
+int main(13,224
+
+strend.c,71
+enum { NO,4,40
+enum { NO, YES 4,40
+int main(8,90
+int strend(22,411
+
+yearday.c,97
+static char daytab[daytab3,20
+int main(11,273
+int day_of_year(35,866
+void month_day(52,1226
+
+strcat.c,59
+enum { BUFSIZE 3,20
+int main(7,81
+void th_strcat(21,335
+
+atof.c,20
+double atof(29,429
+
+strstr.c,146
+enum { MAXLINE 3,20
+char pattern[pattern9,179
+int main(12,271
+int th_getline(25,677
+char *th_strstr(th_strstr45,1068
+int strindex(61,1291
+
+getfloat.c,38
+int main(11,153
+int getfloat(23,365
+
+detab.c,60
+enum { TABSTOP 4,40
+int main(15,279
+int tabspace(49,1001
+
+entab.c,38
+enum { TABSTOP 3,20
+int main(14,231

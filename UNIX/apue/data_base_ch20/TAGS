@@ -1,0 +1,71 @@
+
+db.c,1372
+#define IDXLEN_SZ	14,359
+#define SEP 15,422
+#define SPACE 16,484
+#define NEWLINE 17,531
+#define PTR_SZ 23,679
+#define PTR_MAX 24,741
+#define NHASH_DEF	25,804
+#define FREE_OFF 26,857
+#define HASH_OFF 27,918
+typedef unsigned long	DBHASH;29,981
+typedef unsigned long	COUNT;30,1029
+  int    idxfd;36,1159
+  int    datfd;37,1200
+  char  *idxbuf;idxbuf38,1240
+  char  *datbuf;datbuf39,1297
+  char  *name;name40,1352
+  off_t  idxoff;41,1400
+  size_t idxlen;43,1515
+  off_t  datoff;46,1675
+  size_t datlen;47,1733
+  off_t  ptrval;49,1817
+  off_t  ptroff;50,1878
+  off_t  chainoff;51,1946
+  off_t  hashoff;52,2014
+  DBHASH nhash;53,2074
+  COUNT  cnt_delok;54,2123
+  COUNT  cnt_delerr;55,2162
+  COUNT  cnt_fetchok;56,2204
+  COUNT  cnt_fetcherr;57,2242
+  COUNT  cnt_nextrec;58,2283
+  COUNT  cnt_stor1;59,2320
+  COUNT  cnt_stor2;60,2386
+  COUNT  cnt_stor3;61,2453
+  COUNT  cnt_stor4;62,2520
+  COUNT  cnt_storerr;63,2588
+} DB;64,2629
+db_open(86,3281
+_db_alloc(173,5428
+db_close(206,6223
+_db_free(216,6453
+db_fetch(235,6779
+_db_find_and_lock(261,7362
+_db_hash(308,8691
+_db_readptr(325,9055
+_db_readidx(345,9720
+_db_readdat(426,12299
+db_delete(442,12783
+_db_dodelete(465,13337
+_db_writedat(533,15069
+_db_writeidx(569,16252
+_db_writeptr(620,17881
+db_store(639,18440
+_db_findfree(754,21688
+db_rewind(814,23146
+db_nextrec(837,23742
+
+test_db.c,11
+main(6,63
+
+apue_db.h,240
+#define _APUE_DB_H2,19
+typedef	void *	DBHANDLE;4,39
+#define DB_INSERT	17,394
+#define DB_REPLACE	18,446
+#define DB_STORE	19,500
+#define IDXLEN_MIN	24,580
+#define IDXLEN_MAX	25,643
+#define DATLEN_MIN	26,683
+#define DATLEN_MAX	27,732

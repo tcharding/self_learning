@@ -1,0 +1,31 @@
+
+identifier-count.c,560
+#define _XOPEN_SOURCE 5,78
+struct tnode 8,149
+	char *word;word9,182
+	int count;10,195
+	struct tnode *left;left11,207
+	struct tnode *right;right12,228
+char *keywords[keywords15,254
+#define NKEYS 23,579
+#define MAXWORD 24,628
+#define SIGNF 25,648
+int main(37,1108
+static int identifier(66,1776
+static int binsearch(75,1959
+static struct tnode *addtree(addtree96,2309
+static void treeprint_signf(115,2841
+static int collision(131,3278
+static void treeprint(140,3490
+static struct tnode *talloc(talloc151,3718
+static int treesize(157,3856
+
+getch.c,111
+#define	BUFSIZE 5,90
+static char buf[buf7,112
+static int bufp 8,163
+int getch(11,253
+void ungetch(17,364
+
+getword.c,29
+char *getword(getword5,112

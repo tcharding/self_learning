@@ -1,0 +1,975 @@
+
+connect_retry.c,49
+#define MAXSLEEP 5,119
+int connect_retry(8,189
+
+print.c,69
+int log_to_stderr 15,338
+int main(19,418
+void submit_file(72,1662
+
+util.c,201
+#define MAXCFGLINE 7,157
+#define MAXKWLEN 8,180
+#define MAXFMTLEN 9,202
+getaddrlist(20,458
+scan_configfile(45,1017
+get_printserver(77,1692
+get_printaddr(88,1869
+tread(113,2431
+treadn(140,2998
+
+printd.c,1348
+#define HTTP_INFO(21,385
+#define HTTP_SUCCESS(22,433
+struct job 27,518
+	struct job      *next;next28,531
+	struct job      *prev;prev29,575
+	int32_t          jobid;30,623
+	struct printreq  req;31,662
+struct worker_thread 37,776
+	struct worker_thread  *next;next38,799
+	struct worker_thread  *prev;prev39,848
+	pthread_t              tid;40,901
+	int                    sockfd;41,947
+int					log_to_stderr 47,1026
+struct addrinfo		*printer;printer52,1087
+char					*printer_name;printer_name53,1114
+pthread_mutex_t		configlock 54,1138
+int					reread;55,1195
+struct worker_thread	*workers;workers60,1244
+pthread_mutex_t		workerlock 61,1275
+sigset_t				mask;62,1332
+struct job				*jobhead,jobhead67,1380
+struct job				*jobhead, *jobtail;jobtail67,1380
+int					jobfd;68,1414
+int32_t				nextjob;69,1429
+pthread_mutex_t		joblock 70,1449
+pthread_cond_t			jobwait 71,1503
+main(100,2250
+init_request(196,4641
+init_printer(223,5162
+update_jobno(241,5541
+get_newjobno(258,5852
+add_job(277,6189
+replace_job(303,6725
+remove_job(322,7042
+build_qonstart(340,7362
+client_thread(394,8491
+add_worker(532,11904
+kill_workers(558,12428
+client_cleanup(574,12738
+signal_thread(605,13307
+add_option(641,13921
+		int16_t s;645,14000
+		char c[c646,14013
+printer_thread(670,14391
+readmore(851,18671
+printer_status(877,19181
+
+print.h,769
+#define _PRINT_H2,17
+#define CONFIG_FILE 12,157
+#define SPOOLDIR 13,200
+#define JOBFILE 14,244
+#define DATADIR 15,275
+#define REQDIR 16,305
+#define LPNAME	19,353
+#define LPNAME	21,400
+#define LPNAME	23,429
+#define FILENMSZ 26,459
+#define FILEPERM 27,486
+#define USERNM_MAX 29,529
+#define JOBNM_MAX 30,556
+#define MSGLEN_MAX 31,584
+#define HOST_NAME_MAX 34,635
+#define IPP_PORT 37,671
+#define QLEN 38,699
+#define IBUFSZ 40,727
+#define HBUFSZ 41,784
+#define IOBUFSZ 42,842
+#define ETIME 45,909
+struct printreq 59,1404
+	uint32_t size;60,1422
+	uint32_t flags;61,1460
+	char usernm[usernm62,1495
+	char jobnm[jobnm63,1539
+#define PR_TEXT	69,1610
+struct printresp 74,1734
+	uint32_t retcode;75,1753
+	uint32_t jobid;76,1803
+	char msg[msg77,1834
+
+init_server.c,22
+int initserver(6,138
+
+ipp.h,2770
+#define _IPP_H2,15
+#define STATCLASS_OK(12,180
+#define STATCLASS_INFO(13,241
+#define STATCLASS_REDIR(14,302
+#define STATCLASS_CLIERR(15,363
+#define STATCLASS_SRVERR(16,424
+#define STAT_OK 21,510
+#define STAT_OK_ATTRIGN 22,558
+#define STAT_OK_ATTRCON 23,621
+#define STAT_CLI_BADREQ 25,688
+#define STAT_CLI_FORBID 26,751
+#define STAT_CLI_NOAUTH 27,812
+#define STAT_CLI_NOPERM 28,876
+#define STAT_CLI_NOTPOS 29,938
+#define STAT_CLI_TIMOUT 30,999
+#define STAT_CLI_NOTFND 31,1055
+#define STAT_CLI_OBJGONE 32,1119
+#define STAT_CLI_TOOBIG 33,1186
+#define STAT_CLI_TOOLNG 34,1251
+#define STAT_CLI_BADFMT 35,1317
+#define STAT_CLI_NOTSUP 36,1380
+#define STAT_CLI_NOSCHM 37,1445
+#define STAT_CLI_NOCHAR 38,1510
+#define STAT_CLI_ATTRCON 39,1572
+#define STAT_CLI_NOCOMP 40,1634
+#define STAT_CLI_COMPERR 41,1700
+#define STAT_CLI_FMTERR 42,1767
+#define STAT_CLI_ACCERR 43,1829
+#define STAT_SRV_INTERN 45,1891
+#define STAT_SRV_NOTSUP 46,1957
+#define STAT_SRV_UNAVAIL 47,2021
+#define STAT_SRV_BADVER 48,2081
+#define STAT_SRV_DEVERR 49,2143
+#define STAT_SRV_TMPERR 50,2196
+#define STAT_SRV_REJECT 51,2252
+#define STAT_SRV_TOOBUSY 52,2318
+#define STAT_SRV_CANCEL 53,2374
+#define STAT_SRV_NOMULTI 54,2436
+#define OP_PRINT_JOB 59,2528
+#define OP_PRINT_URI 60,2562
+#define OP_VALIDATE_JOB 61,2596
+#define OP_CREATE_JOB 62,2630
+#define OP_SEND_DOC 63,2664
+#define OP_SEND_URI 64,2698
+#define OP_CANCEL_JOB 65,2732
+#define OP_GET_JOB_ATTR 66,2766
+#define OP_GET_JOBS 67,2800
+#define OP_GET_PRINTER_ATTR 68,2834
+#define OP_HOLD_JOB 69,2868
+#define OP_RELEASE_JOB 70,2902
+#define OP_RESTART_JOB 71,2936
+#define OP_PAUSE_PRINTER 72,2970
+#define OP_RESUME_PRINTER 73,3004
+#define OP_PURGE_JOBS 74,3038
+#define TAG_OPERATION_ATTR 79,3099
+#define TAG_JOB_ATTR 80,3164
+#define TAG_END_OF_ATTR 81,3223
+#define TAG_PRINTER_ATTR 82,3285
+#define TAG_UNSUPP_ATTR 83,3348
+#define TAG_UNSUPPORTED 88,3438
+#define TAG_UNKNOWN 89,3496
+#define TAG_NONE 90,3550
+#define TAG_INTEGER 91,3599
+#define TAG_BOOLEAN 92,3647
+#define TAG_ENUM 93,3695
+#define TAG_OCTSTR 94,3747
+#define TAG_DATETIME 95,3799
+#define TAG_RESOLUTION 96,3848
+#define TAG_INTRANGE 97,3899
+#define TAG_TEXTWLANG 98,3954
+#define TAG_NAMEWLANG 99,4011
+#define TAG_TEXTWOLANG 100,4068
+#define TAG_NAMEWOLANG 101,4128
+#define TAG_KEYWORD 102,4188
+#define TAG_URI 103,4236
+#define TAG_URISCHEME 104,4280
+#define TAG_CHARSET 105,4330
+#define TAG_NATULANG 106,4378
+#define TAG_MIMETYPE 107,4434
+struct ipp_hdr 109,4489
+	int8_t  major_version;110,4506
+	int8_t  minor_version;111,4545
+		int16_t op;113,4593
+		int16_t st;114,4626
+	} u;115,4653
+	int32_t request_id;116,4659
+	char    attr_group[attr_group117,4698
+#define operation 121,4796
+#define status 122,4819
+
+connect_retry.c,49
+#define MAXSLEEP 5,119
+int connect_retry(8,189
+
+print.c,232
+int log_to_stderr 23,616
+int main(33,951
+void submit_file(108,2649
+static void set_orientation(189,4624
+static void set_sides(205,5067
+static int job_status(216,5304
+static int cancel_job(222,5400
+static void usage(228,5502
+
+util.c,201
+#define MAXCFGLINE 7,157
+#define MAXKWLEN 8,180
+#define MAXFMTLEN 9,202
+getaddrlist(20,458
+scan_configfile(45,1017
+get_printserver(77,1692
+get_printaddr(88,1869
+tread(113,2431
+treadn(140,2998
+
+play.h,827
+{ STAT_OK,1,0
+{ STAT_OK_ATTRIGN,2,24
+{ STAT_OK_ATTRCON,3,71
+{ STAT_CLI_BADREQ,4,121
+{ STAT_CLI_FORBID,5,168
+{ STAT_CLI_NOAUTH,6,213
+{ STAT_CLI_NOPERM,7,261
+{ STAT_CLI_NOTPOS,8,307
+{ STAT_CLI_TIMOUT,9,352
+{ STAT_CLI_NOTFND,10,392
+{ STAT_CLI_OBJGONE,11,440
+{ STAT_CLI_TOOBIG,12,492
+{ STAT_CLI_TOOLNG,13,541
+{ STAT_CLI_BADFMT,14,591
+{ STAT_CLI_NOTSUP,15,638
+{ STAT_CLI_NOSCHM,16,687
+{ STAT_CLI_NOCHAR,17,736
+{ STAT_CLI_ATTRCON,18,782
+{ STAT_CLI_NOCOMP,19,828
+{ STAT_CLI_COMPERR,20,878
+{ STAT_CLI_FMTERR,21,930
+{ STAT_CLI_ACCERR,22,976
+{ STAT_SRV_INTERN,23,1021
+{ STAT_SRV_NOTSUP,24,1071
+{ STAT_SRV_UNAVAIL,25,1119
+{ STAT_SRV_BADVER,26,1163
+{ STAT_SRV_DEVERR,27,1209
+{ STAT_SRV_TMPERR,28,1246
+{ STAT_SRV_REJECT,29,1286
+{ STAT_SRV_TOOBUSY,30,1336
+{ STAT_SRV_CANCEL,31,1377
+{ STAT_SRV_NOMULTI,32,1423
+
+printd.c,1602
+#define HTTP_INFO(20,384
+#define HTTP_SUCCESS(21,432
+struct job 26,517
+	struct job      *next;next27,530
+	struct job      *prev;prev28,574
+	int32_t          jobid;29,622
+	struct printreq  req;30,661
+struct worker_thread 36,775
+	struct worker_thread  *next;next37,798
+	struct worker_thread  *prev;prev38,847
+	pthread_t              tid;39,900
+	int                    sockfd;40,946
+int log_to_stderr 46,1025
+struct addrinfo 	*printer;printer51,1082
+char *printer_name;printer_name52,1109
+pthread_mutex_t	configlock 53,1129
+int reread;54,1185
+struct worker_thread *workers;workers59,1230
+pthread_mutex_t	workerlock 60,1261
+sigset_t mask;61,1317
+struct job *jobhead,jobhead66,1362
+struct job *jobhead, *jobtail;jobtail66,1362
+int jobfd;67,1393
+int32_t	nextjob;68,1404
+pthread_mutex_t	joblock 69,1421
+pthread_cond_t jobwait 70,1474
+struct ipp_attr 76,1553
+	int8_t tag;77,1571
+	char *name;name78,1584
+	char *value;value79,1597
+} op_tab[op_tab80,1611
+#define nprinter_ops 92,2023
+main(124,2907
+init_request(220,5298
+init_printer(247,5819
+update_jobno(272,6378
+get_newjobno(291,6763
+add_job(310,7100
+replace_job(336,7636
+remove_job(355,7953
+build_qonstart(373,8273
+client_thread(427,9402
+add_worker(565,12815
+kill_workers(591,13339
+client_cleanup(607,13649
+signal_thread(638,14218
+add_option(674,14832
+		int16_t s;678,14911
+		char c[c679,14924
+printer_thread(703,15302
+readmore(907,20314
+int printer_status(932,20820
+static void log_error(1085,24027
+static int get_printer_attributes(1098,24287
+static void printer_read_attributes(1174,26016
+
+print.h,1078
+#define _PRINT_H2,17
+#define CONFIG_FILE 12,157
+#define SPOOLDIR 13,200
+#define JOBFILE 14,244
+#define DATADIR 15,275
+#define REQDIR 16,305
+#define LPNAME	19,353
+#define LPNAME	21,400
+#define LPNAME	23,429
+#define FILENMSZ 26,459
+#define FILEPERM 27,486
+#define USERNM_MAX 29,529
+#define JOBNM_MAX 30,556
+#define MSGLEN_MAX 31,584
+#define HOST_NAME_MAX 34,635
+#define IPP_PORT 37,671
+#define QLEN 38,699
+#define IBUFSZ 40,727
+#define HBUFSZ 41,784
+#define IOBUFSZ 42,842
+#define ETIME 45,909
+struct printreq 59,1404
+	uint32_t size;60,1422
+	uint32_t flags;61,1460
+	char usernm[usernm62,1495
+	char jobnm[jobnm63,1539
+#define PR_REQ_TEXT(68,1624
+#define PR_REQ_ORIENT(69,1661
+#define PR_REQ_SIDES(70,1715
+#define PR_TEXT	75,1794
+#define PR_ORIENT_P 76,1847
+#define PR_ORIENT_RP 77,1905
+#define PR_ORIENT_L 78,1972
+#define PR_ORIENT_RL 79,2032
+#define PR_SIDES_ONE 80,2101
+#define PR_SIDES_TWO_LONG 81,2144
+#define PR_SIDES_TWO_SHORT 82,2201
+struct printresp 87,2332
+	uint32_t retcode;88,2351
+	uint32_t jobid;89,2401
+	char msg[msg90,2432
+
+init_server.c,22
+int initserver(6,138
+
+ipp.h,2935
+#define _IPP_H2,15
+#define STATCLASS_OK(12,180
+#define STATCLASS_INFO(13,241
+#define STATCLASS_REDIR(14,302
+#define STATCLASS_CLIERR(15,363
+#define STATCLASS_SRVERR(16,424
+#define STAT_INVALID 21,537
+#define STAT_OK 22,564
+#define STAT_OK_ATTRIGN 23,598
+#define STAT_OK_ATTRCON 24,632
+#define STAT_CLI_BADREQ 27,689
+#define STAT_CLI_FORBID 28,723
+#define STAT_CLI_NOAUTH 29,757
+#define STAT_CLI_NOPERM 30,791
+#define STAT_CLI_NOTPOS 31,825
+#define STAT_CLI_TIMOUT 32,859
+#define STAT_CLI_NOTFND 33,893
+#define STAT_CLI_OBJGONE 34,927
+#define STAT_CLI_TOOBIG 35,961
+#define STAT_CLI_TOOLNG 36,995
+#define STAT_CLI_BADFMT 37,1029
+#define STAT_CLI_NOTSUP 38,1063
+#define STAT_CLI_NOSCHM 39,1097
+#define STAT_CLI_NOCHAR 40,1131
+#define STAT_CLI_ATTRCON 41,1165
+#define STAT_CLI_NOCOMP 42,1199
+#define STAT_CLI_COMPERR 43,1233
+#define STAT_CLI_FMTERR 44,1267
+#define STAT_CLI_ACCERR 45,1301
+#define STAT_SRV_INTERN 47,1358
+#define STAT_SRV_NOTSUP 48,1392
+#define STAT_SRV_UNAVAIL 49,1426
+#define STAT_SRV_BADVER 50,1460
+#define STAT_SRV_DEVERR 51,1494
+#define STAT_SRV_TMPERR 52,1528
+#define STAT_SRV_REJECT 53,1562
+#define STAT_SRV_TOOBUSY 54,1596
+#define STAT_SRV_CANCEL 55,1630
+#define STAT_SRV_NOMULTI 56,1664
+struct err_info 58,1698
+	int err_code;59,1716
+	char *err_msg;err_msg60,1731
+} err_tab[err_tab61,1747
+#define OP_PRINT_JOB 100,3322
+#define OP_PRINT_URI 101,3356
+#define OP_VALIDATE_JOB 102,3390
+#define OP_CREATE_JOB 103,3424
+#define OP_SEND_DOC 104,3458
+#define OP_SEND_URI 105,3492
+#define OP_CANCEL_JOB 106,3526
+#define OP_GET_JOB_ATTR 107,3560
+#define OP_GET_JOBS 108,3594
+#define OP_GET_PRINTER_ATTR 109,3628
+#define OP_HOLD_JOB 110,3662
+#define OP_RELEASE_JOB 111,3696
+#define OP_RESTART_JOB 112,3730
+#define OP_PAUSE_PRINTER 113,3764
+#define OP_RESUME_PRINTER 114,3798
+#define OP_PURGE_JOBS 115,3832
+#define TAG_OPERATION_ATTR 120,3893
+#define TAG_JOB_ATTR 121,3958
+#define TAG_END_OF_ATTR 122,4017
+#define TAG_PRINTER_ATTR 123,4079
+#define TAG_UNSUPP_ATTR 124,4142
+#define TAG_UNSUPPORTED 129,4232
+#define TAG_UNKNOWN 130,4290
+#define TAG_NONE 131,4344
+#define TAG_INTEGER 132,4393
+#define TAG_BOOLEAN 133,4441
+#define TAG_ENUM 134,4489
+#define TAG_OCTSTR 135,4541
+#define TAG_DATETIME 136,4593
+#define TAG_RESOLUTION 137,4642
+#define TAG_INTRANGE 138,4693
+#define TAG_TEXTWLANG 139,4748
+#define TAG_NAMEWLANG 140,4805
+#define TAG_TEXTWOLANG 141,4862
+#define TAG_NAMEWOLANG 142,4922
+#define TAG_KEYWORD 143,4982
+#define TAG_URI 144,5030
+#define TAG_URISCHEME 145,5074
+#define TAG_CHARSET 146,5124
+#define TAG_NATULANG 147,5172
+#define TAG_MIMETYPE 148,5228
+struct ipp_hdr 150,5283
+	int8_t  major_version;151,5300
+	int8_t  minor_version;152,5339
+		int16_t op;154,5387
+		int16_t st;155,5420
+	} u;156,5447
+	int32_t request_id;157,5453
+	char    attr_group[attr_group158,5492
+#define operation 163,5591
+#define status 164,5614
+
+connect_retry.c,49
+#define MAXSLEEP 5,119
+int connect_retry(8,189
+
+print.c,232
+int log_to_stderr 23,616
+int main(33,963
+void submit_file(113,2757
+static void set_orientation(194,4732
+static void set_sides(210,5175
+static int job_status(221,5412
+static int cancel_job(228,5531
+static void usage(272,6554
+
+util.c,201
+#define MAXCFGLINE 7,157
+#define MAXKWLEN 8,180
+#define MAXFMTLEN 9,202
+getaddrlist(20,458
+scan_configfile(45,1017
+get_printserver(77,1692
+get_printaddr(88,1869
+tread(113,2431
+treadn(140,2998
+
+play.h,827
+{ STAT_OK,1,0
+{ STAT_OK_ATTRIGN,2,24
+{ STAT_OK_ATTRCON,3,71
+{ STAT_CLI_BADREQ,4,121
+{ STAT_CLI_FORBID,5,168
+{ STAT_CLI_NOAUTH,6,213
+{ STAT_CLI_NOPERM,7,261
+{ STAT_CLI_NOTPOS,8,307
+{ STAT_CLI_TIMOUT,9,352
+{ STAT_CLI_NOTFND,10,392
+{ STAT_CLI_OBJGONE,11,440
+{ STAT_CLI_TOOBIG,12,492
+{ STAT_CLI_TOOLNG,13,541
+{ STAT_CLI_BADFMT,14,591
+{ STAT_CLI_NOTSUP,15,638
+{ STAT_CLI_NOSCHM,16,687
+{ STAT_CLI_NOCHAR,17,736
+{ STAT_CLI_ATTRCON,18,782
+{ STAT_CLI_NOCOMP,19,828
+{ STAT_CLI_COMPERR,20,878
+{ STAT_CLI_FMTERR,21,930
+{ STAT_CLI_ACCERR,22,976
+{ STAT_SRV_INTERN,23,1021
+{ STAT_SRV_NOTSUP,24,1071
+{ STAT_SRV_UNAVAIL,25,1119
+{ STAT_SRV_BADVER,26,1163
+{ STAT_SRV_DEVERR,27,1209
+{ STAT_SRV_TMPERR,28,1246
+{ STAT_SRV_REJECT,29,1286
+{ STAT_SRV_TOOBUSY,30,1336
+{ STAT_SRV_CANCEL,31,1377
+{ STAT_SRV_NOMULTI,32,1423
+
+printd.c,1695
+#define HTTP_INFO(20,384
+#define HTTP_SUCCESS(21,432
+struct job 26,517
+	struct job      *next;next27,530
+	struct job      *prev;prev28,574
+	int32_t          jobid;29,622
+	struct printreq  req;30,661
+struct worker_thread 36,775
+	struct worker_thread  *next;next37,798
+	struct worker_thread  *prev;prev38,847
+	pthread_t              tid;39,900
+	int                    sockfd;40,946
+int log_to_stderr 46,1025
+struct addrinfo 	*printer;printer51,1082
+char *printer_name;printer_name52,1109
+pthread_mutex_t	configlock 53,1129
+int reread;54,1185
+struct worker_thread *workers;workers59,1230
+pthread_mutex_t	workerlock 60,1261
+sigset_t mask;61,1317
+struct job *jobhead,jobhead66,1362
+struct job *jobhead, *jobtail;jobtail66,1362
+int jobfd;67,1393
+int32_t	nextjob;68,1404
+pthread_mutex_t	joblock 69,1421
+pthread_cond_t jobwait 70,1474
+struct ipp_attr 76,1553
+	int8_t tag;77,1571
+	char *name;name78,1584
+	char *value;value79,1597
+} op_tab[op_tab80,1611
+#define nprinter_ops 92,2023
+main(126,2991
+init_request(222,5382
+init_printer(249,5902
+update_jobno(274,6461
+get_newjobno(293,6846
+add_job(312,7183
+replace_job(338,7719
+remove_job(357,8036
+build_qonstart(375,8356
+void * client_thread(428,9478
+void add_worker(581,13308
+kill_workers(607,13837
+client_cleanup(623,14147
+signal_thread(654,14716
+add_option(690,15330
+		int16_t s;694,15409
+		char c[c695,15422
+printer_thread(719,15800
+readmore(923,20812
+int printer_status(948,21318
+static void log_error(1101,24525
+static int get_printer_attributes(1114,24785
+static void printer_read_attributes(1190,26514
+static char *get_status(get_status1201,26799
+static int cancel_job(1218,27093
+
+print.h,1105
+#define _PRINT_H2,17
+#define CONFIG_FILE 12,157
+#define SPOOLDIR 13,200
+#define JOBFILE 14,244
+#define DATADIR 15,275
+#define REQDIR 16,305
+#define LPNAME	19,353
+#define LPNAME	21,400
+#define LPNAME	23,429
+#define FILENMSZ 26,459
+#define FILEPERM 27,486
+#define USERNM_MAX 29,529
+#define JOBNM_MAX 30,556
+#define MSGLEN_MAX 31,584
+#define HOST_NAME_MAX 34,635
+#define IPP_PORT 37,671
+#define QLEN 38,699
+#define IBUFSZ 40,727
+#define HBUFSZ 41,784
+#define IOBUFSZ 42,842
+#define ETIME 45,909
+struct printreq 59,1404
+	uint32_t size;60,1422
+	uint32_t flags;61,1460
+	char usernm[usernm62,1495
+	char jobnm[jobnm63,1539
+#define PR_REQ_TEXT(69,1625
+#define PR_REQ_ORIENT(70,1662
+#define PR_REQ_SIDES(71,1716
+#define PR_TEXT	76,1795
+#define PR_CANCEL 77,1848
+#define PR_ORIENT_P 78,1889
+#define PR_ORIENT_RP 79,1947
+#define PR_ORIENT_L 80,2014
+#define PR_ORIENT_RL 81,2074
+#define PR_SIDES_ONE 82,2143
+#define PR_SIDES_TWO_LONG 83,2186
+#define PR_SIDES_TWO_SHORT 84,2243
+struct printresp 89,2374
+	uint32_t retcode;90,2393
+	uint32_t jobid;91,2443
+	char msg[msg92,2474
+
+init_server.c,22
+int initserver(6,138
+
+ipp.h,2935
+#define _IPP_H2,15
+#define STATCLASS_OK(12,180
+#define STATCLASS_INFO(13,241
+#define STATCLASS_REDIR(14,302
+#define STATCLASS_CLIERR(15,363
+#define STATCLASS_SRVERR(16,424
+#define STAT_INVALID 21,537
+#define STAT_OK 22,564
+#define STAT_OK_ATTRIGN 23,598
+#define STAT_OK_ATTRCON 24,632
+#define STAT_CLI_BADREQ 27,689
+#define STAT_CLI_FORBID 28,723
+#define STAT_CLI_NOAUTH 29,757
+#define STAT_CLI_NOPERM 30,791
+#define STAT_CLI_NOTPOS 31,825
+#define STAT_CLI_TIMOUT 32,859
+#define STAT_CLI_NOTFND 33,893
+#define STAT_CLI_OBJGONE 34,927
+#define STAT_CLI_TOOBIG 35,961
+#define STAT_CLI_TOOLNG 36,995
+#define STAT_CLI_BADFMT 37,1029
+#define STAT_CLI_NOTSUP 38,1063
+#define STAT_CLI_NOSCHM 39,1097
+#define STAT_CLI_NOCHAR 40,1131
+#define STAT_CLI_ATTRCON 41,1165
+#define STAT_CLI_NOCOMP 42,1199
+#define STAT_CLI_COMPERR 43,1233
+#define STAT_CLI_FMTERR 44,1267
+#define STAT_CLI_ACCERR 45,1301
+#define STAT_SRV_INTERN 47,1358
+#define STAT_SRV_NOTSUP 48,1392
+#define STAT_SRV_UNAVAIL 49,1426
+#define STAT_SRV_BADVER 50,1460
+#define STAT_SRV_DEVERR 51,1494
+#define STAT_SRV_TMPERR 52,1528
+#define STAT_SRV_REJECT 53,1562
+#define STAT_SRV_TOOBUSY 54,1596
+#define STAT_SRV_CANCEL 55,1630
+#define STAT_SRV_NOMULTI 56,1664
+struct err_info 58,1698
+	int err_code;59,1716
+	char *err_msg;err_msg60,1731
+} err_tab[err_tab61,1747
+#define OP_PRINT_JOB 100,3322
+#define OP_PRINT_URI 101,3356
+#define OP_VALIDATE_JOB 102,3390
+#define OP_CREATE_JOB 103,3424
+#define OP_SEND_DOC 104,3458
+#define OP_SEND_URI 105,3492
+#define OP_CANCEL_JOB 106,3526
+#define OP_GET_JOB_ATTR 107,3560
+#define OP_GET_JOBS 108,3594
+#define OP_GET_PRINTER_ATTR 109,3628
+#define OP_HOLD_JOB 110,3662
+#define OP_RELEASE_JOB 111,3696
+#define OP_RESTART_JOB 112,3730
+#define OP_PAUSE_PRINTER 113,3764
+#define OP_RESUME_PRINTER 114,3798
+#define OP_PURGE_JOBS 115,3832
+#define TAG_OPERATION_ATTR 120,3893
+#define TAG_JOB_ATTR 121,3958
+#define TAG_END_OF_ATTR 122,4017
+#define TAG_PRINTER_ATTR 123,4079
+#define TAG_UNSUPP_ATTR 124,4142
+#define TAG_UNSUPPORTED 129,4232
+#define TAG_UNKNOWN 130,4290
+#define TAG_NONE 131,4344
+#define TAG_INTEGER 132,4393
+#define TAG_BOOLEAN 133,4441
+#define TAG_ENUM 134,4489
+#define TAG_OCTSTR 135,4541
+#define TAG_DATETIME 136,4593
+#define TAG_RESOLUTION 137,4642
+#define TAG_INTRANGE 138,4693
+#define TAG_TEXTWLANG 139,4748
+#define TAG_NAMEWLANG 140,4805
+#define TAG_TEXTWOLANG 141,4862
+#define TAG_NAMEWOLANG 142,4922
+#define TAG_KEYWORD 143,4982
+#define TAG_URI 144,5030
+#define TAG_URISCHEME 145,5074
+#define TAG_CHARSET 146,5124
+#define TAG_NATULANG 147,5172
+#define TAG_MIMETYPE 148,5228
+struct ipp_hdr 150,5283
+	int8_t  major_version;151,5300
+	int8_t  minor_version;152,5339
+		int16_t op;154,5387
+		int16_t st;155,5420
+	} u;156,5447
+	int32_t request_id;157,5453
+	char    attr_group[attr_group158,5492
+#define operation 163,5591
+#define status 164,5614
+
+connect_retry.c,49
+#define MAXSLEEP 5,119
+int connect_retry(8,189
+
+print.c,232
+int log_to_stderr 23,616
+int main(33,963
+void submit_file(113,2757
+static void set_orientation(194,4732
+static void set_sides(210,5175
+static int job_status(221,5412
+static int cancel_job(228,5531
+static void usage(272,6554
+
+util.c,201
+#define MAXCFGLINE 7,157
+#define MAXKWLEN 8,180
+#define MAXFMTLEN 9,202
+getaddrlist(20,458
+scan_configfile(45,1017
+get_printserver(77,1692
+get_printaddr(88,1869
+tread(113,2431
+treadn(140,2998
+
+play.h,827
+{ STAT_OK,1,0
+{ STAT_OK_ATTRIGN,2,24
+{ STAT_OK_ATTRCON,3,71
+{ STAT_CLI_BADREQ,4,121
+{ STAT_CLI_FORBID,5,168
+{ STAT_CLI_NOAUTH,6,213
+{ STAT_CLI_NOPERM,7,261
+{ STAT_CLI_NOTPOS,8,307
+{ STAT_CLI_TIMOUT,9,352
+{ STAT_CLI_NOTFND,10,392
+{ STAT_CLI_OBJGONE,11,440
+{ STAT_CLI_TOOBIG,12,492
+{ STAT_CLI_TOOLNG,13,541
+{ STAT_CLI_BADFMT,14,591
+{ STAT_CLI_NOTSUP,15,638
+{ STAT_CLI_NOSCHM,16,687
+{ STAT_CLI_NOCHAR,17,736
+{ STAT_CLI_ATTRCON,18,782
+{ STAT_CLI_NOCOMP,19,828
+{ STAT_CLI_COMPERR,20,878
+{ STAT_CLI_FMTERR,21,930
+{ STAT_CLI_ACCERR,22,976
+{ STAT_SRV_INTERN,23,1021
+{ STAT_SRV_NOTSUP,24,1071
+{ STAT_SRV_UNAVAIL,25,1119
+{ STAT_SRV_BADVER,26,1163
+{ STAT_SRV_DEVERR,27,1209
+{ STAT_SRV_TMPERR,28,1246
+{ STAT_SRV_REJECT,29,1286
+{ STAT_SRV_TOOBUSY,30,1336
+{ STAT_SRV_CANCEL,31,1377
+{ STAT_SRV_NOMULTI,32,1423
+
+printd.c,1695
+#define HTTP_INFO(20,384
+#define HTTP_SUCCESS(21,432
+struct job 26,517
+	struct job      *next;next27,530
+	struct job      *prev;prev28,574
+	int32_t          jobid;29,622
+	struct printreq  req;30,661
+struct worker_thread 36,775
+	struct worker_thread  *next;next37,798
+	struct worker_thread  *prev;prev38,847
+	pthread_t              tid;39,900
+	int                    sockfd;40,946
+int log_to_stderr 46,1025
+struct addrinfo 	*printer;printer51,1082
+char *printer_name;printer_name52,1109
+pthread_mutex_t	configlock 53,1129
+int reread;54,1185
+struct worker_thread *workers;workers59,1230
+pthread_mutex_t	workerlock 60,1261
+sigset_t mask;61,1317
+struct job *jobhead,jobhead66,1362
+struct job *jobhead, *jobtail;jobtail66,1362
+int jobfd;67,1393
+int32_t	nextjob;68,1404
+pthread_mutex_t	joblock 69,1421
+pthread_cond_t jobwait 70,1474
+struct ipp_attr 76,1553
+	int8_t tag;77,1571
+	char *name;name78,1584
+	char *value;value79,1597
+} op_tab[op_tab80,1611
+#define nprinter_ops 92,2023
+main(126,2991
+init_request(222,5382
+init_printer(249,5902
+update_jobno(274,6461
+get_newjobno(293,6846
+add_job(312,7183
+replace_job(338,7719
+remove_job(357,8036
+build_qonstart(375,8356
+void * client_thread(428,9478
+void add_worker(580,13292
+kill_workers(606,13821
+client_cleanup(622,14131
+signal_thread(653,14700
+add_option(689,15314
+		int16_t s;693,15393
+		char c[c694,15406
+printer_thread(718,15784
+readmore(922,20796
+int printer_status(947,21302
+static void log_error(1100,24509
+static int get_printer_attributes(1113,24769
+static void printer_read_attributes(1189,26498
+static char *get_status(get_status1200,26783
+static int cancel_job(1217,27077
+
+print.h,1105
+#define _PRINT_H2,17
+#define CONFIG_FILE 12,157
+#define SPOOLDIR 13,200
+#define JOBFILE 14,244
+#define DATADIR 15,275
+#define REQDIR 16,305
+#define LPNAME	19,353
+#define LPNAME	21,400
+#define LPNAME	23,429
+#define FILENMSZ 26,459
+#define FILEPERM 27,486
+#define USERNM_MAX 29,529
+#define JOBNM_MAX 30,556
+#define MSGLEN_MAX 31,584
+#define HOST_NAME_MAX 34,635
+#define IPP_PORT 37,671
+#define QLEN 38,699
+#define IBUFSZ 40,727
+#define HBUFSZ 41,784
+#define IOBUFSZ 42,842
+#define ETIME 45,909
+struct printreq 59,1404
+	uint32_t size;60,1422
+	uint32_t flags;61,1460
+	char usernm[usernm62,1495
+	char jobnm[jobnm63,1539
+#define PR_REQ_TEXT(69,1625
+#define PR_REQ_ORIENT(70,1662
+#define PR_REQ_SIDES(71,1716
+#define PR_TEXT	76,1795
+#define PR_CANCEL 77,1848
+#define PR_ORIENT_P 78,1889
+#define PR_ORIENT_RP 79,1947
+#define PR_ORIENT_L 80,2014
+#define PR_ORIENT_RL 81,2074
+#define PR_SIDES_ONE 82,2143
+#define PR_SIDES_TWO_LONG 83,2186
+#define PR_SIDES_TWO_SHORT 84,2243
+struct printresp 89,2374
+	uint32_t retcode;90,2393
+	uint32_t jobid;91,2443
+	char msg[msg92,2474
+
+init_server.c,22
+int initserver(6,138
+
+ipp.h,2935
+#define _IPP_H2,15
+#define STATCLASS_OK(12,180
+#define STATCLASS_INFO(13,241
+#define STATCLASS_REDIR(14,302
+#define STATCLASS_CLIERR(15,363
+#define STATCLASS_SRVERR(16,424
+#define STAT_INVALID 21,537
+#define STAT_OK 22,564
+#define STAT_OK_ATTRIGN 23,598
+#define STAT_OK_ATTRCON 24,632
+#define STAT_CLI_BADREQ 27,689
+#define STAT_CLI_FORBID 28,723
+#define STAT_CLI_NOAUTH 29,757
+#define STAT_CLI_NOPERM 30,791
+#define STAT_CLI_NOTPOS 31,825
+#define STAT_CLI_TIMOUT 32,859
+#define STAT_CLI_NOTFND 33,893
+#define STAT_CLI_OBJGONE 34,927
+#define STAT_CLI_TOOBIG 35,961
+#define STAT_CLI_TOOLNG 36,995
+#define STAT_CLI_BADFMT 37,1029
+#define STAT_CLI_NOTSUP 38,1063
+#define STAT_CLI_NOSCHM 39,1097
+#define STAT_CLI_NOCHAR 40,1131
+#define STAT_CLI_ATTRCON 41,1165
+#define STAT_CLI_NOCOMP 42,1199
+#define STAT_CLI_COMPERR 43,1233
+#define STAT_CLI_FMTERR 44,1267
+#define STAT_CLI_ACCERR 45,1301
+#define STAT_SRV_INTERN 47,1358
+#define STAT_SRV_NOTSUP 48,1392
+#define STAT_SRV_UNAVAIL 49,1426
+#define STAT_SRV_BADVER 50,1460
+#define STAT_SRV_DEVERR 51,1494
+#define STAT_SRV_TMPERR 52,1528
+#define STAT_SRV_REJECT 53,1562
+#define STAT_SRV_TOOBUSY 54,1596
+#define STAT_SRV_CANCEL 55,1630
+#define STAT_SRV_NOMULTI 56,1664
+struct err_info 58,1698
+	int err_code;59,1716
+	char *err_msg;err_msg60,1731
+} err_tab[err_tab61,1747
+#define OP_PRINT_JOB 100,3322
+#define OP_PRINT_URI 101,3356
+#define OP_VALIDATE_JOB 102,3390
+#define OP_CREATE_JOB 103,3424
+#define OP_SEND_DOC 104,3458
+#define OP_SEND_URI 105,3492
+#define OP_CANCEL_JOB 106,3526
+#define OP_GET_JOB_ATTR 107,3560
+#define OP_GET_JOBS 108,3594
+#define OP_GET_PRINTER_ATTR 109,3628
+#define OP_HOLD_JOB 110,3662
+#define OP_RELEASE_JOB 111,3696
+#define OP_RESTART_JOB 112,3730
+#define OP_PAUSE_PRINTER 113,3764
+#define OP_RESUME_PRINTER 114,3798
+#define OP_PURGE_JOBS 115,3832
+#define TAG_OPERATION_ATTR 120,3893
+#define TAG_JOB_ATTR 121,3958
+#define TAG_END_OF_ATTR 122,4017
+#define TAG_PRINTER_ATTR 123,4079
+#define TAG_UNSUPP_ATTR 124,4142
+#define TAG_UNSUPPORTED 129,4232
+#define TAG_UNKNOWN 130,4290
+#define TAG_NONE 131,4344
+#define TAG_INTEGER 132,4393
+#define TAG_BOOLEAN 133,4441
+#define TAG_ENUM 134,4489
+#define TAG_OCTSTR 135,4541
+#define TAG_DATETIME 136,4593
+#define TAG_RESOLUTION 137,4642
+#define TAG_INTRANGE 138,4693
+#define TAG_TEXTWLANG 139,4748
+#define TAG_NAMEWLANG 140,4805
+#define TAG_TEXTWOLANG 141,4862
+#define TAG_NAMEWOLANG 142,4922
+#define TAG_KEYWORD 143,4982
+#define TAG_URI 144,5030
+#define TAG_URISCHEME 145,5074
+#define TAG_CHARSET 146,5124
+#define TAG_NATULANG 147,5172
+#define TAG_MIMETYPE 148,5228
+struct ipp_hdr 150,5283
+	int8_t  major_version;151,5300
+	int8_t  minor_version;152,5339
+		int16_t op;154,5387
+		int16_t st;155,5420
+	} u;156,5447
+	int32_t request_id;157,5453
+	char    attr_group[attr_group158,5492
+#define operation 163,5591
+#define status 164,5614
