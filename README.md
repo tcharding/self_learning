@@ -54,6 +54,9 @@ __scheme/sicp__:
 Structure and Interpretation of Computer Programs - Harold Abelson and Gerald
 Jay Sussman with Julie Sussman 
 
+__tgpl/__:
+The Go Programming Language - Alan A. A. Donovan, Brian W. Kernighan
+
 __UNIX/apue__:  
 Advanced Programming in the UNIX Environment - Stevens and Rago, Third Edition.
 
