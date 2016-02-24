@@ -1,0 +1,32 @@
+repo%3AOpenBazaar%2FOpenBazaar-Server+is%3Aopen+is%3Aissue
+33 issues:
+#230   dsmurrell Messages stored in the DHT aren't being cleared
+#224    ac225519 2nd+ instance of OpenBazaar-Server intermittent stuck
+#219   VivaLaPan Failure on install: Windows 10
+#217   papermate Error installing on raspbian 
+#214     drwasho Limit the maximum number of images per contract
+#203    hoffmabc IPv6 Support
+#202    hoffmabc IP exposed to other users 
+#200   tcharding DATA_FOLDER created with world write
+#198   dsmurrell Moving ~/Openbazaar to ~/OpenBazaar2 and then relinking
+#193   jjeffryes URLs not separated by a hard return break the contract
+#188     justicz HTML escaping causes malformed profile response
+#186     SamPatt Option to backup database
+#185     SamPatt Allow database to be updated when schema changes
+#182     SamPatt Automatically send digital goods when payment received
+#181      cpacia Save unconfirmed txs to db
+#179   jjeffryes Search in Discover does not always return results
+#175   tcharding OpenBazaard hang if multiple processes running
+#164   ABISproto Revisiting Tor Compatibility
+#163   DanielMur OpenBazaar folder appears in my home folder (OSX).
+#140   JustinDra node.id vs node.guid
+#139   JustinDra Publish GUID on bootup
+#138   JustinDra RPC call to download k-buckets
+#137   JustinDra Can a node know if it has been banned?
+#136   JustinDra Keep track of RPC calls to avoid getting banned
+#134   JustinDra Cache NAT type
+#122   jjeffryes Add Title to Search API
+#120   JustinDra Stick with BitcoinAverage.com?
+#113   JustinDra Clean up versioning
+#103   jjeffryes Limit short_description to 160 characters, possible tru
+#86       cpacia Nearest without value

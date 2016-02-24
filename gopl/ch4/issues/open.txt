@@ -1,0 +1,32 @@
+repo%3AOpenBazaar%2FOpenBazaar-Server+is%3Aopen
+46 issues:
+#232   tyler-smi Ts fix httpseed
+#230   dsmurrell Messages stored in the DHT aren't being cleared
+#224    ac225519 2nd+ instance of OpenBazaar-Server intermittent stuck
+#223   tcharding Enable system wide constans by removing command line op
+#222   tcharding Initiated system management support
+#219   VivaLaPan Failure on install: Windows 10
+#217   papermate Error installing on raspbian 
+#215   tcharding Modified startup procedure
+#214     drwasho Limit the maximum number of images per contract
+#213   tcharding Added comments to config file
+#211   tcharding Added platform Independent utility functions
+#203    hoffmabc IPv6 Support
+#202    hoffmabc IP exposed to other users 
+#200   tcharding DATA_FOLDER created with world write
+#198   dsmurrell Moving ~/Openbazaar to ~/OpenBazaar2 and then relinking
+#196   tcharding Refactored datastore
+#195   tcharding Enable platform specific data_folder name/location
+#194   tcharding Re-factor config.py
+#193   jjeffryes URLs not separated by a hard return break the contract
+#188     justicz HTML escaping causes malformed profile response
+#186     SamPatt Option to backup database
+#185     SamPatt Allow database to be updated when schema changes
+#182     SamPatt Automatically send digital goods when payment received
+#181      cpacia Save unconfirmed txs to db
+#179   jjeffryes Search in Discover does not always return results
+#175   tcharding OpenBazaard hang if multiple processes running
+#164   ABISproto Revisiting Tor Compatibility
+#163   DanielMur OpenBazaar folder appears in my home folder (OSX).
+#140   JustinDra node.id vs node.guid
+#139   JustinDra Publish GUID on bootup
