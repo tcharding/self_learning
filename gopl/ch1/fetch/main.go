@@ -28,6 +28,6 @@ func main() {
 		}
 		io.Copy(os.Stdout, resp.Body)
 		resp.Body.Close()
-		fmt.Printf("HTTP Status: %s\n", x1resp.Status)
+		fmt.Printf("HTTP Status: %s\n", resp.Status)
 	}
 }
