@@ -31,6 +31,9 @@ The C Programming Language - Brian W. Kernighan, Denis M. Ritchie, Second editio
 __blp__:
 Beginning Linux Programming - Neil Matthew and Richard Stones.
 
+__lpi__:
+The Linux Programming Interface - Michael Kerrisk
+
 __perl/learning-perl__:  
 Learning Perl - Randal L. Schwartz, brian d foy and Tom Phoenix, Sixth edition.
 
