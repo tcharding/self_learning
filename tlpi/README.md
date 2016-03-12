@@ -2,13 +2,17 @@ The Linux Programming Interface
 ===============================
 - Michael Kerrisk
 
-Exercises from the text by chapter. See chapter directories for answers and
-related source code.
+Downloaded source code (http://man7.org/tlpi/code/index.html) from the text.
+
+Completed exercises by chapter (see exercises/*). See chapter directories for
+answers and related source code.
 
 Tobin Harding 2016
 
-From the Original
-=================
+Much gratitude to Mr Michael Kerrisk.
+
+From the Original README
+========================
 
 Gidday!
 
