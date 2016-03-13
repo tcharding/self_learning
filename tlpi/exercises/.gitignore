@@ -1,0 +1,9 @@
+# random files
+tfile
+
+# executables
+tee
+copy
+append
+atomic_write
+

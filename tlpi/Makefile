@@ -5,7 +5,7 @@
 #
 
 DIRS = 	lib \
-    	acl altio \
+	acl altio \
 	cap \
 	daemons dirs_links \
 	filebuff fileio filelock files filesys getopt \

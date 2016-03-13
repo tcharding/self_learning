@@ -4,12 +4,11 @@ The Linux Programming Interface
 
 Downloaded source code (http://man7.org/tlpi/code/index.html) from the text.
 
-Completed exercises by chapter (see exercises/*). See chapter directories for
-answers and related source code.
+Completed exercises by chapter, see exercises/Makefile for filenames by chapter.
 
 Tobin Harding 2016
 
-Much gratitude to Mr Michael Kerrisk.
+Much gratitude and thanks to Mr Michael Kerrisk.
 
 From the Original README
 ========================
