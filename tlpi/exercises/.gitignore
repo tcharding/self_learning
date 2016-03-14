@@ -11,3 +11,5 @@ shared_fd
 readwritev
 broken_longjmp
 env
+free_and_sbrk
+memory

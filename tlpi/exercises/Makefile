@@ -1,7 +1,7 @@
 include ../Makefile.inc
 
 EXE = tee copy append atomic_append dup shared_fd readwritev \
-	broken_longjmp env
+	broken_longjmp env free_and_sbrk memory
 
 all : ${EXE}
 

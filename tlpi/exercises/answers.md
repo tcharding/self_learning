@@ -51,4 +51,7 @@ ch6
    expected.
 3. env.c
 
-
+ch7
+---
+1. free_and_sbrk.c
+2. memory.c
