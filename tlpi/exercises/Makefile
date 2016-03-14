@@ -1,9 +1,7 @@
 include ../Makefile.inc
 
-# executables by chapter
-CH4 = tee copy
-CH5 = append atomic_append dup shared_fd readwritev
-EXE = ${CH4} ${CH5}
+EXE = tee copy append atomic_append dup shared_fd readwritev \
+	broken_longjmp env
 
 all : ${EXE}
 

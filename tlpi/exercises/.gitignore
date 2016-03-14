@@ -5,5 +5,9 @@ tfile
 tee
 copy
 append
-atomic_write
-
+atomic_append
+dup
+shared_fd
+readwritev
+broken_longjmp
+env
