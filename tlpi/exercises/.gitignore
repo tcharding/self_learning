@@ -14,3 +14,5 @@ env
 free_and_sbrk
 memory
 getpwnam
+idshow
+initgroups
