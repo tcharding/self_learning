@@ -55,3 +55,8 @@ ch7
 ---
 1. free_and_sbrk.c
 2. memory.c
+
+ch8
+---
+1. Same username twice because getpwuid() uses a static buffer.
+2. getpwnam.c

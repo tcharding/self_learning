@@ -13,3 +13,4 @@ broken_longjmp
 env
 free_and_sbrk
 memory
+getpwnam
