@@ -2,7 +2,7 @@ include ../Makefile.inc
 
 EXE = tee copy append atomic_append dup shared_fd readwritev \
 	broken_longjmp env free_and_sbrk memory getpwnam idshow \
-	initgroups
+	initgroups ps pstree
 
 all : ${EXE}
 

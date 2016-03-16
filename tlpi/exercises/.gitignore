@@ -16,3 +16,5 @@ memory
 getpwnam
 idshow
 initgroups
+ps
+pstree

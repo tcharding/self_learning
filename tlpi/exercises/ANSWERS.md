@@ -129,5 +129,5 @@ _see idshow.c for code showing above results_
 		seteuid(saved);
 
 	b) permanently drop set-user-ID
-		if (setuid(getuid()) == -1)
+	if (setuid(getuidlg()) == -1)
 			handleError();
