@@ -1,14 +1,18 @@
-#include "node.h"
+#include "pstree.h"
 #include "tlpi_hdr.h"
 
-static struct node *getNode(struct node *root, int id);
+static struct proc *newProc(pid_t ppid, pid_t pid, const char *cmd);
+static void freeProc(struct proc *p);
+static struct node *getNode(struct node *root, pid_t pid);
 static void printTreeR(struct node *node, int level);
 
-static struct node *getNodeR(struct node *node, int id);
+static void freeProc(struct proc *p);
+static struct node *getNodeR(struct node *node, pid_t pid);
 static void prettyPrintNode(struct node *node, int level);
 
 /* node: allocate memory and create node */
-struct node *node(int id)
+struct node *
+node(pid_t ppid, pid_t pid, const char *cmd)
 {
 	struct node *node;
 
@@ -17,7 +21,7 @@ struct node *node(int id)
 		errno = ENOMEM;
 		return NULL;
 	}
-	node->id = id;
+	node->p = newProc(ppid, pid, cmd);
 	node->child = NULL;
 	node->next = NULL;
 
@@ -32,16 +36,17 @@ void freeNode(struct node *node)
 
 	freeNode(node->child);
 	freeNode(node->next);
+	freeProc(node->p);
 }
 
 /* addTreeParentIdChild: add child node to parentId starting at root
     return non-zero if parent not found */
 int
-addTreeParentIdChild(struct node *root, int parentId, struct node *child)
+add(struct node *root, struct node *child)
 {
 	struct node *parent, *ptr;
 
-	parent = getNode(root, parentId);
+	parent = getNode(root, child->p->ppid);
 	if (parent == NULL)
 		return 1;
 
@@ -63,11 +68,39 @@ void printTree(struct node *root)
 	printTreeR(root, 0);
 }
 
+/* newProc: allocate memory and create proc */
+static struct proc *
+newProc(pid_t ppid, pid_t pid, const char *cmd)
+{
+	struct proc *p;
+
+	p = malloc(sizeof(struct proc));
+	if (p == NULL)
+		return NULL;
+
+	p->ppid = ppid;
+	p->pid = pid;
+	p->cmd = strdup(cmd);
+
+	return p;
+}
+
+/* freeProc: helper function called by freeNode. Don't call this directly */
+static void
+freeProc(struct proc *p)
+{
+	if (p != NULL) {
+		if (p->cmd != NULL)
+			free(p->cmd);
+		free(p);
+	}
+}
+
 /* getNode: return node with id, NULL if node not found */
 static struct node *
-getNode(struct node *root, int id)
+getNode(struct node *root, pid_t pid)
 {
-	return getNodeR(root, id);
+	return getNodeR(root, pid);
 }
 
 /* printTreeR: recursive helper */
@@ -84,21 +117,21 @@ printTreeR(struct node *node, int level)
 
 /* getNodeR: recursive helper */
 static struct node *
-getNodeR(struct node *node, int id)
+getNodeR(struct node *node, pid_t pid)
 {
 	struct node *found;
 	
 	if (node == NULL)
 		return NULL;
 
-	if (node->id == id)
+	if (node->p->pid == pid)
 		return node;
 
-	found = getNodeR(node->child, id);
+	found = getNodeR(node->child, pid);
 	if (found != NULL)
 		return found;
 
-	found = getNodeR(node->next, id);
+	found = getNodeR(node->next, pid);
 	if (found != NULL)
 		return found;
 
@@ -110,5 +143,6 @@ prettyPrintNode(struct node *node, int level)
 {
 	while(level-- > 0)
 		printf("\t");
-	printf("--- %d ---\n", node->id);
+	printf("--- ppid: %ld pid: %ld cmd: %s ---\n",
+	       (long) node->p->ppid, (long) node->p->pid, node->p->cmd);
 }

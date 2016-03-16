@@ -10,7 +10,8 @@ main(void)
 
 	root = buildTree();
 	printTree(root);
-
+	free(root);
+	
 	exit(EXIT_SUCCESS);
 }
 
