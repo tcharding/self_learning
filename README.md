@@ -24,6 +24,8 @@ opportunity to learn from them. Many thanks.
 
 Directory Listing 
 -----------------
+__adt__:
+Abstract Data Types
 
 __cpl__:  
 The C Programming Language - Brian W. Kernighan, Denis M. Ritchie, Second edition.
