@@ -4,7 +4,7 @@ LFLAG = -L../.. -ltlpi
 
 CFLAG = -std=c99 -D_XOPEN_SOURCE=600 \
 	        -D_DEFAULT_SOURCE \
-		-g -I${TLPI_INCL_DIR} \
+		-g \
 		-pedantic \
 		-Wall \
 		-W \
