@@ -131,3 +131,21 @@ _see idshow.c for code showing above results_
 	b) permanently drop set-user-ID
 	if (setuid(getuidlg()) == -1)
 			handleError();
+
+ch10
+----
+1. Calculations completed on paper.
+
+ch11
+----
+1. No output.
+2. No output.
+
+ch12
+----
+1. ps.c
+2. pstree/main.c
+3. pathopen.c
+
+ch13
+----

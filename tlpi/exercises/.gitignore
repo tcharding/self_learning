@@ -17,4 +17,4 @@ getpwnam
 idshow
 initgroups
 ps
-
+pathopen

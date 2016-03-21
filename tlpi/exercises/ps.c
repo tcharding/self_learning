@@ -121,8 +121,10 @@ psDoDir(const char *user, const char *psName)
 		}
 	}
 
-	if (userMatchesLine(user, uidLine))
+	if (userMatchesLine(user, uidLine)) {
+		printf("%s ", psName);
 		printCommand(nameLine);
+	}
 }
 
 /* open stream for file /pid/<name>/status */
