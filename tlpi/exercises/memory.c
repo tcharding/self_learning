@@ -38,53 +38,53 @@ main()
 	exit(EXIT_SUCCESS);
 }
 
-static void
-stress_test_allocator()
-{
-		int small = 10;
-	int medium = 1000;
-	int large = 1000000;
+/* static void */
+/* stress_test_allocator() */
+/* { */
+/* 		int small = 10; */
+/* 	int medium = 1000; */
+/* 	int large = 1000000; */
 
-	int i;
-	int loop = 1000;
+/* 	int i; */
+/* 	int loop = 1000; */
 
-	void *mem, *smem, *mmem, *lmem;
+/* 	void *mem, *smem, *mmem, *lmem; */
 
-	mem = smem = mmem = lmem = NULL;
+/* 	mem = smem = mmem = lmem = NULL; */
 	
-	for (i = 0; i < loop; i++) {
-		mem = my_malloc(small);
-		if (mem == NULL)
-			fatal("small");
+/* 	for (i = 0; i < loop; i++) { */
+/* 		mem = my_malloc(small); */
+/* 		if (mem == NULL) */
+/* 			fatal("small"); */
 
-		if (i % 3 == 0) {
-			my_free(smem);
-			smem = mem;
+/* 		if (i % 3 == 0) { */
+/* 			my_free(smem); */
+/* 			smem = mem; */
 
-			mem = my_malloc(medium);
-			if (mem == NULL)
-				fatal("medium");
-		}
+/* 			mem = my_malloc(medium); */
+/* 			if (mem == NULL) */
+/* 				fatal("medium"); */
+/* 		} */
 
-		if (i % 10 == 0) {
-			my_free(mmem);
-			mmem = mem;
+/* 		if (i % 10 == 0) { */
+/* 			my_free(mmem); */
+/* 			mmem = mem; */
 			
-			mem = my_malloc(large);
-			if (mem == NULL)
-				fatal("large"); /*  */
-		}
+/* 			mem = my_malloc(large); */
+/* 			if (mem == NULL) */
+/* 				fatal("large"); /\*  *\/ */
+/* 		} */
 
-		if (i % 30 == 0) {
-			my_free(lmem);
-			lmem = mem;
-		}
+/* 		if (i % 30 == 0) { */
+/* 			my_free(lmem); */
+/* 			lmem = mem; */
+/* 		} */
 
-		if (i % 50 == 0) {
-			printf("program break: %10p\n", sbrk(0));
-		}
-	}
-}
+/* 		if (i % 50 == 0) { */
+/* 			printf("program break: %10p\n", sbrk(0)); */
+/* 		} */
+/* 	} */
+/* } */
 
 void
 my_free(void *memory)

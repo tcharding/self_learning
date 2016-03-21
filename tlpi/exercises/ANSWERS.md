@@ -139,13 +139,27 @@ ch10
 ch11
 ----
 1. No output.
+
 2. No output.
 
 ch12
 ----
 1. ps.c
+
 2. pstree/main.c
+
 3. pathopen.c
 
 ch13
 ----
+1. No output.
+
+2. No output.
+
+3. fflush(fp) causes all data in the fp buffer to be written to the kernel
+   cache. fsync(fp) causes all data in the kernel cache to be written to disk,
+   including all metadata (achieves synchronized IO file integrity state).
+
+4. stdio buffering differs for terminals and files so the output varies.
+
+5. tail.c

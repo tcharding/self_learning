@@ -80,6 +80,6 @@ typedef int socklen_t;
 #define sival_ptr sigval_ptr
 #endif
 
-#define eprintf(args...) fprintf (stderr, args)
+#define eprintf(f, ...) fprintf (stderr, f, __VA_ARGS__)
 
 #endif
