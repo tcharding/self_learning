@@ -52,7 +52,7 @@ isAccessable(const char *path)
 }
 
 #define FLAGS O_CREAT | O_WRONLY
-#define LEN 8			/* x + 6*N + '\0' */
+#define LEN sizeof("xNNNNNN")
 
 /* manyFiles: create num random files in directory path */
 static int

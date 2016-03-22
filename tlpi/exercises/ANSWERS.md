@@ -163,3 +163,23 @@ ch13
 4. stdio buffering differs for terminals and files so the output varies.
 
 5. tail.c
+
+ch14
+----
+1. No output.
+
+2. Stat() should not update file times (atime, mtime, or ctime) since it does
+   not modify the inode or the file.
+
+3. Failed: could not get nanosecond timestamps from stat. Tried:
+
+    printf("Last file access:         sec:%ld usec:%ld\n",
+		(long) sb->st_atime, (long) sb->st_atime->st_atime_nsec);
+
+4. access.c
+
+5. 	umask(mask = umask(0));
+
+6. readX.c
+
+7. chattr.c

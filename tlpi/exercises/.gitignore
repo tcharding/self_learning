@@ -20,3 +20,7 @@ ps
 pathopen
 tail
 manyfiles
+t_stat
+access
+readX
+chattr
