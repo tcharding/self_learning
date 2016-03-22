@@ -24,3 +24,4 @@ t_stat
 access
 readX
 chattr
+setfattr

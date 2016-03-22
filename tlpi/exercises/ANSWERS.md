@@ -166,6 +166,10 @@ ch13
 
 ch14
 ----
+1. manyfiles.c
+
+ch15
+----
 1. No output.
 
 2. Stat() should not update file times (atime, mtime, or ctime) since it does
@@ -183,3 +187,7 @@ ch14
 6. readX.c
 
 7. chattr.c
+
+ch16
+----
+1. setfattr.c
