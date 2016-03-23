@@ -26,3 +26,5 @@ readX
 chattr
 setfattr
 getacl
+longrunner
+realpath

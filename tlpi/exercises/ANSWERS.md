@@ -191,3 +191,23 @@ ch15
 ch16
 ----
 1. setfattr.c
+
+ch17
+----
+1. getacl.c
+
+ch18
+----
+1. gcc unlinks the executable. This removes the file name entry from the
+   directory and reduces the link count by one. The kernel will not remove the
+   inode though because it still has an open file descriptor, held by the
+   process running the executable.
+
+   The newly compiled executable has a new inode, it is unrelated to the
+   original except that the directory entry happens to contain the same filename.
+
+2. chmod follows links so the call tries to set the permissions of 'myfile' to
+   S_IRUSR, however the process already has this file open with write
+   permissions so the call fails.
+
+3. realpath.c

@@ -7,7 +7,6 @@
 #include "tlpi_hdr.h"
 
 static int chattr(int fd, const int attr, int action, Boolean info);
-static void pout(Boolean info, const char *fmt, ...);
 
 enum {
 	SET = 1,
@@ -118,15 +117,3 @@ chattr(int fd, const int newAttr, int action, Boolean info)
 	return 0;
 }
 
-static void
-pout(Boolean info, const char *fmt, ...)
-{
-    va_list va;
-    
-    if (!info)
-	    return;
-
-    va_start(va, fmt);
-    vprintf(fmt, va);
-    va_end(va);
-}
