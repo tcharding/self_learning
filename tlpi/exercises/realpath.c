@@ -121,7 +121,7 @@ isDir(const char *path)
 	return (S_ISDIR(sb.st_mode));
 }
 
-/*l appendFileToPath: append file and slashes as joining slash */
+/* appendFileToPath: append file and slashes as joining slash */
 static void
 appendFileToPath(const char *file, char *path)
 {

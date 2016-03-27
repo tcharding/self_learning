@@ -2,8 +2,9 @@ include ../Makefile.inc
 
 EXE = tee copy append atomic_append dup shared_fd readwritev \
 	broken_longjmp env free_and_sbrk memory getpwnam idshow \
-	initgroups ps pstree pathopen tail manyfiles t_stat access \
-	readX chattr setfattr getacl longrunner realpath
+	initgroups ps pathopen tail manyfiles t_stat access \
+	readX chattr setfattr getacl longrunner realpath list_files \
+	getcwd filetypes ftw
 
 all : ${EXE}
 
@@ -11,7 +12,11 @@ getacl: getacl.o
 	$(CC) -o $@ getacl.o -lacl -L.. -ltlpi
 
 clean : 
-	${RM} ${EXE} *.o
+	@for f in *.o $(EXE); do \
+	if [ -f $$f ]; then \
+	rm "$$f"; \
+	echo "rm $$f" ; \
+	fi; done
 
 showall :
 	@ echo ${EXE}

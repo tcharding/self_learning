@@ -211,3 +211,17 @@ ch18
    permissions so the call fails.
 
 3. realpath.c
+
+4. list_files.c
+
+5. getcwd.c
+
+6. ../dirs_links/nftw_dir_tree -d
+
+7. filetypes.c
+
+8. ftw.c
+
+
+
+

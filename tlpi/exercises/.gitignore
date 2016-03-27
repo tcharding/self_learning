@@ -28,3 +28,7 @@ setfattr
 getacl
 longrunner
 realpath
+list_files
+getcwd
+filetypes
+ftw

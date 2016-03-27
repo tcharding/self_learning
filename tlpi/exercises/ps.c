@@ -47,6 +47,7 @@ main(int argc, char *argv[])
 
 /* ps: list all processes owned by user */
 static void
+
 ps(const char *user)
 {
 	DIR * dirp;
