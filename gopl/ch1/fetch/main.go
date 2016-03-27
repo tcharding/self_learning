@@ -10,24 +10,21 @@ import (
 )
 
 func main() {
-	const (
-		protocol = "http://"
-	)
-	if len(os.Args) == 1 {
-		fmt.Printf("Usage: %s <url>\n", os.Args[0])
-		os.Exit(1)
-	}
 	for _, url := range os.Args[1:] {
-		if !strings.HasPrefix(url, protocol) {
-			url = protocol + url
+		if !strings.HasPrefix(url, "http") {
+			url = "http://" + url
 		}
 		resp, err := http.Get(url)
+
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
-		io.Copy(os.Stdout, resp.Body)
-		resp.Body.Close()
-		fmt.Printf("HTTP Status: %s\n", resp.Status)
+		written, err := io.Copy(os.Stdout, resp.Body)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Status: %v Fetched %d bytes\n", resp.Status, written)
 	}
 }

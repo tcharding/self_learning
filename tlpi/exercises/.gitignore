@@ -33,3 +33,6 @@ getcwd
 filetypes
 multi_chdir
 notify
+sig_receiver
+sig_ignore
+sig_flags

@@ -1,35 +1,31 @@
-// Echo1 prints its command-line arguments
+// Echo
 package main
 
 import (
 	"fmt"
 	"os"
-	"strings"
+	"strconv"
 )
 
 func main() {
-	echo3()
-}
 
-func echo1() {
 	var s, sep string
-	for i := 1; i < len(os.Args); i++ {
-		s += sep + os.Args[i]
-		sep = " "
+	//	var s string
+	var loop int
+
+	loop, err := strconv.Atoi(os.Args[1])
+	if err != nil {
+		os.Exit(1)
+	}
+
+	for i := 0; i < loop; i++ {
+		// s = strings.Join(os.Args[:], " ")
+		s = ""
+		sep = ""
+		for _, arg := range os.Args[2:] {
+			s += sep + arg
+			sep = " "
+		}
 	}
 	fmt.Println(s)
-}
-
-func echo2() {
-	s, sep := "", ""
-	for _, arg := range os.Args[1:] {
-		s += sep + arg
-		sep = " "
-
-	}
-	fmt.Println(s)
-}
-
-func echo3() {
-	fmt.Println(strings.Join(os.Args[1:], " "))
 }
