@@ -32,4 +32,4 @@ list_files
 getcwd
 filetypes
 multi_chdir
-
+notify

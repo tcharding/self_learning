@@ -4,7 +4,7 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	broken_longjmp env free_and_sbrk memory getpwnam idshow \
 	initgroups ps pathopen tail manyfiles t_stat access \
 	readX chattr setfattr getacl longrunner realpath list_files \
-	getcwd filetypes multi_chdir
+	getcwd filetypes multi_chdir notify
 
 all : ${EXE}
 
