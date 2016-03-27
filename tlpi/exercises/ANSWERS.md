@@ -222,6 +222,9 @@ ch18
 
 8. ftw.c
 
+9. We would expect fchdir to be quicker since the call has less system call
+   overhead than chdir since the dir is already open there is no need to stat()
+   it first. See multi_chdir.c
 
 
 
