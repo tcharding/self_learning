@@ -36,3 +36,5 @@ notify
 sig_receiver
 sig_ignore
 sig_flags
+sig_interupt
+abort
