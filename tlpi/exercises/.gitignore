@@ -38,3 +38,6 @@ sig_ignore
 sig_flags
 sig_interupt
 abort
+sig_stop
+sig_catchall
+sig_systemV

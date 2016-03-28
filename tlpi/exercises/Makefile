@@ -5,7 +5,8 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	initgroups ps pathopen tail manyfiles t_stat access \
 	readX chattr setfattr getacl longrunner realpath list_files \
 	getcwd filetypes multi_chdir notify sig_receiver sig_ignore \
-	sig_flags sig_interupt
+	sig_flags sig_interupt sig_stop sig_catchall sig_speed_sigwaitinfo \
+	sig_systemV
 
 all : ${EXE}
 
