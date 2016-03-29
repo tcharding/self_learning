@@ -8,6 +8,8 @@ if [ $# -eq 0 ]; then
 fi
 
 name=$1
+name=${name%.c}
+
 ls $name.c 2> /dev/null
 if [ $? -eq 0 ]; then
     echo "File already exists $name.c"

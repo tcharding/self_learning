@@ -1,0 +1,6 @@
+#
+# Display number of lines of C code.
+#  Excludes files copied from TLPI source tree
+#
+#
+wc $(grep -L 'Copyright (C) Michael Kerrisk' $(find . -name *.[ch]))

@@ -281,4 +281,18 @@ ch24
 5. Process synchronization such as this can be achieved by alternating calls to
    kill() and sigsuspend() in the parent and child process.
 
+ch25
+----
+1. Exit status of -1 will result in parent receiving an exit status of 255. This
+   is because only the least significant 8 bits are returned. These are all 1's
+   in a twos compliment number system, hence 255.
 
+ch26
+----
+1. noparent.c
+
+2. My guess: after the parent exits. Answer is correct, see grandparent.c
+
+3. child_status.c
+
+4. make_zombie.c
