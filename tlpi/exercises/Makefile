@@ -6,7 +6,8 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	readX chattr setfattr getacl longrunner realpath list_files \
 	getcwd filetypes multi_chdir notify sig_receiver sig_ignore \
 	sig_flags sig_interupt sig_stop sig_catchall sig_speed_sigwaitinfo \
-	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal
+	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal \
+	vfork
 
 all : ${EXE}
 

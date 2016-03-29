@@ -266,5 +266,19 @@ ch23
 
 4. ptmr_sigev_signal.c
 
+ch24
+----
+1. After three consecutive calls to fork() there will be eight processes in
+   total, or seven new processes.
+
+2. vfork.c
+
+3. In order to get a core dump of a running process without terminating we could
+   fork() and abort() the child.
+
+4. No output.
+
+5. Process synchronization such as this can be achieved by alternating calls to
+   kill() and sigsuspend() in the parent and child process.
 
 
