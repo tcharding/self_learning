@@ -6,12 +6,20 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	readX chattr setfattr getacl longrunner realpath list_files \
 	getcwd filetypes multi_chdir notify sig_receiver sig_ignore \
 	sig_flags sig_interupt sig_stop sig_catchall sig_speed_sigwaitinfo \
-	sig_systemV
+	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal
 
 all : ${EXE}
 
+# We need to link with extra libraries for these
+#
 getacl: getacl.o
-	$(CC) -o $@ getacl.o -lacl -L.. -ltlpi
+	$(CC) -o $@ getacl.o -L.. -ltlpi -lacl
+
+posix_timer: posix_timer.o
+	$(CC) -o $@ posix_timer.o  -L.. -ltlpi -lrt
+
+ptmr_sigev_signal: ptmr_sigev_signal.o
+	$(CC) -o $@ ptmr_sigev_signal.o  -L.. -ltlpi -lrt
 
 clean : 
 	@for f in *.o $(EXE); do \

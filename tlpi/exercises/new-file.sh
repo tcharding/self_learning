@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
 fi
 
 cp template.c $1.c
-echo $1 >> .gitignore
+#echo $1 >> .gitignore
 
 exit 0
 

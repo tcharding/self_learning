@@ -253,3 +253,18 @@ ch22
 3. sig_speed_sigwaitinfo.c
 
 4. sig_systemV.c
+
+ch23
+----
+1. alarm.c
+
+2. Sleeps indefinitely since timer rounding up causes timer to increase on every
+   signal received. Only occurs when signals are received at a higher frequency
+   than jiffies per second. See t_nanosleep.c
+
+3. posix_timer.c
+
+4. ptmr_sigev_signal.c
+
+
+
