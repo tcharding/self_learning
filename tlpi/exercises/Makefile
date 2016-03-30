@@ -7,7 +7,8 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	getcwd filetypes multi_chdir notify sig_receiver sig_ignore \
 	sig_flags sig_interupt sig_stop sig_catchall sig_speed_sigwaitinfo \
 	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal \
-	vfork noparent grandparent child_status make_zombie
+	vfork noparent grandparent child_status make_zombie execlp exec \
+	sig_chld_wait
 
 all : ${EXE}
 

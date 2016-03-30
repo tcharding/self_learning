@@ -296,3 +296,23 @@ ch26
 3. child_status.c
 
 4. make_zombie.c
+
+ch27
+----
+1. The command fails with error ENOPERM since path is searched in order the
+   directory dir1 is searched first. File xyz is found and it does not have
+   execute permissions set.
+
+2. execlp.c
+
+3. We would see the file output on stdout (with line numbers). See cat.script
+   and exec.c
+
+4. The effect of this code snippet is to create a running in the background i.e
+   not attached to the current terminal. With a bit of extra bookkeeping this is
+   one way to start a daemon process.
+
+5. No output is produced because of stdio buffering.
+
+6. sig_chld_wait.c
+

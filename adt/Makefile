@@ -1,4 +1,4 @@
-BUILD_DIRS = lists
+BUILD_DIRS = lists vectors
 
 # Dummy targets for building and clobbering everything in all subdirectories
 
