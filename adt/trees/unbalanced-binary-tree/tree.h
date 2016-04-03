@@ -22,5 +22,6 @@ struct node {
 struct node *add(struct node *root, char *key, void *value);
 Boolean delete(struct node *root, char *key);
 Boolean lookup(struct node *root, char *key, void **value);
+void freeNode(struct node *root, void (*fn)(void *));
 
 #endif	/* TREE_H */

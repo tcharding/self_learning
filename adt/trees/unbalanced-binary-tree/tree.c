@@ -73,10 +73,13 @@ lookup(struct node *root, char *key, void **value)
 		return FALSE;
 
 	if (strcmp(root->key, key) == 0) {
-		if (root->value != NULL)
+		if (root->value != NULL) {
+			if (value != NULL)
+				*value = root->value; 
 			return TRUE;
-		else
+		} else {
 			return FALSE; /* node deleted */
+		}
 	}
 
 	if (strcmp(root->key, key) < 0)
@@ -85,6 +88,19 @@ lookup(struct node *root, char *key, void **value)
 		return lookup(root->right, key, value);
 
 	return FALSE;		/* shouldn't get here */
+}
+
+/* freeNode: free resources used by tree, call fn on each node's value */
+void freeNode(struct node *root, void (*fn)(void *))
+{
+	if (root != NULL) {
+		freeNode(root->left, fn);
+		freeNode(root->right, fn);
+		if (root->value != NULL)
+			fn(root->value);
+		if (root->key != NULL)
+			free(root->key);
+	}
 }
 
 /* test implementation */
@@ -118,6 +134,8 @@ static void testAdd(void)
 	root = add(root, strdup("another"), strdup("value"));
 	if (root == NULL)
 		fail("add second node");
+
+	freeNode(root, free);
 
 }
 static void testDelete(void)
@@ -158,11 +176,12 @@ static void testLookup(void)
 	if (lookup(root, "key", NULL) != TRUE)
 		fail("couldn't find present node with NULL value");
 
-	if (lookup(root, "key", &value) != TRUE)
+	if (lookup(root, "key", (void **) &value) != TRUE)
 		fail("couldn't find present node");
+	
 	if (strcmp(value, "value") != 0)
-		fail("didn't get value");
-
+		fail("didn't get value"); 
+	
 	if (lookup(root, "not there", NULL) == TRUE)
 		fail("found non-existant node");
 
@@ -173,11 +192,11 @@ static void testLookup(void)
 	if (delete(root, "key") != TRUE)
 		fail("couldn't remove present node");
 
-	value = "don't touch me"
-	if (lookup(root, "key", &value) == TRUE)
+	value = "don't touch me";
+	if (lookup(root, "key", (void **) &value) == TRUE)
 		fail("found deleted node");
 	if (strcmp(value, "don't touch me") != 0)
-		fail("lookup modified value when it should not have");
+		fail("lookup modified value when it should not have"); 
 }
 
 static void fail(const char *msg)
