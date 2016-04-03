@@ -8,7 +8,8 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	sig_flags sig_interupt sig_stop sig_catchall sig_speed_sigwaitinfo \
 	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal \
 	vfork noparent grandparent child_status make_zombie execlp exec \
-	sig_chld_wait forktime thread_join_self thread_incr
+	sig_chld_wait forktime thread_join_self thread_incr thread_one_time_init \
+	basename_r dirname_r
 
 all : ${EXE}
 
@@ -18,6 +19,13 @@ thread_join_self: thread_join_self.o
 	$(CC) -o $@ thread_join_self.o -L.. -ltlpi -pthread
 thread_incr: thread_incr.o
 	$(CC) -o $@ thread_incr.o -L.. -ltlpi -pthread
+thread_one_time_init: thread_one_time_init.o
+	$(CC) -o $@ thread_one_time_init.o -L.. -ltlpi -pthread
+
+basename_r: basename_r.o
+	$(CC) -o $@ basename_r.o -L.. -ltlpi -pthread
+dirname_r: dirname_r.o
+	$(CC) -o $@ dirname_r.o -L.. -ltlpi -pthread
 
 # We need to link with extra libraries for these
 #

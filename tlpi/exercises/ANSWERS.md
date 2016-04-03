@@ -337,3 +337,8 @@ ch30
 
 2. See ../../adt/trees/unbalanced-binary-tree/
 
+ch31
+----
+1. one_time_init.c
+
+2. dirname_r.c basename_r.c
