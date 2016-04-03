@@ -316,3 +316,24 @@ ch27
 
 6. sig_chld_wait.c
 
+ch28
+----
+1. forktime.c
+
+ch29
+----
+1. pthread_join_self.c: pthread_join(pthread_self(), NULL) returns EDEADLOCK
+   error. Avoid this condition by code like;
+
+	if (!pthread_equal(tid, pthread_self())
+		pthread_join(tid, NULL);
+
+2. The problem is that buf is declared on the stack of main(), after calling
+   pthread_exit (in main) this memory address is no longer valid.
+
+ch30
+----
+1. thread_incr.c
+
+2. See ../../adt/trees/unbalanced-binary-tree/
+
