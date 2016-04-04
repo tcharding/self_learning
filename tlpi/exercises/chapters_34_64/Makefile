@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-EXE = changepgrp setsid disc_SIGHUP
+EXE = changepgrp setsid disc_SIGHUP orphan orphancatch
 
 all : ${EXE}
 
