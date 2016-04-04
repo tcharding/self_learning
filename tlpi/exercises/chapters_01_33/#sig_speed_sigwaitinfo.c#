@@ -90,7 +90,7 @@ main(int argc, char *argv[])
 		    errExit("sigwaitinfo");
 /*
             if (sigsuspend(&emptyMask) == -1 && errno != EINTR)
-	    errExit("sigsuspend"); */xb
+	    errExit("sigsuspend"); */
             if (kill(childPid, TESTSIG) == -1)
                 errExit("kill");
         }

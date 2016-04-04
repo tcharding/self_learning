@@ -146,7 +146,7 @@ ch12
 ----
 1. ps.c
 
-2. pstree/main.c
+2. ../pstree/main.c
 
 3. pathopen.c
 
@@ -220,7 +220,7 @@ ch18
 
 7. filetypes.c
 
-8. ftw.c
+8. ../ftw/*
 
 9. We would expect fchdir to be quicker since the call has less system call
    overhead than chdir since the dir is already open there is no need to stat()
@@ -352,4 +352,3 @@ ch33
 1. thread_sigpending.c
 
 2. SIGCHLD is not thread specific so it may be delivered to any thread within a process.
-

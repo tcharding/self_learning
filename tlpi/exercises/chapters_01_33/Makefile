@@ -16,31 +16,31 @@ all : ${EXE}
 # Need thread library for these
 #
 thread_join_self: thread_join_self.o
-	$(CC) -o $@ thread_join_self.o -L.. -ltlpi -pthread
+	$(CC) -o $@ thread_join_self.o -L../.. -ltlpi -pthread
 thread_incr: thread_incr.o
-	$(CC) -o $@ thread_incr.o -L.. -ltlpi -pthread
+	$(CC) -o $@ thread_incr.o -L../.. -ltlpi -pthread
 thread_one_time_init: thread_one_time_init.o
-	$(CC) -o $@ thread_one_time_init.o -L.. -ltlpi -pthread
+	$(CC) -o $@ thread_one_time_init.o -L../.. -ltlpi -pthread
 
 basename_r: basename_r.o
-	$(CC) -o $@ basename_r.o -L.. -ltlpi -pthread
+	$(CC) -o $@ basename_r.o -L../.. -ltlpi -pthread
 dirname_r: dirname_r.o
-	$(CC) -o $@ dirname_r.o -L.. -ltlpi -pthread
+	$(CC) -o $@ dirname_r.o -L../.. -ltlpi -pthread
 
 thread_sigpending: thread_sigpending.o
-	$(CC) -o $@ thread_sigpending.o -L.. -ltlpi -pthread
+	$(CC) -o $@ thread_sigpending.o -L../.. -ltlpi -pthread
 
 
 # We need to link with extra libraries for these
 #
 getacl: getacl.o
-	$(CC) -o $@ getacl.o -L.. -ltlpi -lacl
+	$(CC) -o $@ getacl.o -L../.. -ltlpi -lacl
 
 posix_timer: posix_timer.o
-	$(CC) -o $@ posix_timer.o  -L.. -ltlpi -lrt
+	$(CC) -o $@ posix_timer.o  -L../.. -ltlpi -lrt
 
 ptmr_sigev_signal: ptmr_sigev_signal.o
-	$(CC) -o $@ ptmr_sigev_signal.o  -L.. -ltlpi -lrt
+	$(CC) -o $@ ptmr_sigev_signal.o  -L../.. -ltlpi -lrt
 
 clean : 
 	@for f in *.o $(EXE); do \
