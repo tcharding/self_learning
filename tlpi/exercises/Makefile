@@ -9,7 +9,7 @@ EXE = tee copy append atomic_append dup shared_fd readwritev \
 	sig_systemV abort alarm t_nanosleep posix_timer ptmr_sigev_signal \
 	vfork noparent grandparent child_status make_zombie execlp exec \
 	sig_chld_wait forktime thread_join_self thread_incr thread_one_time_init \
-	basename_r dirname_r
+	basename_r dirname_r thread_sigpending
 
 all : ${EXE}
 
@@ -26,6 +26,10 @@ basename_r: basename_r.o
 	$(CC) -o $@ basename_r.o -L.. -ltlpi -pthread
 dirname_r: dirname_r.o
 	$(CC) -o $@ dirname_r.o -L.. -ltlpi -pthread
+
+thread_sigpending: thread_sigpending.o
+	$(CC) -o $@ thread_sigpending.o -L.. -ltlpi -pthread
+
 
 # We need to link with extra libraries for these
 #

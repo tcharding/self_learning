@@ -342,3 +342,14 @@ ch31
 1. one_time_init.c
 
 2. dirname_r.c basename_r.c
+
+ch32
+----
+No exercises
+
+ch33
+----
+1. thread_sigpending.c
+
+2. SIGCHLD is not thread specific so it may be delivered to any thread within a process.
+
