@@ -35,4 +35,11 @@ ch35
 
 4. pipeaffinity.c
 
+ch36
+----
+1. rusage.c
 
+2. time.c
+
+3. xsoftlimit.c, strangely calls to setrlimit succeed even with soft limit below
+   current usage.

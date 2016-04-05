@@ -1,7 +1,7 @@
 include ../Makefile.inc
 
 EXE = changepgrp setsid disc_SIGHUP orphan orphancatch nice rtsched \
-	fifoloop pipeaffinity
+	fifoloop pipeaffinity rusage time xsoftlimit
 
 all : ${EXE}
 
