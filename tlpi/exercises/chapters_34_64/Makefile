@@ -1,6 +1,7 @@
 include ../Makefile.inc
 
-EXE = changepgrp setsid disc_SIGHUP orphan orphancatch
+EXE = changepgrp setsid disc_SIGHUP orphan orphancatch nice rtsched \
+	fifoloop pipeaffinity
 
 all : ${EXE}
 

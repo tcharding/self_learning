@@ -24,3 +24,15 @@ ch34
 5. orphan.c
 
 6. orphancatch.c
+
+ch35
+----
+1. nice.c
+
+2. rtsched.c
+
+3. fifoloop.c
+
+4. pipeaffinity.c
+
+
