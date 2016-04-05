@@ -42,4 +42,8 @@ ch36
 2. time.c
 
 3. xsoftlimit.c, strangely calls to setrlimit succeed even with soft limit below
-   current usage.
+   current usage. Verified also that the soft limit is changed.
+
+ch37
+----
+1. logger.c
