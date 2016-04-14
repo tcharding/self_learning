@@ -47,3 +47,25 @@ ch36
 ch37
 ----
 1. logger.c
+
+ch38
+----
+1. Modification of the fie causes the set-UID-bit to be removed. This is a
+   security feature to prevent malicious (or accidental) modification of set-UID programs.
+
+2. sudo.c
+
+ch39
+----
+1. sched_set.c
+
+ch40
+----
+1. getlogin.c Writen to specification does not function correctly. getuxent()
+   does not return a record matching the current device. Neither when using a
+   terminal emulator or when at a second console (tty2).
+
+2. utmpx_login.c
+
+3. who
+
