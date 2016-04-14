@@ -69,3 +69,12 @@ ch40
 
 3. who
 
+ch41
+----
+1. No output
+
+ch42
+----
+1. ../sharedlibs/*
+
+2. dynload.c
