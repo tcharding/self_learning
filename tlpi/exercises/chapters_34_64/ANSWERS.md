@@ -104,4 +104,8 @@ ch44
    set nor can open fifo's have flag set, however a fifo can be closed and
    reopened with this flag, non-blocking I/O then functions.
 
+ch45
+----
+1. ftok.c verify()
 
+2. ftok.c my_ftok() verify()
