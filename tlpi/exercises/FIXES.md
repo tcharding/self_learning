@@ -12,4 +12,12 @@ Boolean lookup(char *key, void **value)
  -> Boolean lookup(tree, char *key, void **value)
 
 
+Page 904/905
+------------
+line;
+
+  fp = popen(popenCmd, "r");
+
+is reproduced on both pages.
+
 

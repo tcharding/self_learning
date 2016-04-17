@@ -3,7 +3,8 @@ include ../Makefile.inc
 EXE = changepgrp setsid disc_SIGHUP orphan orphancatch nice rtsched \
 	fifoloop pipeaffinity rusage time xsoftlimit logger douser \
 	check_password check_password_caps sched_set getlogin \
-	utmpx_login loginout who dynload
+	utmpx_login loginout who dynload twinpipe popen fifo_seqnum_client \
+	fifo_seqnum_server nonblockpipe
 
 all : ${EXE}
 
@@ -17,8 +18,6 @@ sched_set: sched_set.o
 	$(CC) -o $@ sched_set.o -L../.. -ltlpi -lcap
 dynload: dynload.o
 	$(CC) -o $@ dynload.o -L../.. -ltlpi -ldl
-
-
 
 clean : 
 	@for f in *.o $(EXE); do \

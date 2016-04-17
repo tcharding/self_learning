@@ -78,3 +78,30 @@ ch42
 1. ../sharedlibs/*
 
 2. dynload.c
+
+ch43
+----
+
+NOTE: come back to these exercises after chapter 61
+
+ch44
+----
+1. twinpipe.c
+
+2. popen.c
+
+3. fifo_seqnum_server.c
+
+4. fifo_seqnum_server.c
+
+5. This approach would cause the following read to get EOF again if no client
+   had accessed it, i.e it would achieve nothing.
+
+6. Set open flags to NONBLOCK, if client misbehaves server will simply ignore
+   and continue.
+
+7. nonblockpipe.c. Result of test code: pipes cannot have flag O_NONBLOCK
+   set nor can open fifo's have flag set, however a fifo can be closed and
+   reopened with this flag, non-blocking I/O then functions.
+
+

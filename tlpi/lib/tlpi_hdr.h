@@ -82,4 +82,11 @@ typedef int socklen_t;
 
 #define eprintf(f, ...) fprintf (stderr, f, __VA_ARGS__)
 
+/* Tobin's additions */
+#define R 0			/* read */
+#define W 1			/* write */
+#ifndef BUF_SIZE
+#define BUF_SIZE 4096
+#endif
+
 #endif
