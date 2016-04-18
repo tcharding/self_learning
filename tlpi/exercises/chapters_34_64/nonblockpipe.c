@@ -51,15 +51,15 @@ main(int argc, char *argv[]) {
 	if (open(fifo, O_RDONLY | O_NONBLOCK) == -1)
 		errExit("parent: open");
 
-	/* flags = fcntl(fd, F_GETFD); */
-	/* flags |= O_NONBLOCK; */
-	/* if (fcntl(fd, F_SETFD, flags) == -1) */
-	/* 	errExit("fcntl set"); */
+	flags = fcntl(fd, F_GETFL);
+	flags |= O_NONBLOCK;
+	if (fcntl(fd, F_SETFL, flags) == -1)
+		errExit("fcntl set");
 
-	/* /\* verify flags set correctly *\/ */
-	/* flags = fcntl(fd, F_GETFD); */
-	/* if (!(flags & O_NONBLOCK))  */
-	/* 	fatal("failed to set O_NONBLOCK\n"); */
+	/* verify flags set correctly */
+	flags = fcntl(fd, F_GETFL);
+	if (!(flags & O_NONBLOCK))
+		fatal("failed to set O_NONBLOCK\n");
 		
 	nread = read(fd, &c, 1);
 	printf("parent read returned: %d %s\n", errno, strerror(errno));

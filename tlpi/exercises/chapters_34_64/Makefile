@@ -4,9 +4,16 @@ EXE = changepgrp setsid disc_SIGHUP orphan orphancatch nice rtsched \
 	fifoloop pipeaffinity rusage time xsoftlimit logger douser \
 	check_password check_password_caps sched_set getlogin \
 	utmpx_login loginout who dynload twinpipe popen fifo_seqnum_client \
-	fifo_seqnum_server nonblockpipe ftokverify ftok
+	fifo_seqnum_server nonblockpipe ftokverify ftok getcall svmsg_seqnum_client \
+	svmsg_seqnum_server 
+
+.PHONY: all svmsg_file
 
 all : ${EXE}
+svmsg_file: svmsg_file_client svmsg_file_server
+
+svmsg_file_server: svmsg_file_server.o become_daemon.o
+	$(CC) -o $@ svmsg_file_server.o become_daemon.o -L../.. -ltlpi	
 
 douser: douser.o
 	$(CC) -o $@ douser.o -L../.. -ltlpi -lcrypt

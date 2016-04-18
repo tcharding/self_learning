@@ -49,7 +49,7 @@ main(int argc, char *argv[])
 	char clientFifo[CLIENT_FIFO_NAME_LEN];
 	struct request req;
 	struct response resp;
-	char *file = "seqnum.txt";
+	char *file = "/tmp/seqnum.txt";
 	int nread;
 	int fd;
 	int seqNum;
@@ -67,6 +67,10 @@ main(int argc, char *argv[])
 		seqNum = 0;
 		fd = open(file, O_RDWR | O_CREAT | O_DSYNC, S_IRUSR | S_IWUSR);
 	}
+	/* catch error on either open's */
+	if (fd == -1)
+		errExit("open");
+
 /* 	printf("seqNum: %d\n", seqNum); */
 
 	sigemptyset(&sa.sa_mask);
@@ -77,9 +81,6 @@ main(int argc, char *argv[])
 	if (sigaction(SIGTERM, &sa, NULL) == -1)
 		errExit("sigaction");
 
-	/* catch error on either open's */
-	if (fd == -1)
-		errExit("open");
 
 	/* Create well-known FIFO, and open it for reading */
 

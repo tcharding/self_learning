@@ -82,7 +82,7 @@ ch42
 ch43
 ----
 
-NOTE: come back to these exercises after chapter 61
+TODO: come back to these exercises after chapter 61
 
 ch44
 ----
@@ -100,12 +100,29 @@ ch44
 6. Set open flags to NONBLOCK, if client misbehaves server will simply ignore
    and continue.
 
-7. nonblockpipe.c. Result of test code: pipes cannot have flag O_NONBLOCK
-   set nor can open fifo's have flag set, however a fifo can be closed and
-   reopened with this flag, non-blocking I/O then functions.
+7. nonblockpipe.c. Result of test code; pipes behave as expected  O_NONBLOCK
+   flag causes operations on pipe to that would block to return immediately with
+   EAGAIN. 
 
 ch45
 ----
 1. ftok.c verify()
 
 2. ftok.c my_ftok() verify()
+
+3. getcall.c
+
+ch46
+----
+1. No output
+
+2. sysv_mqid_seqnum_srv/cli
+
+3. 0 is a valid message queue identifier but 0 cannot be used as a message type
+   (from answers).
+
+4. svmsg_file_server.c
+
+5. svmsg_file_client.c
+
+6. D not complete.
