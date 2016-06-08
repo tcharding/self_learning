@@ -1,12 +1,10 @@
-/*
-This does not work! seg faults (because data is read only?)
-	Where should data be, which section?
-*/
+	.section	.data
 	.align	2
 data:
 	.word 0xFEBBAAAA, 0x12340000, 0x88881111
 	.word 0x00000013, 0x80808080, 0xFFFF0000
 	.word 0xFEBBAAAA, 0x12340000, 0x88881111
+
 	.word 0x00000013, 0x80808080, 0xFFFF0000
 	.word 0xFEBBAAAA, 0x12340000, 0x88881111
 	.word 0x00000013, 0x80808080, 0xFFFF0000
@@ -21,7 +19,7 @@ main:
 	stmfd   sp!, {fp, lr}
 
 	mov	r0, #16		@ loop counter
-	adr	r1, data
+	ldr	r1, =data
 loop:
 	rsb	r2, r0, #16	@ front element index
 	ldr	r3, [r1, r2, lsl #2] @ lsl #2 for 4 * index
@@ -40,4 +38,5 @@ loop:
 	bx	lr
 
 	.align	2
+	
 	.size	main, .-main
