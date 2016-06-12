@@ -3,8 +3,8 @@
 .global name
 .type   name, %function
 name:
-        stmfd   sp!, {fp, ip, lr}
+        stmfd   sp!, {fp, lr}
 
-        ldmfd   sp!, {fp, ip, lr}
+        ldmfd   sp!, {fp, lr}
         bx      lr
         .size   name, .-name

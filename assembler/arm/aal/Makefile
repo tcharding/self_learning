@@ -1,11 +1,17 @@
 CFLAGS = -g -Wall -pedantic
-EXE = first printv sort find printtab queue jump-trig
+EXE = first printv sort find printtab queue trig factorial magic
 
 .PHONY: all
 
 all: $(EXE)
 
-trig: jump-trig.o sine.o cosine.o tangent.o
+magic: tst-magic-square.o magic-square.o
+	gcc $(CFLAGS) -o $@ $+
+
+fact: factorial.s
+	gcc $(CFLAGS) -o $@ $+ -lm
+
+trig: sine.o cosine.o tangent.o jump-trig.o 
 	gcc $(CFLAGS) -o $@ $+ -lm
 
 tan: tangent.o
