@@ -1,0 +1,98 @@
+; from text, page 71
+(define factor-next
+  (lambda (n)
+    (let f ((n n) (i 2))
+      (cond
+       ((>= i n) (list n))
+       ((integer? (/ n i))
+        (cons i (f (/ n i) i)))
+       (else (f n (+ i 1)))))))
+
+; now using letrec (exercise 3.2.1)
+(define factor
+  (lambda (n)
+    (letrec ((f (lambda (n i) 
+                  (cond
+                   ((>= i n) (list n))
+                   ((integer? (/ n i))
+                    (cons i (f (/ n i) i)))
+                   (else (f n (+ i 1)))))))
+      (f n 2))))
+
+(letrec ((even?
+          (lambda (x)
+            (or (= x 0)
+                (odd? (- x 1)))))
+         (odd?
+          (lambda (x)
+            (and (= x 0)
+                 (even? (- x 1))))))
+  even? 19)
+
+; exercise 3.2.3
+(let even? ((odd?
+             (lambda (x)
+               (and (= x 0)
+                    (even? (- x 1)))))
+            (x x))
+  (or (= x 0)
+      (odd? (- x 1)))
+  (even? 20))
+
+;;;; section 3.3
+
+(define product
+  (lambda (l)
+    (let f ([l l] [z #f])
+      (cond
+       [(null? l) 1]
+       [(eq? #t z) 0]
+       [(= (car l) 0) (* (car l) (f (cdr l) #t))]
+       [else (* (car l) (f (cdr l) z))]))))
+
+;; infinite loop using call/cc
+(define f #f)
+(define n 0)
+
+(define loop
+ (lambda ()
+   (call/cc
+    (lambda (k)
+      (set! f k)))
+   (write n)
+   (newline)
+   (set! n (+ n 1))
+   (f "ignore")))
+
+(define integer-divide
+  (lambda (x y success failure)
+    (if (= y 0)
+        (failure "divide by zero")
+        (let ([q (quotient x y )])
+          (success q (- x (* q y)))))))
+
+(define reciprocal
+  (lambda (n success failure)
+    (if (= n 0)
+        (failure "oops!")
+        (success (/ 1 n)))))
+
+; exercise 3.4.2 (doesn't work)
+(define retry #f)
+(define factorial
+  (lambda (x k)
+    (if (= 0 x)
+        (lambda (k) (set! retry k) 1)
+        (factorial (- x 1) ((lambda (y)
+                              (k  (* x y))))))))
+
+
+(define reciprocals
+  (lambda (ls k)
+    (k (map (lambda (x)
+              (if (= x 0)
+                  (k "zero found")
+                  (/ 1 x)))
+            ls))))
+
+
