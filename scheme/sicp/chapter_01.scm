@@ -299,6 +299,7 @@
               (iter nr result)))))
   (iter a null-value))
 
+(load "primes.scm")
 (define (sum-squares-primes a b)
   "Exercise 1.32 part a"
   (filtered-accumulate + 0 square a inc b prime?))
@@ -321,8 +322,8 @@
     (< (abs (- v1 v2)) tolerance))
   (define (try guess)
     (let ((next (f guess)))
-      (display guess)
-      (newline)
+;      (display guess)
+;      (newline)
       (if (close-enough? guess next)
           next
           (try next))))
@@ -418,5 +419,111 @@
 
 (define (average-damp f)
   (lambda (x) (average x (f x))))
+
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+(define dx 0.00001)
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+            
+;;;; Exercise 1.40
+
+; (newtons-method (cubic a b c) 1)
+
+;; simple cubic polynomial
+(define (cubic a b c)
+  (lambda (x)
+    (+ (cube x)
+       (* a (square x))
+       (* b x)
+       c)))
+
+;;;; Exercise 1.41
+
+(define (double f)
+  (lambda (x)
+    (f (f x))))
+
+;;;; Exercise 1.42
+
+(define (compose f g)
+  (lambda (x)
+    (f (g x))))
+
+;;;; Exercise 1.43
+
+(define (repeated f n)
+  (lambda (x)
+    (let fn ((f f) (n n))
+      (cond ((= n 1) (f x))
+            (else (fn (compose f f) (dec n)))))))
+
+;;;; Exercise 1.44
+
+;; dx defined above to 0.00001
+
+(define (n-fold f n)
+  (repeated (smooth f) n))
+
+(define (smooth f)
+    (lambda (x) (average (f (- x dx))
+                         (f x)
+                         (f (+ x dx)))))
+
+(define average
+  (lambda x
+    (/ (sum-ls x) (length x))))
+
+(define sum-ls
+  (lambda (ls)
+    (cond ((null? ls) 0)
+          (else (+ (car ls) (sum-ls (cdr ls)))))))
+   
+;;;; Exercise 1.45
+
+(define (cube-roots x)
+  (fixed-point (average-damp (lambda (y) (/ x (square y))))
+               1.0))
+
+(define (fourth-roots x)
+  (fixed-point (repeated (average-damp (lambda (y) (/ x (cube y)))) 2)
+               1.0))
+
+(define (nth-roots x n n-damp)
+  (fixed-point (repeated (average-damp (root-fn x (dec n))) n-damp)
+               1.0))
+
+(load "exp.scm")
+(define (root-fn x power)
+  (lambda (y)
+    (/ x (fast-expt y power))))
+
+;;;; Exercise 1.46
+
+(define (iterative-improve good-enough improve x)
+  (lambda (guess)
+    (let fn ((guess guess))
+      (let ((next-guess (improve guess x)))
+        (if (good-enough next-guess guess)
+            guess
+            (fn next-guess))))))
+
+(define (sqrt x)
+  ((iterative-improve good-enough? improve x) 10.0))              
+
+(define good-enough?
+  (lambda (guess previous-guess)
+    (< (abs (- guess previous-guess)) 0.001)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
 
 
