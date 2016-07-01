@@ -1,0 +1,20 @@
+;;;; Tobin's test suite
+;;;;
+
+(define (tst-eq msg exp got)
+  (unless (equal? exp got)
+    (display "*")
+    (newline)
+    (display "* Test Failed!")
+    (newline)
+    (display "*")
+    (newline)
+    (display "test-case: ")
+    (display msg)
+    (newline)
+    (display "exp: ")
+    (display exp)
+    (newline)
+    (display "got: ")
+    (display got)
+    (newline)))
