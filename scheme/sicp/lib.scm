@@ -28,3 +28,11 @@
 (define first car)
 (define (second ls)
   (cadr ls))
+
+(define d display)
+(define (dnl x)
+  (display x)
+  (newline))
+
+
+

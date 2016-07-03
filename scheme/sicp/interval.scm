@@ -2,17 +2,39 @@
 (import (rnrs base))
 (define av assertion-violation)
 
+;;; Constructors
+
 (define (make-interval lower upper)
   (if (< upper lower)
       (av 'make-interval "lower/upper wrong way around" lower upper)
       (cons lower upper)))
 
-(define (interval-from-list ls)
-  (make-interval (first ls) (second ls)))
+(define (make-center-width c w)
+  (make-interval (- c w) (+ c w)))
+
+(define (make-center-percent c p)
+  "accepts p as a decimal or integer e.g 0.1 or 10 (10%)"
+  (define (percentage-as-decimal p)
+    (if (< p 1) p (/ p 100.0)))
+  (make-center-width c (* c (percentage-as-decimal p))))
+
+;;; Selectors
 
 (define lower-bound car)
 (define upper-bound cdr)
-  
+
+(define (center i)
+  (/ (+ (lower-bound i) (upper-bound i)) 2.0))
+
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2.0))
+
+(define (percent i)
+  "returns percentage as decimal"
+  (/ (width i) (center i)))
+
+;;; 
+
 (define (add-interval x y)
   (make-interval (+ (lower-bound x) (lower-bound y))
                  (+ (upper-bound x) (upper-bound y))))
@@ -21,7 +43,6 @@
   (make-interval (- (lower-bound x) (lower-bound y))
                  (- (upper-bound x) (upper-bound y))))
 
-;; from text, p2 and p3 seem redundant?
 (define (mul-interval x y)
   (let ((p1 (* (lower-bound x) (lower-bound y)))
         (p2 (* (lower-bound x) (upper-bound y)))
@@ -35,9 +56,6 @@
                 (make-interval (/ 1.0 (upper-bound y))
                                (/ 1.0 (lower-bound y)))))
 
-(define (width-interval x)
-  (/ (- (upper-bound x) (lower-bound x))
-     2.0))
 
 ;; Exercise 2.9
 (define (show-width-sum)
@@ -58,7 +76,7 @@
 
 
 ;;;; Exercise 2.10
-;; has a wee little bug for case bc and ac (need to flip them around)
+;; has a wee little bug for case ba and ca (need to flip them around)
 (define (mul-optimised-interval x y)
   (cond ((type-a? x)
          (cond ((or (type-a? y) (type-b? y))
@@ -69,7 +87,7 @@
                                (* (lower-bound x) (lower-bound y))))))
         ((type-b? x)
          (cond ((type-a? y)
-                (make-interval (* (lower-bound x) (upper-bound y))
+                (make-interval (* (upper-bound x) (lower-bound y))
                                (* (upper-bound x) (upper-bound y))))
                ((type-b? y)
                 (make-interval (* (lower-bound x) (lower-bound y))
@@ -79,11 +97,11 @@
                                (* (lower-bound x) (upper-bound y))))))
         (else                           ; type-c x
          (cond ((type-a? y)              
-                (make-interval (* (upper-bound x) (lower-bound y))
+                (make-interval (* (lower-bound x) (upper-bound y))
                                (* (lower-bound x) (lower-bound y))))
                ((type-b? y)
-                (make-interval (* (upper-bound x) (lower-bound y))
-                               (* (lower-bound x) (upper-bound y))))
+                (make-interval (* (lower-bound x) (upper-bound y))
+                               (* (upper-bound x) (lower-bound y))))
                ((type-c? y)
                 (make-interval (* (upper-bound x) (upper-bound y))
                                (* (lower-bound x) (lower-bound y))))))))
@@ -100,6 +118,4 @@
 (define (eq-interval x y)
   (and (= (lower-bound x) (lower-bound y))
        (= (upper-bound x) (upper-bound y))))
-
-
 
