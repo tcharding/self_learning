@@ -15,8 +15,8 @@
 (test-eq "left-branch" (left-branch sub) b2)
 (test-eq "right-branch" (right-branch sub) b3)
 
-(test-eq "branch-worm" (branch-worm (left-branch sub)) 8)
-(test-eq "branch-worm" (branch-worm (right-branch sub)) 32)
+(test-eq "branch-payload" (branch-payload (left-branch sub)) 8)
+(test-eq "branch-payload" (branch-payload (right-branch sub)) 32)
 
 (test-eq "branch-length" (branch-length b1) 1)
 (test-eq "branch-length" (branch-length b2) 4)
@@ -33,8 +33,8 @@
 
 ;;; test weight related procedures
 
-(test-eq "weight?" (weight? (branch-worm b1)) #t)
-(test-eq "weight?" (weight? (branch-worm b2)) #t)
+(test-eq "weight?" (weight? (branch-payload b1)) #t)
+(test-eq "weight?" (weight? (branch-payload b2)) #t)
 
 (test-eq "holds-weight?" (holds-weight? (left-branch sub)) #t)
 (test-eq "holds-weight?" (holds-weight? (right-branch sub)) #t)
@@ -42,9 +42,9 @@
 (test-eq "holds-weight?" (holds-weight? (left-branch root)) #t)
 (test-eq "holds-weight?" (holds-weight? (right-branch root)) #f)
 
-(test-eq "total-branch-weight" (total-branch-weight b1) 2)      
-(test-eq "total-branch-weight" (total-branch-weight b2) 8)      
-(test-eq "total-branch-weight" (total-branch-weight b3) 32)      
+(test-eq "branch-weight" (branch-weight b1) 2)      
+(test-eq "branch-weight" (branch-weight b2) 8)      
+(test-eq "branch-weight" (branch-weight b3) 32)      
 
 (test-eq "total weight" (total-weight sub) 40)      
 (test-eq "total weight" (total-weight root) 42)      
@@ -73,5 +73,5 @@
 (define balanced (make-mobile b3 (make-branch 3 sub)))
 (define un-balanced (make-mobile b2 (make-branch 2 sub)))
 
-(test-eq "balanced" (balanced? balanced) #t)
-(test-eq "un-balanced" (balanced? un-balanced) #f)
+(test-eq "balanced" (mobile-balanced? balanced) #t)
+(test-eq "un-balanced" (mobile-balanced? un-balanced) #f)

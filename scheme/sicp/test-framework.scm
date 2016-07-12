@@ -1,5 +1,7 @@
 ;;;; Scheme Test Framework
 
+(define test-section '())
+
 (define (test-eq msg got exp)
   (unless (equal? got exp)
     (fail msg got exp)))
@@ -12,6 +14,7 @@
 
 (define (fail msg got exp)
   (display "Test Failed: ")
+  (display test-section)
   (display msg)
   (newline)
   (display "got: ")
