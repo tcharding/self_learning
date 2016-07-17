@@ -1,7 +1,7 @@
 ;;;; tests for huffman.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "huffman.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;;; Simple data tests
 

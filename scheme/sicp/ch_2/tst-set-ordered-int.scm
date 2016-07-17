@@ -1,7 +1,7 @@
 ;;;; tests for set-ordered-int.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "set-ordered-int.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;;
 (set! test-section "element-of-set?: ")

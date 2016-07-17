@@ -1,7 +1,7 @@
 ;;;; Section 2.3.4 Huffman Encoding Trees
 ;;;;
 ;;;; Nodes can be either 'leaf' nodes or 'code-tree' nodes.
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;; Constructors
 

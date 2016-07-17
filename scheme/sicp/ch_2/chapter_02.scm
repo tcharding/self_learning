@@ -1,9 +1,8 @@
 ;;;; Various exercises from chapter 2
 ;;;;
-(load "lib.scm")
+(load "../lib.scm")
 (load "signal.scm")
-(load "ch_1/primes.scm")
-(load "bin-tree.scm")
+(load "../ch_1/primes.scm")
 
 ;;; Church Numerals
 (define (zero f)
@@ -368,7 +367,7 @@
         ((< key (key db))
          (lookup key (left-branch db)))
         ((> key (key db))
-         (lookup (right-branch db)))))
+         (lookup key (right-branch db)))))
 
 
    

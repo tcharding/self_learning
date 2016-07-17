@@ -1,6 +1,6 @@
 ;;;; Section 2.3.3 Representing Sets
 
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;; Represent a set as an un-ordered list without duplicates
 

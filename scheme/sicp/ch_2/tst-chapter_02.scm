@@ -1,7 +1,7 @@
 ;;;; tests for chapter_02.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "chapter_02.scm")
-(load "lib.scm")
+(load "../lib.scm")
       
 (test-eq "one" ((one inc) 0) 1)
 

@@ -1,9 +1,9 @@
 ;;;; Test suite for example representation of car/cons
 ;;;;
 ;;;; Exercise 2.4
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "car-cons.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 (define raw-data '((1 2) (3 6) (-1 2) (-3 0)))
 

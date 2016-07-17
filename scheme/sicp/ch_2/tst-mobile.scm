@@ -1,5 +1,5 @@
 ;;;; tests for mobile.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "mobile.scm")
 
 ;;; test constructors

@@ -1,7 +1,7 @@
 ;;;; Binary Mobile
 ;;;;
 ;;;; Exercise 2.29
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;; Constructors
 

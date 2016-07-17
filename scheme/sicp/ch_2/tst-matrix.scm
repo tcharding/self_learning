@@ -1,7 +1,7 @@
 ;;;; tests for matrix.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "matrix.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 (define v '(1 2 3))
 (define w '(4 5 6))

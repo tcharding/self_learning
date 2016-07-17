@@ -1,5 +1,5 @@
 ;;;; Test suite for rectangle.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "rectangle.scm")
 (load "point.scm")
 

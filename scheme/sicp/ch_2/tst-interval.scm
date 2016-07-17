@@ -1,5 +1,5 @@
 ;;;; Test suite for interval.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "interval.scm")
 
 ; initial test of constructor

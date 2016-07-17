@@ -1,5 +1,5 @@
 ;;;; tests for queens.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "queens.scm")
 
 (test-eq "empty board"

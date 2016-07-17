@@ -1,7 +1,7 @@
 ;;;; Sequences as Conventional Interfaces
 ;;;;
 ;;;; Section 2.2.3
-(load "lib.scm")
+(load "../lib.scm")
 
 (define (filter predicate sequence)
   (cond ((null? sequence) '())

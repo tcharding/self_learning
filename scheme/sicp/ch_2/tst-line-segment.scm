@@ -1,5 +1,5 @@
 ;;;; Test suite for line-segment.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "line-segment.scm")
 (load "point.scm")
 

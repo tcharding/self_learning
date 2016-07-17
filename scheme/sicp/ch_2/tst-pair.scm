@@ -1,9 +1,9 @@
 ;;;; Test suite for example representation of a pair
 ;;;;
 ;;;; Exercise 2.5
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "pair.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 (define raw-data '((1 2) (3 6) (10 100)))
 

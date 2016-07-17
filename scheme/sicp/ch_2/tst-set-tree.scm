@@ -1,7 +1,7 @@
 ;;;; tests for set-tree.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "set-tree.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 (use-modules (ice-9 debug)
              (system vm trace))

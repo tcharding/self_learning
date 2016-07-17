@@ -1,7 +1,7 @@
 ;;;; tests for set.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "set.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;;
 (set! test-section "element-of-set?: ")

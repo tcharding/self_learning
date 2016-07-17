@@ -1,7 +1,7 @@
 ;;;; 8 Queens Puzzle
 ;;;;
 ;;;; Place 8 queens on a chess-board so that no two are on the same row, column or diagonal
-(load "lib.scm")
+(load "../lib.scm")
 (load "signal.scm")
 
 (define (queens board-size)

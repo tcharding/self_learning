@@ -1,5 +1,5 @@
 ;;;; Test suite for rational.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "rational.scm")
 
 (define one-half (make-rat 1 2))

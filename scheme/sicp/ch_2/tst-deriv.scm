@@ -1,7 +1,7 @@
 ;;;; tests for deriv.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "deriv.scm")
-(load "lib.scm")
+(load "../lib.scm")
 
 ;;;; test predicates
 

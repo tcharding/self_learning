@@ -1,5 +1,5 @@
 ;;;; Test suite for point.scm
-(load "test-framework.scm")
+(load "../test-framework.scm")
 (load "point.scm")
 
 (define p0 (make-point 1 2))

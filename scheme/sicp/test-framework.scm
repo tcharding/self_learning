@@ -24,4 +24,5 @@
   (display exp)
   (newline))
 
-
+(define (set-test-section! label)
+  (set! test-section (string-append label ": ")))
