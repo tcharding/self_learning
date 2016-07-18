@@ -2,7 +2,7 @@
 ;;;;
 ;;;; SICP Section 2.1.1
 
-(load "../lib.scm")
+(load-from-path "lib.scm")
 
 (define (add-rat x y)
   (make-rat (+ (* (numer x) (denom y))

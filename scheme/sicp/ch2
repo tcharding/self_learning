@@ -1,6 +1,6 @@
 ;;;; Test suite for rational.scm
-(load "../test-framework.scm")
-(load "rational.scm")
+(load-from-path "test-framework.scm")
+(load-from-path"arithmetic-pkg/rational.scm")
 
 (define one-half (make-rat 1 2))
 (define one-third (make-rat 1 3))

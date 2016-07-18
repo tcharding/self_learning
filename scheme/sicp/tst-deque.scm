@@ -1,4 +1,4 @@
-;;;; tests for dequeue.scm
+;;;; tests for deque.scm
 (load-from-path "test-framework.scm")
 (load-from-path "deque.scm")
 (load-from-path "lib.scm")
@@ -50,9 +50,9 @@
 (rear-delete-deque! d)                  ; (a)
 (test-eq "front" (front-deque d) 'a)
 (test-eq "rear" (rear-deque d) 'a)
-#!
+
 (front-insert-deque! d 'b)              ; (b a)
 (rear-insert-deque! d 'c)               ; (b a c)
 (rear-delete-deque! d)                  ; (b a)
 
-!#
+
