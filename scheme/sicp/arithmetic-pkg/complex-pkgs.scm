@@ -2,6 +2,10 @@
 
 ;;; Rectangular Complex Number Package
 
+(define rectangular-tag 'rectangular)
+(define (rectangular? x)
+  (eq? (type-tag x) rectangular-tag))
+   
 (define (install-rectangular-package)
   ;; internal procedures
   (define (real-part z) (car z))
@@ -19,7 +23,7 @@
     (cons (* r (cos a)) (* r (sin a))))
 
   ;; interface to rest of system
-  (define (tag x) (attach-tag 'rectangular x))
+  (define (tag x) (attach-tag rectangular-tag x))
   (put 'real-part '(rectangular) real-part)
   (put 'imag-part '(rectangular) imag-part)
   (put 'magnitude '(rectangular) magnitude)
@@ -32,6 +36,10 @@
   'done)
 
 ;;; Polar Complex Number Package
+
+(define polar-tag 'polar)
+(define (polar? x)
+  (eq? (type-tag x) polar-tag))
 
 (define (install-polar-package)
   ;; internal procedures
@@ -49,7 +57,7 @@
           (atan y x)))
 
   ;; interface to rest of system
-  (define (tag x) (attach-tag 'polar x))
+  (define (tag x) (attach-tag polar-tag x))
   (put 'real-part '(polar) real-part)
   (put 'imag-part '(polar) imag-part)
   (put 'magnitude '(polar) magnitude)

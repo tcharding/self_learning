@@ -1,8 +1,13 @@
 ;;;; Complex Number Packages
 (load-from-path "arithmetic-pkg/complex-pkgs.scm")
 
-;(install-rectangular-package)
-;(install-polar-package)
+(define complex-tag 'complex)
+(define (complex? x)
+  (eq? (type-tag x) complex-tag))
+
+;  (or (eq? (type-tag x) complex-tag)
+;      (rectangular? x)
+;      (polar? x)))
 
 (define (install-complex-package)
   ;; imported procedures from rectangular and polar packages
@@ -39,7 +44,7 @@
     (apply-generic 'angle z))
 
   ;; interface to rest of system
-  (define (tag z) (attach-tag 'complex z))
+  (define (tag z) (attach-tag complex-tag z))
   (put 'real-part '(complex) real-part)
   (put 'imag-part '(complex) imag-part)
   (put 'magnitude '(complex) magnitude)

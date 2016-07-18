@@ -3,35 +3,31 @@
 (load-from-path "lib.scm")
 (load-from-path "arithmetic-pkg/arithmetic.scm")
 
-;(load-from-path "arithmetic-pkg/tst-rational.scm")
 
-;(install-scheme-number-package)
-;(install-rational-package)
-
-(set-test-section! "ordinary numbers")
-(define x (make-scheme-number 1))
-(define y (make-scheme-number 2))
+(set-test-section! "integers")
+(define x (make-integer 1))
+(define y (make-integer 2))
 
 (test-eq "" (num-eq? x y) #f)
 ;(test-eq "" (num-eq? x x) #t)
 
 
-(test-eq "add" (num-eq? (add x y) (make-scheme-number 3)) #t)
-(test-eq "zero" (=zero? (make-scheme-number 0)) #t)
-(test-eq "zero" (=zero? (make-scheme-number 1)) #f)
+(test-eq "add" (num-eq? (add x y) (make-integer 3)) #t)
+(test-eq "zero" (=zero? (make-integer 0)) #t)
+(test-eq "zero" (=zero? (make-integer 1)) #f)
 (test-eq "sub" (num-eq? (sub y x) 1) #t)
-(test-eq "div" (num-eq? (div y x) (make-scheme-number 2)) #t)
-(test-eq "mul" (num-eq? (mul y x) (make-scheme-number 2)) #t)
+(test-eq "div" (num-eq? (div y x) (make-integer 2)) #t)
+(test-eq "mul" (num-eq? (mul y x) (make-integer 2)) #t)
 
 
 (set-test-section! "ordinary numbers - untagged")
 
-(define x (make-scheme-number 1))
+(define x (make-integer 1))
 (define y 2)
 
 (test-eq "" (num-eq? x y) #f)
 (test-eq "" (num-eq? x x) #t)
-(test-eq "sum" (num-eq? (add x y) (make-scheme-number 3)) #t)
+(test-eq "sum" (num-eq? (add x y) (make-integer 3)) #t)
 (test-eq "zero" (=zero? 0) #t)
 (test-eq "zero" (=zero? 1) #f)
 
@@ -53,10 +49,29 @@
 (test-eq "zero" (=zero? (sub three-quarters half)) #f)
 
 
+(set-test-section! "real")
+
+(define x (make-real 1))
+(define y (make-real 2))
+
+(test-eq "" (num-eq? x y) #f)
+(test-eq "" (num-eq? x x) #t)
+
+(test-eq "add" (num-eq? (add x y) (make-real 3)) #t)
+(test-eq "zero" (=zero? (make-real 0)) #t)
+(test-eq "zero" (=zero? (make-real 1)) #f)
+(test-eq "sub" (num-eq? (sub y x) (make-real 1)) #t)
+(test-eq "div" (num-eq? (div y x) (make-real 2)) #t)
+(test-eq "mul" (num-eq? (mul y x) (make-real 2)) #t)
+
+
 (set-test-section! "complex")
 
 (define c (make-from-real-imag 1 2))
 (define d (make-from-real-imag 2 4))
+
+(test-eq "" (real-part c) 1)
+(test-eq "" (imag-part c) 2)
 
 (test-eq "num-eq? #f" (num-eq? c d) #f)
 
@@ -68,3 +83,14 @@
 
 (test-eq "zero" (=zero? (sub c c)) #t)
 
+(set-test-section! "raise")
+
+(define x (make-integer 1))
+(define rat (make-rational 1 1))
+(define real (make-real 1))
+(define z (make-from-real-imag 1 0))
+
+(test-eq "" (num-eq? x rat) #t)
+(test-eq "" (num-eq? x real) #t)
+;(test-eq "" (num-eq? x z) #t)
+;(test-eq "" (num-eq? r z) #t)

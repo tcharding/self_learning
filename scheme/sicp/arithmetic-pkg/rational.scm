@@ -42,7 +42,11 @@
     (newline))
 
   ;; interface to rest of system
-  (define (tag x) (attach-tag 'rational x))
+  (define (tag x) (attach-tag rational-tag x))
+  (put 'denom '(rational)
+       (lambda (x) (denom (contents x))))
+  (put 'numer '(rational)
+       (lambda (x) (numer (contents x))))
   (put 'add '(rational rational)
        (lambda (x y) (tag (add-rat x y))))
   (put 'sub '(rational rational)
@@ -61,9 +65,11 @@
 (define (negate-rat x)
   (make-rat (- 0 (numer x)) (denom x)))             
 
-(define (neg-rat? x)
+(define (negative-rat? x)
   (cond ((and (negative? (numer x)) (negative? (denom x))) #f)
         ((or (negative? (numer x)) (negative? (denom x))) #t)
         (else #f)))
 
-           
+(define rational-tag 'rational)
+(define (rational? x)
+  (eq? (type-tag x) 'rational))
