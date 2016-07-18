@@ -4,25 +4,26 @@
 
 (load-from-path "arithmetic-pkg/table.scm")
 (load-from-path "arithmetic-pkg/ordinary-numbers.scm")
-
-;(load-from-path "arithmetic-pkg/rational.scm")
-;(load-from-path "arithmetic-pkg/complex.scm")
-
-(install-scheme-number-package)
-;(install-rational-package)
-;(install-complex-package)
+(load-from-path "arithmetic-pkg/rational.scm")
+(load-from-path "arithmetic-pkg/complex.scm")
 
 ;; Operation Table
 
-(define operation-table (make-table eqv?))
+(define operation-table (make-table-2d))
 (define get (operation-table 'lookup))
 (define put (operation-table 'insert!))
 
+(install-scheme-number-package)
+(install-rational-package)
+(install-rectangular-package)
+(install-polar-package)
+(install-complex-package)
+
 ;; Coercion Table
 
-(define coercion-table (make-table eqv?))
-(define get-coercion (coercion-table 'lookup))
-(define put-coercion (coercion-table 'insert!))
+;(define coercion-table (make-table eqv?))
+;(define get-coercion (coercion-table 'lookup))
+;(define put-coercion (coercion-table 'insert!))
   
 ;;; Tag's
 
@@ -45,7 +46,7 @@
 
 (define (apply-generic op . args)
   (let ((type-tags (map type-tag args)))
-    (let ((proc (get (list op type-tags))))
+    (let ((proc (get op type-tags)))
       (if proc
           (apply proc (map contents args))
           (error
@@ -75,21 +76,21 @@
 ;;; Ordinary Numbers
 
 (define (make-scheme-number n)
-  ((get '(make scheme-number)) n))
-#!
+  ((get 'make 'scheme-number) n))
+
 ;;; Rational Numbers
 
 (define (make-rational n d)
-  ((get '(make rational)) n d))
+  ((get 'make 'rational) n d))
 
 ;;; Complex Numbers
 
 (define (make-from-real-imag x y)
-  ((get '(make-from-real-imag complex)) x y))
+  ((get 'make-from-real-imag 'complex) x y))
 
 (define (make-from-mag-ang r a)
-  ((get '(make-from-mag-ang complex)) r a))
-!#
+  ((get 'make-from-mag-ang 'complex) r a))
+
 ;;; Miscellaneous Procedures
 
 (define (square x)

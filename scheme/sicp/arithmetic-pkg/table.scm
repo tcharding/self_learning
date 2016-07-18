@@ -1,6 +1,7 @@
 ;;;; Tables
 
 ;;; http://community.schemewiki.org/?sicp-ex-3.25
+#!
 
 (define (fold-left op init seq) 
   (define (iter ans rest) 
@@ -72,10 +73,14 @@
     
     dispatch))
 
+!#
+
 (define (assoc key records)
   (cond ((null? records) #f)
         ((equal? key (caar records)) (car records))
         (else (assoc key (cdr records)))))
+
+
 
 ;;; One Dimensional Procedural Implementation
 

@@ -1,14 +1,15 @@
 ;;;; Complex Number Packages
+(load-from-path "arithmetic-pkg/complex-pkgs.scm")
 
-(install-rectangular-package)
-(install-polar-package)
+;(install-rectangular-package)
+;(install-polar-package)
 
 (define (install-complex-package)
   ;; imported procedures from rectangular and polar packages
   (define (make-from-real-imag x y)
-    ((get '(make-from-real-imag rectangular)) x y))
+    ((get 'make-from-real-imag 'rectangular) x y))
   (define (make-from-mag-ang r a)
-    ((get '(make-from-mag-ang polar)) r a))
+    ((get 'make-from-mag-ang 'polar) r a))
 
   ;; internal procedures
   (define (add z w)
@@ -39,89 +40,23 @@
 
   ;; interface to rest of system
   (define (tag z) (attach-tag 'complex z))
-  (put '(real-part (complex)) real-part)
-  (put '(imag-part (complex)) imag-part)
-  (put '(magnitude (complex)) magnitude)
-  (put '(angle (complex)) angle)
-  (put '(num-eq? (complex complex)) equal-complex?)
-  (put '(=zero? (complex)) zero-complex?)
-  (put '(add (complex complex))
+  (put 'real-part '(complex) real-part)
+  (put 'imag-part '(complex) imag-part)
+  (put 'magnitude '(complex) magnitude)
+  (put 'angle '(complex) angle)
+  (put 'num-eq? '(complex complex) equal-complex?)
+  (put '=zero? '(complex) zero-complex?)
+  (put 'add '(complex complex)
        (lambda (z w) (tag (add z w))))
-  (put '(sub (complex complex))
+  (put 'sub '(complex complex)
        (lambda (z w) (tag (sub z w))))
-  (put '(mul (complex complex))
+  (put 'mul '(complex complex)
        (lambda (z w) (tag (mul z w))))
-  (put '(div (complex complex))
+  (put 'div '(complex complex)
        (lambda (z w) (tag (div z w))))
-  (put '(make-from-real-imag complex)
+  (put 'make-from-real-imag 'complex
        (lambda (x y) (tag (make-from-real-imag x y))))
-  (put '(make-from-mag-ang complex)
+  (put 'make-from-mag-ang 'complex
        (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
 
-;;; Rectangular Complex Number Package
-
-(define (install-rectangular-package)
-  ;; internal procedures
-  (define (real-part z) (car z))
-  (define (imag-part z) (cdr z))
-  (define (make-from-real-imag x y) (cons x y))
-  (define (magnitude z)
-    (sqrt (+ (square (real-part z))
-             (square (imag-part z)))))
-  (define (angle z)
-    (atan (imag-part z) (real-part z)))
-  (define (=zero? z)
-    (and (equal-float? (real-part z) 0)
-         (equal-float? (imag-part z) 0)))
-  (define (make-from-mag-ang r a)
-    (cons (* r (cos a)) (* r (sin a))))
-
-  ;; interface to rest of system
-  (define (tag x) (attach-tag 'rectangular x))
-  (put '(real-part '(rectangular)) real-part)
-  (put '(imag-part (rectangular)) imag-part)
-  (put '(magnitude (rectangular)) magnitude)
-  (put '(angle (rectangular)) angle)
-  (put '(=zero? (rectangular)) =zero?)
-  (put '(make-from-real-imag rectangular)
-       (lambda (x y) (tag (make-from-real-imag x y))))
-  (put '(make-from-mag-ang rectangular)
-       (lambda (r a) (tag (make-from-mag-ang r a))))
-  'done)
-
-;;; Polar Complex Number Package
-
-(define (install-polar-package)
-  ;; internal procedures
-  (define (magnitude z) (car z))
-  (define (angle z) (cdr z))
-  (define (make-from-mag-ang r a) (cons r a))
-  (define (real-part z)
-    (* (magnitude z) (cos (angle z))))
-  (define (imag-part z)
-    (* (magnitude z) (sin (angle z))))
-  (define (=zero? z)
-    (equal-float? (magnitude z) 0))  
-  (define (make-from-real-imag x y)
-    (cons (sqrt (+ (square x) (square y)))
-          (atan y x)))
-
-  ;; interface to rest of system
-  (define (tag x) (attach-tag 'polar x))
-  (put '(real-part (polar)) real-part)
-  (put '(imag-part (polar)) imag-part)
-  (put '(magnitude (polar)) magnitude)
-  (put '(angle (polar)) angle)
-  (put '(=zero? (polar)) =zero?)
-  (put '(make-from-real-imag polar)
-       (lambda (x y) (tag (make-from-real-imag x y))))
-  (put '(make-from-mag-ang polar)
-       (lambda (r a) (tag (make-from-mag-ang r a))))
-  'done)
-
-(define (equal-float? x y)
-  "equal to three decimal place"
-  (= (round (* 1000 x))
-     (round (* 1000 y))))
-                     

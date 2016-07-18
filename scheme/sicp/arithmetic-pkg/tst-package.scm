@@ -5,7 +5,7 @@
 
 ;(load-from-path "arithmetic-pkg/tst-rational.scm")
 
-(install-scheme-number-package)
+;(install-scheme-number-package)
 ;(install-rational-package)
 
 (set-test-section! "ordinary numbers")
@@ -15,7 +15,7 @@
 (test-eq "" (num-eq? x y) #f)
 ;(test-eq "" (num-eq? x x) #t)
 
-#!
+
 (test-eq "add" (num-eq? (add x y) (make-scheme-number 3)) #t)
 (test-eq "zero" (=zero? (make-scheme-number 0)) #t)
 (test-eq "zero" (=zero? (make-scheme-number 1)) #f)
@@ -55,22 +55,16 @@
 
 (set-test-section! "complex")
 
-(install-rectangular-package)
-(install-polar-package)
-(install-complex-package)
-
 (define c (make-from-real-imag 1 2))
 (define d (make-from-real-imag 2 4))
 
-(test-eq "" (real-part c) 1)
-(test-eq "" (imag-part c) 2)
-
 (test-eq "num-eq? #f" (num-eq? c d) #f)
+
 (test-eq "num-eq? same #t" (num-eq? c c) #t)
 (test-eq "add" (num-eq? d (add c c)) #t)
 (test-eq "sub" (num-eq? (sub d c) c) #t)
 (test-eq "div" (num-eq? (div d c) (make-from-mag-ang 2 0)) #t)
 (test-eq "mul" (num-eq? (mul c d) (make-from-real-imag -6 8)) #t)
 
-(test-eq "zero" (=zero? (sub c c)) #
-!#
+(test-eq "zero" (=zero? (sub c c)) #t)
+
