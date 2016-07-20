@@ -19,11 +19,13 @@
 
 (define (gcd a b)
   "Euclid's Algorithm for finding GCD"
-  (if (< a b)
-      (gcd b a)
-      (if (= b 0)
-	  a
-	  (gcd b (remainder a b)))))
+  (let ((a (abs a))
+        (b (abs b)))
+    (if (< a b)
+        (gcd b a)
+        (if (= b 0)
+            a
+            (gcd b (remainder a b))))))
 
 (define (remainder a b)
   "return remainder of a / b"
@@ -35,15 +37,29 @@
 (define (second ls)
   (cadr ls))
 
-(define d display)
-(define (dnl x)
-  (display x)
-  (newline))
-
 (define (flatmap proc seq)
+  (define (accumulate op initial sequence)
+    (if (null? sequence)
+        initial
+        (op (car sequence)
+            (accumulate op initial (cdr sequence)))))
   (accumulate append '() (map proc seq)))
 
 (define (member? obj ls)
   (cond ((null? ls) #f)
         ((equal? obj (car ls)) #t)
         (else (member? obj (cdr ls)))))
+
+;;; Debugging
+
+(define (debug . args)
+  (let iter ((ls args))
+    (unless (null? ls)
+      (begin (dnl (car ls))
+             (iter (cdr ls))))))
+
+(define d display)
+
+(define (dnl x)
+  (display x)
+  (newline))
