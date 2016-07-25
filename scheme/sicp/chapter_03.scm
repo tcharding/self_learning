@@ -168,3 +168,51 @@
   (iter x '()))
 
 
+#!
+;;; Exercise 3.50
+
+(define (stream-map proc . argstreams)
+  (if ((stream-null? argstreams))
+      the-empty-stream
+      (cons-stream
+       (apply proc (map stream-car argstreams))
+       (apply stream-map (cons proc (map stream-cdr argstreams))))))
+!#
+
+;;; Exercise 3.51
+
+(define (show x)
+  (dnl x)
+  x)
+
+(define (stream-enumerate-interval low high)
+  (if (> low high)
+      '()
+      (stream-cons
+       low
+       (stream-enumerate-interval (inc low) high))))
+
+(define x (stream-map show (stream-enumerate-interval 1 10)))
+
+;;;; Exercise 3.52
+
+(define sum 0)
+
+(define (accum x)
+  (set! sum (+ x sum))
+  sum)
+
+(define seq (stream-map accum (stream-enumerate-interval 1 20)))
+(define y (stream-filter even? seq))
+(define z (stream-filter (lambda (x) (= (remainder x 5) 0)) seq))
+
+;;;; Exercise 3.59
+
+(define exp-series
+  (cons-stream 1 (integrate-series exp-series)))
+
+(define cosine-series
+  (cons-stream 1) (integrate-series (scale-stream sine-series -1)))
+
+(define sine-series
+  (cons-stream 0 (integrate-series cosine-series)))
