@@ -1,13 +1,51 @@
-;;;; Metacircular Evaluator
+;;;; Streams as Lazy Lists
 ;;;;
-;;;; SICP, Section 4.1
+;;;; SICP, Section 4.2.3
 
-;; Run this in guile before loading
+;;; code as in the text; does not load
+
+;; You need this before loading
 ;(define apply-in-underlying-scheme apply)
 
-;(dnl apply-in-underlying-scheme)
-;(define applied (apply-in-underlying-scheme cons (list 'a '(b c))))
-;(dnl applied)
+;;; cons as a procedure
+
+(define (cons x y)
+  (lambda (m) (m x y)))
+
+(define (car z)
+  (z (lambda (p q) p)))
+
+(define (cdr z)
+  (z (lambda (p q) q)))
+
+;;; streams procedures
+
+(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+       
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+(define (scale-list items factor)
+  (map (lambda (x) (* x factor))
+       items))
+
+(define (add-lists list-1 list-2)
+  (cond ((null? list-1) list-2)
+        ((null? list-2) list-1)
+        (else (cons (+ (car list-1) (car list-2))
+                    (add-lists (cdr list-1) (cdr list-2))))))
 
 (define false #f)
 (define true #t)
@@ -236,23 +274,74 @@
         ((let? exp) (eval (let->combination exp) env))
 ;        ((let*? exp) (eval (let*->nested-lets exp) env))
         ((application? exp)
-         (apply (eval (operator exp) env)
-                (list-of-values (operands exp) env)))
+         (apply (actual-value (operator exp) env)
+                (operands exp)
+                env))
         (else
          (error "Unknown expression type -- EVAL" exp))))
 
-(define (apply procedure arguments)
+(define (actual-value exp env)
+  (force-it (eval exp env)))
+
+(define (force-it obj)
+  (cond ((thunk? obj)
+         (let ((result (actual-value
+                        (thunk-exp obj)
+                        (thunk-env obj))))
+           (set-car! obj 'evaluated-thunk)
+           (set-car! (cdr obj) result)  ; replace exp with it's value
+           (set-cdr! (cdr obj) '())     ; forget unneeded env
+           result))
+        ((evaluated-thunk? obj)
+         (thunk-value obj))
+        (else obj)))
+
+(define (delay-it exp env)
+  (list 'thunk exp env))
+
+(define (thunk? obj)
+  (tagged-list? obj 'thunk))
+
+(define (thunk-exp thunk)
+  (cadr thunk))
+
+(define (thunk-env thunk)
+  (caddr thunk))
+
+(define (evaluated-thunk? obj)
+  (tagged-list? obj 'evaluated-thunk))
+
+(define (thunk-value evaluated-thunk)
+  (cadr evaluated-thunk))
+         
+(define (apply procedure arguments env)
   (cond ((primitive-procedure? procedure)
-         (apply-primitive-procedure procedure arguments))
+         (apply-primitive-procedure
+          procedure
+          (list-of-arg-values arguments env)))
         ((compound-procedure? procedure)
          (eval-sequence
           (procedure-body procedure)
           (extend-environment
            (procedure-parameters procedure)
-           arguments
+           (list-of-delayed-args arguments env)
            (procedure-environment procedure))))
         (else
          (error "Unknown procedure type -- APPLY" procedure))))
+
+(define (list-of-arg-values exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (actual-value (first-operand exps) env)
+            (list-of-arg-values (rest-operands exps)
+                                env))))
+
+(define (list-of-delayed-args exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (delay-it (first-operand exps) env)
+            (list-of-delayed-args (rest-operands exps)
+                                  env))))
 
 (define (list-of-values exps env)
   (if (no-operands? exps)
@@ -261,15 +350,15 @@
             (list-of-values (rest-operands exps) env))))
 
 (define (eval-if exp env)
-  (if (true? (eval (if-predicate exp) env))
+  (if (true? (actual-value (if-predicate exp) env))
       (eval (if-consequent exp) env)
       (eval (if-alternative exp) env)))
 
 (define (eval-sequence exps env)
   "return the value of the last expression"
   (cond ((last-exp? exps)
-         (eval (first-exp exps) env)) 
-        (else (eval (first-exp exps) env)
+         (eval (first-exp exps) env))
+        (else (actual-value (first-exp exps) env)
               (eval-sequence (rest-exps exps) env))))
 
 (define (eval-assignment exp env)
@@ -354,9 +443,9 @@
   (let iter ((vars (frame-variables frame))
              (vals (frame-values frame)))
     (cond ((null? vars)
-           (error "unbound variable -- SET-VARIABLE-VALUE-FRAME!" var))
+           (error "unbound variable -- SET-BINDING-IN-FRAME!" var))
           ((eq? (car vars) var)
-           (set! (car vals) val))
+           (set-car! vals val))
           (else (iter (cdr vars) (cdr vals))))))
 
 (define (add-binding-to-frame! var val frame)
@@ -393,7 +482,7 @@
      env))
   ; Exercise 4.16 part a (did not complete b or c)
   (let ((value (get-value)))
-    (if (eq? value '*unassigned*)
+    (if (eq? value '*d*)
         (error "Unassigned variable -- LOOKUP-VARIABLE-VALUE" var)
         value)))
 
@@ -444,7 +533,7 @@
         (list '- -)
         (list '* *)
         ; ...
-        ))
+        )) 
 
 (define (primitive-procedure-names)
   (map car primitive-procedures))
@@ -457,13 +546,13 @@
   (apply-in-underlying-scheme
    (primitive-implementation proc) args))
 
-(define input-prompt ";;; M-Eval input:")
-(define output-prompt ";;; M-Eval output:")
+(define input-prompt ";;; L-Eval input:")
+(define output-prompt ";;; L-Eval output:")
 
 (define (driver-loop)
   (prompt-for-input input-prompt)
   (let ((input (read)))
-    (let ((output (eval input the-global-environment)))
+    (let ((output (actual-value input the-global-environment)))
       (announce-output output-prompt)
       (user-print output)))
   (driver-loop))
@@ -485,6 +574,8 @@
 (define the-global-environment (setup-environment))
 
 ;;;; Exercise 4.4
+
+;; or
 
 (define (or? exp)
   (tagged-list? exp 'or))
@@ -527,31 +618,6 @@
            (if (eval (first-and-clause clauses) env)
                (iter (rest-and-clauses clauses))
                false)))))
-
-;; or
-
-(define (or? exp)
-  (tagged-list? exp 'or))
-
-(define (or-clauses exp)
-  (cdr exp))
-
-(define (first-or-clause clauses)
-  (car clauses))
-
-(define (rest-or-clauses clauses)
-  (cdr clauses))
-
-(define (or->if exp)
-  (expand-or-clauses (or-clauses exp)))
-
-(define (expand-or-clauses clauses)
-   (if (null? clauses)
-       false
-       (let ((result (eval (first-or-clause clauses))))
-         (if result
-             result
-             (expand-or-clauses (rest-or-clauses clauses))))))
 
 ;;;; Exercise 4.6
 
