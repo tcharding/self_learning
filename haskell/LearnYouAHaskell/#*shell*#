@@ -1,0 +1,11 @@
+/home/tobin/.zprezto/golang-completion:180: command not found: compdef
+% [?2004hghci
+ghci[?2004l
+GHCi, version 8.0.1: http://www.haskell.org/ghc/  :? for help
+Prelude> :set prompt "ghci> "
+:set prompt "ghci> "
+ghci> /home/tobin/.zprezto/golang-completion:180: command not found: compdef
+% [?2004hghci
+ghci[?2004l
+GHCi, version 8.0.1: http://www.haskell.org/ghc/  :? for help
+Prelude> 
