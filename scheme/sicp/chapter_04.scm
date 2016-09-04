@@ -277,4 +277,46 @@
                 (list 'miller miller)
                 (list 'smith smith)))))))
 
+;;;; Exercise 4.43
+;;
+;; Fathers Mr Moore, Colonel Downing, Mr Hall, Sir Barnacle Hood, Dr Parker
+;; Daughters Mary Anne, Gabrielle, Lorna, Rosalind, Melissa
+;(define fathers '(mr-moore colnel-downing mr-hall sir-barnicle-hood dr-parker))
+
+(define surnames '(moore downing hall hood parker))
+(define daughters 'mary-anne gabrielle lona rosalind melissa)
+
+(define (yahct)
+  ;; daughters -> surnames
+  (let ((mary-anne 'mr-moore)
+        (gabrielle (amb surnames))
+        (lona (amb surnames))
+        (rosalind (amb surnames))
+        (melissa (amb (surnames))))
+    ;; fathers -> yachts (daughters names)
+    (let ((moore (amb daughters))
+          (downing (amb daughters))
+          (hall (amb daughters))
+          (hood (amb daughters))
+          (parker (amb daughters)))
+      (require (eq? hood 'gabrielle))
+      (require (eq? moore 'lorna))
+      (require (eq? hall 'rosalind))
+      (require (eq? downing 'melissa))
+      (require (eq? melissa 'hood))
+      (require (eq? gabrielle ;; ???
+                    ))))
+  (list 
+   (list (list 'mary-anne mary-anne)
+         (list 'gabrielle gabrielle)
+         (list 'lona lona)
+         (list 'rosalind rosalind)
+         (list 'melissa melissa))
+   (list (list 'moore moore)
+         (list 'downing downing)
+         (list 'hall hall)
+         (list 'hood hood)
+         (list 'parker parker))))
+
+;;; Exercise 4.44
 
