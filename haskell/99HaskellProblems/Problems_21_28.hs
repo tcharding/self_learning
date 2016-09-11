@@ -61,10 +61,46 @@ randomPermu' xs = do
 Problem 26
 (**) Generate the combinations of K distinct objects chosen from the N elements of a list
 -}
-combinations :: Int -> [a] -> [[a]]
-combinations 0 _ = [[]]
-combinations n xs = [ xs !! i : x | i <- [0..(length xs)-1] 
-                                  , x <- combinations (n-1) (drop (i+1) xs) ]
+--genKDistinctObjects n xs = combinations $ rmNonDistinct $ genKObjects n xs
+genKDistinctObjects n xs = combinations $ filter isDistinct $ genKObjects n xs
+
+-- get combinatons from permutations
+combinations :: Eq a => [[a]] -> [[a]]
+combinations (x:xs)
+  | containsSimilar x xs = combinations xs
+  | otherwise = x : combinations xs
+combinations _ = []
+
+containsSimilar :: Eq a => [a] -> [[a]] -> Bool
+containsSimilar y (x:xs)
+  | isSimilar y x = True
+  | otherwise = containsSimilar y xs
+containsSimilar _ [] = False
+
+isSimilar :: Eq a => [a] -> [a] -> Bool
+isSimilar a b = containsEveryElement a b && containsEveryElement b a
+  where containsEveryElement (x:xs) ys = (elem x ys) && (containsEveryElement xs ys)
+        containsEveryElement _ _ = True 
+
+-- genereate all permutations of length k from list
+genKObjects :: Int -> [a] -> [[a]]
+genKObjects 1 xs = individualElements xs
+genKObjects k xs = addEach xs (genKObjects (k-1) xs)
+
+-- list is distinct if all elements appear only once
+isDistinct :: Eq a => [a] -> Bool
+isDistinct [] = True
+isDistinct (x:xs)
+  | x `elem` xs = False
+  | otherwise = isDistinct xs
+
+individualElements :: [a] -> [[a]]
+individualElements [] = []
+individualElements (x:xs) = ([x]) : individualElements xs
+
+addEach :: [a] -> [[a]] -> [[a]]
+addEach (x:xs) ys = map (x:) ys ++ addEach xs ys 
+addEach _ _ = []
 
 {-
 Problem 27
