@@ -61,31 +61,33 @@ randomPermu' xs = do
 Problem 26
 (**) Generate the combinations of K distinct objects chosen from the N elements of a list
 -}
---genKDistinctObjects n xs = combinations $ rmNonDistinct $ genKObjects n xs
-genKDistinctObjects n xs = combinations $ filter isDistinct $ genKObjects n xs
+genKDistinctObjects n xs = combinations $ filter isDistinct $ permN n xs
+c n xs = genKDistinctObjects n xs
 
 -- get combinatons from permutations
 combinations :: Eq a => [[a]] -> [[a]]
 combinations (x:xs)
-  | containsSimilar x xs = combinations xs
+  | xs `holdsPermOf` x = combinations xs
   | otherwise = x : combinations xs
+--  | containsSimilar x xs = combinations xs
+--  | otherwise = x : combinations xs
 combinations _ = []
 
-containsSimilar :: Eq a => [a] -> [[a]] -> Bool
-containsSimilar y (x:xs)
-  | isSimilar y x = True
-  | otherwise = containsSimilar y xs
-containsSimilar _ [] = False
+holdsPermOf :: Eq a => [[a]] -> [a] -> Bool
+(x:xs) `holdsPermOf` y
+  | isPerm x y = True
+  | otherwise = xs `holdsPermOf` y
+  where isPerm a b = (a `hasAllElementsOf` b) && (b `hasAllElementsOf` a)
+          where xs `hasAllElementsOf` (y:ys) = (y `elem` xs) && (xs `hasAllElementsOf` ys)
+                _ `hasAllElementsOf` [] = True 
+[] `holdsPermOf` _ = False
 
-isSimilar :: Eq a => [a] -> [a] -> Bool
-isSimilar a b = containsEveryElement a b && containsEveryElement b a
-  where containsEveryElement (x:xs) ys = (elem x ys) && (containsEveryElement xs ys)
-        containsEveryElement _ _ = True 
-
--- genereate all permutations of length k from list
-genKObjects :: Int -> [a] -> [[a]]
-genKObjects 1 xs = individualElements xs
-genKObjects k xs = addEach xs (genKObjects (k-1) xs)
+-- genereate all permutations of length n
+permN :: Int -> [a] -> [[a]]
+permN 1 xs = individual xs
+  where individual (e:es) = ([e]) : individual es
+        individual _ = []
+permN n xs = addEach xs (permN (n-1) xs)
 
 -- list is distinct if all elements appear only once
 isDistinct :: Eq a => [a] -> Bool
@@ -94,10 +96,7 @@ isDistinct (x:xs)
   | x `elem` xs = False
   | otherwise = isDistinct xs
 
-individualElements :: [a] -> [[a]]
-individualElements [] = []
-individualElements (x:xs) = ([x]) : individualElements xs
-
+-- concat individially each element of list to each sublist
 addEach :: [a] -> [[a]] -> [[a]]
 addEach (x:xs) ys = map (x:) ys ++ addEach xs ys 
 addEach _ _ = []
@@ -110,8 +109,29 @@ a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3
 and 4 persons? Write a function that generates all the possibilities and returns
 them in a list.
 -}
+type Group = String
+-- group of people represented as "abcdefghi"
+people = "abcdefghi"
+-- results of form ("ab","cde","fghi")
+solve_27 = triplets $ twins $ genKDistinctObjects 2 people
 
--- did not complete
+triplets :: [(Group,Group)] -> [(Group,Group,Group)]
+triplets ((a,b):rest) = (a,b,(remaining a b)) : triplets rest
+  where remaining a b = ((people `less` a) `less` b)
+triplets [] = []
+
+-- form pairs consisting of one group of 2 and one group of 3
+twins :: [Group] -> [(Group,Group)]
+twins [] = []
+twins (x:xs) = formTwins x ++ twins xs
+  where formTwins g = combine g $ genKDistinctObjects 3 (people `less` g)
+          where combine g (t:ts) = (g,t):combine g ts
+                combine _ [] = []
+
+-- remove all characters of h from g
+less :: String -> String -> String
+g `less` "" = g
+g `less` (h:hs) = (delete h g) `less` hs
 
 {-
 Problem 28
