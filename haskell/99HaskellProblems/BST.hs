@@ -65,11 +65,21 @@ successor _ = undefined
 -}
 
 -- supports multiple nodes of same value
-add :: Ord a => Tree a -> a -> Tree a
-add Nil x = (Node x Nil Nil)
-add (Node v l r) x
-  | x < v = Node v (add l x) r
-  | otherwise = Node v l (add r x)
+add :: Ord a => a -> Tree a -> Tree a
+add x Nil = (Node x Nil Nil)
+add x (Node y l r) 
+  | x < y = Node y (add x l) r
+  | otherwise = Node y l (add x r)
+
+{-
+-- tree with unique values
+add :: Ord a => a -> Tree a -> Tree a
+add x Empty            = Branch x Empty Empty
+add x t@(Branch y l r) = case compare x y of
+                            LT -> Branch y (add x l) r
+                            GT -> Branch y l (add x r)
+                            EQ -> t
+-}
 
 -- ref: Introduction to Algorithms
 --  Cormen, Leiserson, Rivest, Stein
@@ -91,8 +101,20 @@ deleteT x (Node v l r)
 -- naive implementation
 buildT :: Ord a => [a] -> Tree a
 buildT = naive Nil
-  where naive t (x:xs) = naive (add t x) xs
+  where naive t (x:xs) = naive (add x t) xs
         naive t [] = t
+
+-- i.e size [1,3,7,15]
+isFull :: Tree a -> Bool
+isFull Nil = True
+isFull (Node _ l r) = isFull l && isFull r && (height l == height r)
+
+-- true if tree of size n is full i.e n = 2**H - 1
+fillsTree :: Int -> Bool
+fillsTree n = helper n [floor $ 2**h - 1 | h <- [1..]]
+  where helper n (x:xs)
+          | n < x = False
+          | otherwise = n == x || helper n xs
 
 {-
  Rudementry testing by someone who hasn't yet learnt monads
