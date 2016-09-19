@@ -47,6 +47,7 @@ f xs n = g xs n
 localMaxima :: [Integer] -> [Integer]
 localMaxima (x:y:z:zs)
   | y > x && y > z = y : localMaxima (z:zs)
+  | otherwise = localMaxima (y:z:zs)
 localMaxima _ = []  
 
 -- Exercise 3
@@ -65,10 +66,10 @@ frequency xs = toList (fromListWith (+) [(x, 1) | x <- xs])
 -- find frequency of most frequent, defaults to 0 if none
 maxF :: [(Int,Int)] -> Int
 maxF = go 0
-  where go mf [] = mf
-        go mf ((x,f):ps)
+  where go mf ((x,f):ps)
           | f > mf = go f ps
           | otherwise = go mf ps
+        go mf [] = mf
 
 -- return string with a star in each position if frequency is <= n
 stars :: Int -> [(Int,Int)] -> String
