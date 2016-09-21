@@ -61,12 +61,25 @@ map' f = foldr g []
 -- Exercise 4
 
 sieveSundaram :: Integer -> [Integer]
-sieveSundaram n = [i + j + 2 * i * j
-  -- i + j + 2ij
+sieveSundaram n = map f (rmElemOpt [1..n] (sundaramList n))
+  where f x = 2 * x + 1
+
+-- return list of all integers upto n matching i+j+2ij
+sundaramList :: Integer -> [Integer]
+sundaramList n = takeWhile (<=n) [i + j + 2 * i * j | i <- [1..], j <- [i..]]
+
+-- remove all elements of second list from first list
+rmElem :: [Integer] -> [Integer] -> [Integer]
+rmElem xs ys = filter f xs
+  where f x = not $ elem x ys
+
+-- remove all elements of second list from first list
+-- Optimized version, both lists are sorted and contain only unique values
+rmElemOpt :: [Integer] -> [Integer] -> [Integer]
+rmElemOpt xs [] = xs
+rmElemOpt [] _ = []
+rmElemOpt (x:xs) (y:ys)
+  | x < y = x : (rmElemOpt xs (y:ys))
+  | x > y = rmElemOpt (x:xs) ys
+  | otherwise = rmElemOpt xs ys
   
-  where f x = not $ odd x
-
-{- cartProd [1,2] [’a’,’b’] == [(1,’a’),(1,’b’),(2,’a’),(2,’b’)] -}
-
-cartProd :: [a] -> [b] -> [(a, b)]
-cartProd xs ys = [(x,y) | x <- xs, y <- ys]
