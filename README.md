@@ -7,7 +7,6 @@ Self Learning
 >   -- Zen Proverb
 
 
-
 This tree contains source code I have written (also in some cases source code
 downloaded from text book website) whilst learning the craft of
 programming. Categorized by text book name (or abbreviation thereof). I have
@@ -94,3 +93,23 @@ UNIX SYSTEMS Programming - Kay A. Robbins, Steven Robbins.
 
 __UNIX/unp__:  
 UNIX Network Programming - Stevens, Fenner, Rudoff, Volume 1, Third Edition.
+
+Approximate Line Counts
+-----------------------
+*found by grepping for source files, C headers excluded)*
+
+apue: 9000
+unp: 3000
+usp 8000
+tlpi: 9000
+perl: 2000
+C lib: 1000
+
+### Code not include at the request of project creator
+Project Euler (Python): 3000
+Matasano yryptography challenges (Python): 2000
+HackerRank (Golang): More than 10 000 (not including test code).
+
+Line counts does not include open source contributions.
+
+Total approximate line count for apprenticeship so far: 47 000
