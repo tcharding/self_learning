@@ -98,17 +98,18 @@ Approximate Line Counts
 -----------------------
 *found by grepping for source files, C headers excluded)*
 
-apue: 9000
-unp: 3000
-usp 8000
-tlpi: 9000
-perl: 2000
-C lib: 1000
+apue:	9000  
+unp:  	3000  
+usp   	8000  
+tlpi: 	9000  
+perl: 	2000  
+C lib:	1000  
 
 ### Code not include at the request of project creator
-Project Euler (Python): 3000
-Matasano yryptography challenges (Python): 2000
-HackerRank (Golang): More than 10 000 (not including test code).
+Eudyptula Challenge (C, kernel): 1000  
+Project Euler (Python): 3000  
+Matasano yryptography challenges (Python): 2000  
+HackerRank (Golang): More than 10 000 (not including test code).  
 
 Line counts does not include open source contributions.
 
