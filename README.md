@@ -112,6 +112,6 @@ Project Euler (Python): 3000
 Matasano cryptography challenges (Python): 2000  
 HackerRank (Golang): More than 10 000 (not including test code).  
 
-Line counts does not include open source contributions.
+**Line count does not include open source contributions**
 
 Total approximate line count for apprenticeship so far: approx 50 000
