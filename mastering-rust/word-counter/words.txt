@@ -1,0 +1,4 @@
+This is a sample file with some words in it.
+The cat jumped over the mat.
+The dog shat on the mat.
+boo hoo, boo hoo, boo hoo.
