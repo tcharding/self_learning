@@ -1,0 +1,6 @@
+use adder;
+
+#[test]
+fn adds_two() {
+    assert_eq!(add_two(6), 8);
+}

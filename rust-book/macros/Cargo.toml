@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+        "hello",
+        "hello_macro",
+        "hello_macro/hello_macro_derive",
+]

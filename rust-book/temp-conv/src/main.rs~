@@ -1,0 +1,13 @@
+fn main() {
+    println!("Temperature converter");
+    println!("1) Fahrenheit to Celcius");
+    println!("2) Celcius to Fahrenheitaa");
+
+    let x = convert(5);
+    println!("got: {}", x);
+}
+
+fn convert(x: i32) -> i32 {
+    x
+}
+    
