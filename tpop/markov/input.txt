@@ -1,0 +1,6 @@
+This is a text file that can be used as input to the Markov Chain Algorithm. I
+had to write this because I could not find any text files on my machine to use
+as input, fail huh? It should be possible to convert a pdf to a text file to use
+but without the use of the internet to search for how I was unable to do so. The
+internet is a help but also a curse, I should learn how to learn without the use
+of a search engine.

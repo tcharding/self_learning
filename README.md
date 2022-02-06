@@ -94,6 +94,9 @@ UNIX SYSTEMS Programming - Kay A. Robbins, Steven Robbins.
 __UNIX/unp__:  
 UNIX Network Programming - Stevens, Fenner, Rudoff, Volume 1, Third Edition.
 
+__tpop__:  
+The Practice of Programming - Brian W. Kernighan, Rob Pike.
+
 Approximate Line Counts
 -----------------------
 *Calculated using `wc` on source files (C headers excluded)*
