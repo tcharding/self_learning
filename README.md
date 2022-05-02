@@ -26,6 +26,9 @@ Directory Listing
 __adt__:  
 Abstract Data Types - Implemented in C.  
 
+__aic__:  
+Algorithms in C (Third edition) Parts 1-4 - Robert Sedgewick
+
 __assembler/arm/aal__:  
 Arm Assembly Language Fundamentals and Techniques by William Hohl
 
